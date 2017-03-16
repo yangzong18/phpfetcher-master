@@ -1,0 +1,28 @@
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>售后服务，将显示在商城首页左下方，其中包括服务时间与服务电话等信息</p>
+        </li>
+    </ul>
+</div>
+<div class="col-form">
+    <form class="js-ajax-form form-inline" action="addPost" role="form">
+        <span>服务时间</span>
+        <div class="input-group">
+            <input type="text" name="time" class="form-control text-ra" value="{$service.time}" style="width: 200px" placeholder="输入时间段：8:00 ~ 22:00">
+        </div>
+        <span>服务电话</span>
+        <div class="input-group">
+            <input type="text" name="tel" class="form-control" value="{$service.tel}" style="width: 200px">
+            <span class="input-group-btn">
+              <button class="btn btn-default js-ajax-submit">提交</button>
+            </span>
+        </div>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

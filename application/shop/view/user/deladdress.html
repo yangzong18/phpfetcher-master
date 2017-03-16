@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="mt-layer none">
+    <div class="login-main reg-main">
+        <ul class="">
+            <li class="form-box">
+                <form class="js-ajax-form" action="{:url('shop/user/deladdress')}" onkeydown="if(event.keyCode==13) return false;" method="post">
+                    <input type="hidden" name="address_id" value="{$address_id}"/>
+                    <input type="hidden" name="type" value="1"/>
+                    <div class="user-item">
+                        <p class="fl">删除地址</p>
+                        <p class="clear"></p>
+                    </div>
+                    <div class="form-item">
+                        <p class="sub numd-sub">
+                            <button type="button" class="js-ajax-submit">确定</button>
+                            <button type="button" class="btn max-bg return">取消</button>
+                            <i class="clear"></i>
+                        </p>
+                    </div>
+                </form>
+            </li>
+            <li class="clear"></li>
+        </ul>
+    </div>
+</div>
+<!-- 添加地址弹出 end -->
+<!--自定义的工具类-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<title>主页</title>
+<!--[if lt IE 9]>
+<script src="{$Think.JS_PATH}html5shiv.min.js"></script>
+<script src="{$Think.JS_PATH}respond.min.js"></script>
+<![endif]-->
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jquery.validation.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}ajaxForm.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+        });
+        $('.js-ajax-submit').click(function(){
+            var $btn = $(this);
+                var $form=$(".js-ajax-form");
+                $form.ajaxSubmit({
+                    url: $btn.data('action') ? $btn.data('action') : $form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+                    dataType: 'json',
+                    beforeSubmit: function (arr, $form, options) {
+                        $btn.data("loading",true);
+                        var text = $btn.text();
+                        //按钮文案、状态修改
+                        $btn.text(text + '中...').prop('disabled', true).addClass('disabled');
+                    },
+                    success: function (data, statusText, xhr, $form) {
+                        var text = $btn.text();
+                        //按钮文案、状态修改
+                        $btn.removeClass('disabed').prop('disabled', false).text(text.replace('中...', '')).parent().find('span').remove();
+                        layer.msg(data.msg);
+                        if (data.code == 1) {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        }
+                    },
+                    error:function(xhr,e,statusText){
+                        layer.msg(statusText);
+                    }
+                });
+            return false;
+        });
+    });
+</script>

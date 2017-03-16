@@ -1,0 +1,20 @@
+
+<div class="container">
+
+    <ul class="cnt-box-item order-goods marbox">
+        <div class="og-box">
+            <div class="ncc-receipt-info">
+                <div class="ncc-receipt-info-title">
+                    <h2>订单支付成功！支付单号：<b style="color: #F0A93C">{$pay_info.pay_sn}</b></h2>
+                    <h1 style="color: #c98c8c">订单诚意金支付成功！您已成功支付订单金额<em>￥{$pay_amount}元</em> 祝您购物愉快</h1>
+                </div>
+            </div>
+
+            <div class="ncc-bottom tc">
+                <a href="{:url('shop/index/index')}">继续购物</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="{:url('/shop/logs_order/detail','orderId='.$pay_info.id)}" class="submit">查看订单</a>
+            </div>
+
+        </div>
+    </ul>
+</div>

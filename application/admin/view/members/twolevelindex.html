@@ -1,0 +1,106 @@
+<div class="col-form">
+    <form class="form-inline" role="form" action="twolevelindex" style="float:left;">
+        <div class="form-group">
+            <select name="searchType" class="form-control">
+                {foreach $search as $key => $val}
+                <option value="{$key}" {if condition='$searchType==$key'}selected="selected"{/if}>{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="input-group">
+            <input type="text" class="form-control" name="searchValue" value="{$searchValue}">
+            <span class="input-group-btn">
+              <button class="btn btn-default search" type="button">搜索</button>
+            </span>
+        </div>
+    </form>
+    <ul>
+        <li class="text-right" style="margin-right: 20px;">
+            <a href="addAgent" class="btn btn-info"><i class="icon-plus"></i> 添加代理</a>
+            <button type="button" id="out" class="btn btn-info">导出</button>
+        </li>
+    </ul>
+</div>
+
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10"></th>
+            <th class="w150">创建时间</th>
+            <th class="w150">公司名称</th>
+            <th class="w150">姓名</th>
+            <th class="w150">帐号</th>
+            <th class="w150">邮箱地址</th>
+            <th class="w150">客户订单</th>
+            <th class="w150">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $memberList as $member}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                <input type="checkbox" id="checkbox_a2_{$member.member_id}" value="{$member.member_id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$member.member_id}" class="lab-t"></label>
+            </td>
+            <td>{$member.created_at}</td>
+            <td>{$member.department}</td>
+            <td>{$member.member_name}</td>
+            <td>{$member.account}</td>
+            <td>{$member.email}</td>
+            <td>{if isset($count[$member.member_id])}<a href="{:url('seller/logs_order/index')}?member_id={$member.member_id}">{$count[$member.member_id]}</a>{else /}0{/if}</td>
+            <td class="table-handle">
+                <span>
+                    <a href="editAgent?id={$member.member_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <button type="button" class="btn btn-info reset" member="{$member.member_id}" account="{$member.account}">重置帐号</button>
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="7">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$memberList->render();}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        //重置帐号
+        $('.reset').click(function() {
+            var memberId = $(this).attr('member');
+            var account = $(this).attr('account');
+            layer.open({
+                title:'重置帐号',
+                type: 2,
+                shade: 0.5,
+                skin: 'layui-dbd',/*边框阴影*/
+                shadeClose: false, //开启遮罩关闭
+                area: ['400px', '350px'], //宽高
+                content: 'resetaccount?memberid='+memberId+'&account='+account+'&type=2',
+                end: function () {
+                    location.reload();
+                }
+            });
+        })
+
+        //导出excel
+        $('#out').click(function(){
+            window.open('exportMember?type='+'{$type}'+'&searchType='+'{$searchType}'+'&searchValue='+'{$searchValue}');
+        })
+    })
+</script>

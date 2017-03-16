@@ -1,0 +1,73 @@
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>楼层模板列表</p>
+            <p><i class="icon-circle"></i>列表根据排序由小到大排列显示</p>
+        </li>
+    </ul>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr>
+            <th class="w10"></th>
+            <th class="w150">排序</th>
+            <th class="w400">商品分类</th>
+            <th class="w400">楼层模板</th>
+            <th class="w400">是否失效</th>
+            <th class="w200">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $tblRows as $row}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                <input type="checkbox" id="checkbox_a2_{$row.id}" value="{$row.id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$row.id}" class="lab-t"></label>
+            </td>
+            <td class="text-center">
+                <div class="one-text sort">
+                    <input type="text" class="form-control h30 mb5 w50" key-id="{$row.id}" value="{$row.sort}" readonly/>
+                </div>
+            </td>
+            <td>{$row.goods_category_name}</td>
+            <td>{$row.storey_template_name}</td>
+            <td>{$row.is_disable}</td>
+            <td class="table-handle">
+                <span>
+                    <a href="edit?id={$row.id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a  class="js-ajax-delete" href="delete?id={$row.id}"><i class="icon-trash"></i>删除</a>
+                </span>
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="5">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+        {$tblRows->render();}
+    </table>
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+

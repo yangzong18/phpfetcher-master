@@ -1,0 +1,96 @@
+{__NOLAYOUT__}
+{include file="layout/header" /}
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="re-layui log-order-measure">
+    <form class="js-ajax-form" action="{:url('seller/logsOrder/orderMeasure')}" method="post">
+        <input type="hidden" name="orderId" value="{$order_info.id}">
+        <input type="hidden"  name="type" value="1">
+        <table class="table">
+        <tr>
+            <td class="td-l-na">订单编号：</td>
+            <td>{$order_info.order_sn}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">量房地址：</td>
+            <td>{$order_info.province} {$order_info.city} {$order_info.area} {$order_info.address}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">量房人*：</td>
+            <td><input type="text" name="measure_people" class="form-control h30 mb5"></td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">量房人电话*：</td>
+            <td>
+                <input type="text" name="measure_mob" class="form-control h30 mb5">
+            </td>
+        </tr>
+
+        <tr class="td-textarea">
+            <td class="td-l-na">量房数据：</td>
+            <td>
+                <textarea name="measure_data" rows="2" class="form-control" placeholder="量房数据不超过100字符"></textarea>
+            </td>
+        </tr>
+
+        <tr class="upload-box">
+            <td class="td-l-na"><div><h3>上传图片*：</h3></div></td>
+            <td>
+                <div>
+                    <div class="uploadimg"></div>
+                    <div class="btn-up-zbox">
+                        <div class="clear"></div>
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                    </div>
+                    <div>图片尺寸建议756*454</div>
+                </div>
+            </td>
+        </tr>
+
+        <tr class="b0">
+            <td colspan="4" class="b0">
+                <div class="text-center mt15">
+                    <button type="submit" class="btn btn-warning max-bg js-ajax-submit">确定</button>
+                    <button class="btn max-bg return" >取消</button>
+                </div>
+
+            </td>
+        </tr>
+        </table></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+            return false;
+        });
+
+        //上传图片
+        $('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 5,//上传数量
+            inputName: 'measure_img[]',//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        })
+    })
+</script>
+<style>
+    .table tbody tr td{
+        width: 100px;
+        border-top: hidden;
+    }
+</style>

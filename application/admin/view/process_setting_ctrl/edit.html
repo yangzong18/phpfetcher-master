@@ -1,0 +1,144 @@
+
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>编辑流程子模块的详细信息</p>
+            <p><i class="icon-circle"></i>原木介绍及家具生产过程流程分类，图片显示为旋转交互效果，请上传圆形图片，图片格式建议PNG</p>
+        </li>
+    </ul>
+</div>
+<div class="sheet-box">
+    <form class="js-ajax-form" action="editPost" method="post">
+        <input type="hidden" name="id" value="{$info.id}">
+        <table class="table">
+            <tbody>
+
+            <tr class="goods-tr-bg">
+                <th colspan="4"><h3>编辑流程子模块信息</h3></th>
+            </tr>
+            <tr>
+                <td width="150px"><div><h3>流程子模块标题*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="title" class="form-control h30 mb5" value="{$info.title}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>流程子模块显示图*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="uploadimg">
+                            <div id="img_url" class="file-item thumbnail">
+                                <div class="up-imgbox">
+                                    <img src="{$info.img_url}@w100_h100.png" style="width: 100px;height: 100px;">
+                                </div>
+                                <div>
+                                    <a class="del_pic">删除</a>
+                                </div>
+                                <input type="hidden" name="img_url" value="{$info.img_url}" class="imgName-up-item">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>流程分类*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <select name="cate_id" class="form-control">
+                                {foreach $category as $cate}
+                                <option value="{$cate.cate_id}" {eq name="cate_id" value="$cate.cate_id"}selected = "selected"{/eq}>
+                                {$cate.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>跳转地址*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" value="{$info.address}" name="address" class="form-control h30 mb5">
+                            <span>请填带http://头部的绝对地址</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td><div><h3>流程子模块排序</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="sort" class="form-control h30 mb5" value="{$info.sort}">
+                            <span>请填写自然数。整装联盟列表将会根据排序由小到大排列显示。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>流程子模块说明*</h3></div></td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <textarea name="content" rows="4" class="form-control">{$info.content}</textarea>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">编辑</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+
+            </tbody></table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 1,//上传数量
+            inputName: 'img_url',//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        })
+    });
+</script>

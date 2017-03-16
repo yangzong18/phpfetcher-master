@@ -1,0 +1,398 @@
+<!--<script src="{$Think.JS_PATH}base.js" charset="utf-8"></script>-->
+<script src="{$Think.JS_PATH}lib.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}zoom.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+        $(function() {
+            $(".jqzoom").jqueryzoom({
+                xzoom: 400,
+                yzoom: 457,
+                offset: 10,
+                position: "left",
+                preload: 1,
+                lens: 1
+            });
+            $("#spec-list").jdMarquee({
+                deriction: "left",
+                width: 585,
+                height: 109,
+                step: 1,
+                speed: 4,
+                delay: 5,
+                control: true,
+                _front: "#spec-right",
+                _back: "#spec-left"
+            });
+            $("#spec-list img").bind("mouseover", function() {
+                var src = $(this).attr("src");
+                $("#spec-n1 img").eq(0).attr({
+                    src: src.replace("\/n5\/", "\/n1\/"),
+                    jqimg: src.replace("\/n5\/", "\/n0\/")
+                });
+                $(this).css({
+                    "border": "2px solid #a08f52",
+                    "opacity": ".5"
+                });
+            }).bind("mouseout", function() {
+                $(this).css({
+                    "border": "2px solid #a08f52",
+                    "opacity": "1"
+                });
+            });
+        })
+    </script>
+<div class="container">
+    <ul class="list-box content-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('shop/LivingMuseum/index')}">木筑生活馆</a> > <a href="javascript:;">商品详情</a></h3>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item content-goods-item marbox">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <li class="mt-content-xx">
+            <div class="fl">
+                <div id="preview">
+                    <div class="jqzoom" id="spec-n1">
+                        <img src="{$goods['goods_image_main']}" jqimg="{$goods['goods_image_main']}" width="561" height="337">
+                    </div>
+                    <div id="spec-n5">
+                        <div class="control" id="spec-left">
+                            <!-- <img src="images/left.gif" /> -->
+                        </div>
+                        <div id="spec-list">
+                            <ul class="list-h">
+                                {if condition="isset($goods['goods_image_main'])"}
+                                    <li class="color_default"><p><img src="{$goods['goods_image_main']}" width="180" height="109"></p></li>
+                                {/if}
+                                {foreach $goods['default_goods']['attachment_list'] as $vo}
+                                    <li class="color_default"><p><img src="{$vo['address']}" width="180" height="109"></p></li>
+                                {/foreach}
+                                {if condition="isset($colorUrl) && count($colorUrl) > 0"}
+                                    {foreach $colorUrl as $key=>$val}
+                                        {if condition="count($val) > 0"}
+                                            {foreach $val as $ke=>$va}
+                                                <li class="color_{$key}" style="display: none;"><p><img src="{$va}" width="180" height="109"></p></li>
+                                            {/foreach}
+                                        {/if}
+                                    {/foreach}
+                                {/if}
+                            </ul>
+                        </div>
+                        <div class="control" id="spec-right">
+                            <!-- <img src="images/right.gif" /> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="fr">
+                <div class="mt-bt">
+                    <span>{$goods['goods_name']}</span>
+                    {if $fav == 1}
+                    <span class="fr collect" dataId="{$goods['goods_id']}" style="border-color: rgb(227, 105, 106); color: rgb(227, 105, 106); width: 50px; background-image: url({$Think.IMG_PATH}ico-x-1.png);">已收藏</span>
+                    {else/}
+                    <span class="fr collect" dataId="{$goods['goods_id']}">点击收藏</span>
+                    {/if}
+                </div>
+                <ul class="cont-info">
+                    <li class="ms">
+                        <p>特惠价 ¥ <span class="prize">{$goods['goods_price']}</span> 元</p>
+                        <p>原价 ¥ <del class="market-prize">{$goods['goods_market_price']}</del> 元</p>
+                    </li>
+                    {if $goods['goods_desc'] neq ''}
+                    <li class="ms">
+                        <p>说明 {$goods['goods_desc']}</p>
+                    </li>
+                    {/if}
+                    <li class="ms mb15">
+                        <p>货号 <i class="serial">{$goods['goods_serial']}</i></p>
+                    </li>
+                    {if $goods.goods_type == 1}
+                    {if condition="$hideSpec eq 0"}
+                    {foreach $featureList as $feature}
+                    <li class="mt-color specifications">
+                        <p class="bt">{$feature['attribute_name']}</p>
+                        <div class="chk-color">
+                            {foreach $feature['feature_value'] as $featureValue}
+                                <p>
+                                    <a href="javascript:" class="specifications-value" value-id="{$featureValue['id']}" feature-id="{$feature['feature_id']}">{$featureValue['feature_value']}</a>
+                                </p>
+                            {/foreach}
+                        </div>
+                    </li>
+                    {/foreach}
+                    {/if}
+                    <li class="mt-color">
+                        <p class="bt">选购数量</p>
+                        <div>
+                            <input type="text" name="number" id="number" value="1">
+                            <p class="num">（当前库存 <span>{$goods['goods_storage']}</span> 件)</p>
+                        </div>
+                    </li>
+                    <li class="mt-sub">
+                        <ul>
+                            <li class="mt-zx">
+                                <a href="javascript:" class="zx">在线咨询</a>
+                                <div class="none">
+                                    <p><a class="qq-kf" href="javascript:openQQ('{$setting.qq}')">QQ咨询</a></p>
+                                    <p><a href="javascript:;" class="show-phone">电话咨询</a></p>
+                                </div>
+                            </li>
+                            {if condition="$goods['goods_storage'] > 0"}
+                                    <li><a href="javascript:;" id="add-cart">加入购物车</a></li>
+                                    <li><a href="javascript:;" id="buy">立即购买</a></li>
+                                {else \}
+                                    <li><a href="javascript:;" class="not" id="add-cart">加入购物车</a></li>
+                                    <li><a href="javascript:;" class="not" id="buy">立即购买</a></li>
+                            {/if}
+
+                        </ul>
+
+                    </li>
+                    {/if}
+
+                </ul>
+
+            </div>
+            <div class="clear"></div>
+        </li>
+        <li class="mt-cnt-info">
+            <div class="mt-x-cut">
+                <p class="cus">商品实拍</p>
+                <p>商品规格</p>
+                <p>材质说明</p>
+                <p>品质保证</p>
+            </div>
+            <ul class="cnt-info">
+                <li class="cut-goods-info" style="margin-bottom: 99px;">
+                    {$extra['goods_real_shot']|htmlspecialchars_decode}
+                </li>
+                <li class="cut-goods-info " style="margin-bottom: 99px; display: none;" >
+                    {$extra['goods_specifications']|htmlspecialchars_decode}
+                </li>
+                <li class="cut-goods-info " style="margin-bottom: 99px; display: none;" >
+                    {$extra['goods_material_description']|htmlspecialchars_decode}
+                </li>
+                <li class="cut-goods-info " style="margin-bottom: 99px; display: none;" >
+                    {$extra['goods_quality_assurance']|htmlspecialchars_decode}
+                </li>
+            </ul>
+
+        </li>
+    </ul>
+</div>
+
+<form action="{:url('shop/buy/index')}" method="post" class="hide">
+    <input type="text" name="cart_id[]" id="cart_id" value="" />
+    <input type="text" name="ifcart" value="0" />
+    <input type="submit" id="buy-now" />
+</form>
+
+<script type="text/javascript">
+var goodsList = eval('(' + '{$goods_group}' + ')');
+var featureLength = parseInt('{$featureLength}');
+var storage = parseInt('{$storage}');
+var sku     = '{$sku}';
+var login   = parseInt('{$isLogin}');
+var serial  = '{$goods["goods_serial"]}';
+$(function(){
+    //点击显示电话号码
+    $(".show-phone").click(function(){
+        layer.open({
+            title: [
+                '联系电话'
+            ],
+            anim: 'up',
+            content: '{$service.tel|default="17727982353"}',
+            btn: ['确认']
+        });
+    });
+    //规格值点击
+    $('.specifications-value').parent().click(function(){
+
+        //点击规格值时改变图片
+        var thisVal = $(this).find('a').attr('value-id');
+        var colorRow = $(".color_"+thisVal);
+        if(colorRow){
+            if(colorRow.css('display') == 'block'){
+
+                colorRow.parent().find('li').hide();
+                $('.color_default').show();
+            }else{
+                colorRow.parent().find('li').hide();
+                colorRow.show();
+            }
+        }
+
+
+        // var valueId   = $(this).attr('value-id');
+        // var featureId = $(this).attr('feature-id');
+       /*
+        var ob  = $(this).parent().parent();
+        if ( !$(this).hasClass('choice-spec') ) {
+            //清除本规格所有选中的规格值状态
+            ob.find('a').each(function(){
+                if ( $(this).hasClass('choice-spec') ) {
+                    $(this).removeClass('choice-spec');
+                }
+            });
+            $(this).addClass('choice-spec');
+        } else {
+            $(this).removeClass('choice-spec');
+        }
+*/
+        //判断长度,如果匹配，则可以计算库存
+        if ( $(".choice-spec").length == featureLength ) {
+            //计算规格值组所构成的groupId的库存
+            var valueList = new Array();
+            var prize     = '暂无价格';
+            var marketPrize = '暂无价格';
+            $(".choice-spec").each(function(){
+                valueList.push( $(this).attr('value-id') );
+            });
+            var valueIdArray = new Array();
+            for (var i = 0; i < goodsList.length; i++) {
+                valueIdArray = goodsList[i].value_id_list;
+                if ( valueIdArray.sort().toString() == valueList.sort().toString() ) {
+                    storage = parseInt( goodsList[i].goods_storage );
+                    sku     = goodsList[i].goods_sku;
+                    prize   = goodsList[i].goods_price;
+                    marketPrize  = goodsList[i].goods_market_price;
+                    serial  = goodsList[i].goods_serial;
+                }
+            }
+            //更新商品货号
+            $(".serial").html(serial);
+            //根据库存判断立即下单和加入购物车的状态
+            $(".num span").html( storage.toString() );
+            $("#number").val(1);
+            $("#number").attr('disabled', false);
+            //清除立即购买和加入购物车的点击
+            if ( $("#add-cart").hasClass('not') ) {
+                $("#add-cart").removeClass('not');
+            }
+            if ( $("#buy").hasClass('not') ) {
+                $("#buy").removeClass('not');
+            }
+            if ( storage == 0 ) {
+                $("#number").attr('disabled', true);
+                //加入购物车以及立即购买都不能点击
+                $("#add-cart").addClass('not');
+                $("#buy").addClass('not');
+            }
+            //更新价格显示
+            $(".prize").html( prize );
+            $(".market-prize").html( marketPrize );
+        } else {
+            //否则清空sku和库存
+            sku = '';
+            storage = 0;
+            $(".num span").html( "{$goods['goods_storage']}" );
+            $(".serial").html('{$goods["goods_serial"]}');
+        }
+    });
+    //点击加入购物车
+    $("#add-cart").click(function(){
+        var number = $('#number').val();
+        //将商品信息加入购物车
+        if ( !$(this).hasClass('not') ) {
+            //判断用户是否选择的规格
+            if ( sku == '' ) {
+                layer.msg('请选择商品规格');
+                return false;
+            }
+            //数量判断
+            if ( !isPositiveNum( number ) ) {
+                layer.msg('商品数量为大于0的整数');
+                return false;
+            }
+            //商品库存判断
+            if ( number > storage ) {
+                layer.msg('商品库存不足');
+                return false;
+            }
+            //跳转到添加购物车页面
+            window.location.href="{:url('shop/carts/add')}?nr="+number+'&rid='+sku;
+        }
+    });
+
+    //点击立即购买
+    $("#buy").click(function(){
+        var number = $('#number').val();
+        //将商品信息加入购物车
+        if ( !$(this).hasClass('not') ) {
+            //判断用户是否选择的规格
+            if ( sku == '' ) {
+                layer.msg('请选择商品规格');
+                return false;
+            }
+            //数量判断
+            if ( !isPositiveNum( number ) ) {
+                layer.msg('商品数量为大于0的整数');
+                return false;
+            }
+            //商品库存判断
+            if ( number > storage ) {
+                layer.msg('商品库存不足');
+                return false;
+            }
+            //跳转到添加购物车页面
+            $("#cart_id").val(sku+'|'+number);
+            $("#buy-now").trigger('click');
+        }
+    });
+
+    //收藏以及取消收藏普通商品
+
+    $('.collect').click(function() {
+        //判断是否登录
+        var login   = parseInt('{$isLogin}');
+        if( login == 0 ) {
+            layer.msg('请先登录');
+            window.location.href = '{:url("shop/login/login")}';
+        }
+        var $_this = $(this);
+        var dataId = $(this).attr('dataId');
+        if($(this).text() == '点击收藏'){
+            $.getJSON('{:url("api/Favorites/addFav")}?data=' + dataId, function (result) {
+                layer.msg(result.msg);
+                if (result.code == 1) {
+                    $_this.css({
+                        'border-color':'#e3696a',
+                        'color':'#e3696a',
+                        'width':'50px',
+                        'background-image': "url('{$Think.IMG_PATH}ico-x-1.png')"
+                    })
+                    $_this.text('已收藏')
+                }
+            })
+        }else if($(this).text() == '已收藏'){
+            $.getJSON('{:url("api/Favorites/delFav")}?data=' + dataId, function (result) {
+                layer.msg(result.msg);
+                if (result.code == 1) {
+                    $_this.css({
+                        'border-color': '#afaead',
+                        'color': '#afaead',
+                        'width':'60px',
+                        'background-image': "url('{$Think.IMG_PATH}ico-x-2.png')"
+                    })
+                    $_this.text('点击收藏')
+                }
+            });
+        }
+    });
+})
+</script>

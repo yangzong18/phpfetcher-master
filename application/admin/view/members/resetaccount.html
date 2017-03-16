@@ -1,0 +1,116 @@
+{__NOLAYOUT__}
+{include file="layout/header" /}
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<!-- 表单组 -->
+<div class="re-layui re-count">
+    <form class="js-ajax-form" action="resetAccountPost" method="post">
+        <table class="table">
+            <!--tr>
+                <td colspan="2">
+                    <h3>重置帐号：{$account}</h3>
+                </td>
+                <td></td>
+            </tr-->
+            <tr>
+                <td class="td-l-na h-td">
+                    <h3>重置帐号</h3>
+                </td>
+                <td class="td-r-ipt h-td">
+                    <h3>{$account}</h3>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-l-na">
+                    <div>
+                        原账号
+                    </div>
+                </td>
+                <td class="td-r-ipt">
+                    <div>
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="account" value="{$account}" readonly>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-l-na">
+                    <div>
+                        新账号<span>*</span>
+                    </div>
+                </td>
+                <td class="td-r-ipt">
+                    <div>
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="account">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-l-na">
+                    <div>
+                        再次新账号<span>*</span>
+                    </div>
+                </td>
+                <td class="td-r-ipt">
+                    <div>
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="re_account">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="td-ps">
+                重置账号确认后，将向新账号，发送提醒短信
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="2" class="b0 td-btn">
+                    <div class="text-center btnbox mt10">
+                        <input type="hidden" name="memberId" value="{$memberId}">
+                        <input type="hidden" name="type" value="{$type}">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">确定</button>
+                        <button type="button" class="btn max-bg return">取消</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}mCustomScrollbar.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jquery.jedate.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}commonality.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<script src="{$Think.UEDITOR_PATH}ueditor.config.js" charset="utf-8"></script>
+<script src="{$Think.UEDITOR_PATH}ueditor.all.min.js" charset="utf-8"></script>
+<script src="{$Think.UEDITOR_PATH}lang/zh-cn/zh-cn.js" charset="utf-8"></script>
+<title>主页</title>
+<!--[if lt IE 9]>
+<script src="{$Think.JS_PATH}html5shiv.min.js"></script>
+<script src="{$Think.JS_PATH}respond.min.js"></script>
+<![endif]-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+        });
+    })
+
+</script>
+
+
+
+

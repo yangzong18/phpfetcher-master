@@ -1,0 +1,110 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="editPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>编辑配送</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>配送方式*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="hidden" name="id" value="{$dataArray.id}">
+                            <input type="text" class="form-control h30 mb5 w400" name="name" value="{$dataArray.name}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>链接*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="url" value="{$dataArray.url}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><div><h3>图片*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="uploadimg">
+                            <div id="image" class="file-item thumbnail">
+                                <div class="up-imgbox">
+                                    <img src="{$dataArray.image}@w100_h100.png" style="width: 100px;height: 100px;">
+                                </div>
+                                <div>
+                                    <a class="del_pic">删除</a>
+                                </div>
+                                <input type="hidden" name="image" value="{$dataArray.image}" class="imgName-up-item">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>排序</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="sort" value="{$dataArray.sort}">
+                            <span>请填写自然数。规格列表将会根据排序进行由小到大排列显示。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button class="btn btn-warning max-bg js-ajax-submit">提交</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 1,//上传数量
+            inputName: 'image',//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        })
+    });
+</script>

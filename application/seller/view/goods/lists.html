@@ -1,0 +1,381 @@
+<form class="form-inline" role="form" action="{:url('seller/goods/lists')}">
+<div class="col-form">
+        <div class="form-group" style="float: left;margin-left: 18px;margin-bottom: 1px;" >
+            <span>商品分类</span>
+
+        </div>
+        <div class="form-group" style="float: left;margin-left: 18px;margin-bottom: 1px;">
+            <select class="form-control h30 firstSelect" name="category_id[]">
+                <option value="0">请选择...</option>
+                {if condition="isset($nowCategory[0])"}
+                    {if condition="isset($category)"}
+                    {foreach $category as $k=>$v}
+                        {if condition="$v['category_id'] eq $nowCategory[0]"}
+                            <option selected value="{$v['category_id']}">{$v['name']}</option>
+                        {else \}
+                            <option value="{$v['category_id']}">{$v['name']} </option>
+                        {/if}
+                    {/foreach}
+                    {/if}
+                {else \}
+
+                    {if condition="isset($category)"}
+                    {foreach $category as $k=>$v}
+                        <option value="{$v.category_id}">{$v.name}</option>
+                    {/foreach}
+                    {/if}
+                {/if}
+            </select>
+        </div>
+        <div class="form-group" style="float: left;margin-left:10px;margin-bottom: 1px;">
+            <select class="form-control h30 secondSelect" name="category_id[]">
+                <option value="0">请选择...</option>
+                {if condition="isset($nowCategory[1])"}
+                    {if condition="isset($LevelTwo)"}
+                    {foreach $LevelTwo as $k=>$v}
+                        {if condition="$v['category_id'] eq $nowCategory[1]"}
+                                <option selected value="{$v['category_id']}">{$v['name']}</option>
+                            {else \}
+                                <option value="{$v['category_id']}">{$v['name']} </option>
+                        {/if}
+                    {/foreach}
+                    {/if}
+                {/if}
+            </select>
+        </div>
+        <div class="form-group" style="float: left;margin-left: 10px; margin-bottom: 1px;">
+            <select class="form-control h30 threeSelect" name="category_id[]">
+                <option value="0">请选择...</option>
+                {if condition="isset($nowCategory[2])"}
+                    {if condition="isset($LevelThree)"}
+                    {foreach $LevelThree as $k=>$v}
+                    {if condition="$v['category_id'] eq $nowCategory[2]"}
+                        <option selected value="{$v['category_id']}">{$v['name']}</option>
+                    {else \}
+                        <option value="{$v['category_id']}">{$v['name']} </option>
+                    {/if}
+                {/foreach}
+                {/if}
+                {/if}
+
+            </select>
+        </div>
+        <!--审核状态搜索-->
+        <span>审核状态</span>
+        <div class="form-group">
+            <select class="form-control" name="verify">
+                <option value="2">审核状态</option>
+                <option value="3" {if condition="$param.verify eq 3"} selected {/if} >待审核</option>
+                <option value="1" {if condition="$param.verify eq 1"} selected {/if}>审核通过</option>
+                <option value="0" {if condition="$param.verify eq 0"} selected {/if}>审核未通过</option>
+            </select>
+        </div>
+
+
+</div>
+    <div class="col-form">
+
+
+
+        <span style="float: left;margin-left: 18px;margin-bottom: 1px;">商品类型</span>
+        <div class="form-group" style="float: left;margin-left: 18px;margin-bottom: 1px;" >
+            <select class="form-control" name="goods_type">
+                <option value="0" {if condition="$param.goods_type eq 0"} selected {/if}>全部</option>
+                <option value="1" {if condition="$param.goods_type eq 1"} selected {/if} >普通商品</option>
+                <option value="2" {if condition="$param.goods_type eq 2"} selected {/if}>兑换商品</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <select class="form-control" name="search_name">
+                {if condition="isset($search_name)"}
+                {if condition=" $search_name eq 1"}
+                <option selected value="1">商品名称</option>
+                <option value="2">商品编号</option>
+                {else \}
+                <option  value="1">商品名称</option>
+                <option selected value="2">商品编号</option>
+                {/if}
+                {else \}
+                <option  value="1">商品名称</option>
+                <option  value="2">商品编号</option>
+                {/if}
+            </select>
+        </div>
+        <div class="input-group">
+            {if condition="isset($name)"}
+            <input type="text" name="goods_name" value="{$name}" class="form-control">
+            {elseif condition="isset($goods_id)" \}
+            <input type="text" name="goods_name" value="{$goods_id}" class="form-control">
+            {else \}
+            <input type="text" name="goods_name"  class="form-control">
+            {/if}
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">搜索</button>
+            </span>
+        </div>
+    </div>
+
+</form>
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10">
+                <!-- 按钮占位 -->
+            </th>
+            <th class="w10">
+                <!-- 商品图片占位 -->
+            </th>
+            <th class="w400">商品名称</th>
+            <th class="w150">价格</th>
+            <th class="w150">库存</th>
+            <th class="w150">发布时间</th>
+            <th class="w150">审核时间</th>
+            <th class="w150">审核状态</th>
+            <th class="w400">操作</th>
+        </tr>
+
+
+        {if condition="isset($list)"}
+        {foreach $list as $k=>$v}
+        <tr class="goods-tr-bg">
+            <td class="chk-one">
+                <input type="checkbox" value="{$v.goods_id}" id="checkbox_a2_{$v.goods_id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$v.goods_id}" class="lab-t"></label>
+            </td>
+            <td colspan="8">
+                <label for="checkbox_a2_{$v.goods_id}" class="text-left pr15">商品ID：{$v.goods_id}</label>
+            </td>
+        </tr>
+
+        <tr class="goods-tr-t0">
+            <td>
+                <span class="icon-angle-down in animate-left-yd" data-toggle="tooltip" data-animation="fadeInUp" data-placement="top" title="点击展开查看此商品全部规格;如超出请滚动滚动条，或拉动滚动条"></span>
+            </td>
+            <td>
+                <a href="{:url('shop/goods/index')}?gk={$v.goods_id}" class="bt-images"><img src="{$v.goods_image_main}@w50_h50.png" alt="" height="50px;" width="50px;"></a>
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/goods/index')}?gk={$v.goods_id}">{$v.goods_name}</a></dt>
+                    <!--<dd>商家货号：1983693203980238930</dd>-->
+                </dl>
+            </td>
+            <td>¥{$v.goods_price}</td>
+            <td>{$v.goods_storage}件</td>
+            <td>{$v.goods_created_at|date='Y-m-d H:i:s',###}</td>
+            <td>{if condition="$v.goods_sell_time"}{$v.goods_sell_time|date='Y-m-d H:i:s',###}{else /}/{/if}</td>
+            <td  class="table-handle"><span>
+                    {if condition="$v.goods_verify eq 3"}
+                            待审核
+                        {elseif condition="$v.goods_verify eq 1"}
+                            审核通过
+                        {elseif condition="$v.goods_verify eq 0"}
+                            审核未通过
+
+                    {/if}
+                </span>
+            </td>
+            <td class="table-handle">
+
+                {if condition="$v.goods_verify eq 3"}
+                <span>
+                    <a class="forCheck" href="javascript:;" gid="{$v.goods_id}"><i class="icon-wrench"></i>审核</a>
+                </span>
+                {/if}
+                <span>
+                    <a href="{:url('seller/Goods/edit')}?id={$v.goods_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a class="js-ajax-delete" href="delete?id={$v.goods_id}"><i class="icon-trash"></i>删除</a>
+                </span>
+            </td>
+        </tr>
+        <tr class="goods-tr-t0  goods-tr-none">
+            <td colspan="7">
+                <div class="goods-box">
+                    <ul>
+                        {if condition="isset($list[$k]['feature'])"}
+                        {foreach $list[$k]['feature'] as $ke=>$va}
+                        <li>
+                            {if condition="isset($va['feature'])"}
+                            {if condition="!empty($va['attachment_url'])"}
+                            <a href="#" class="img-link"><img src="{$va['attachment_url']}@w100_h100.png" alt="" width="100px;" height="100px;" /></a>
+                            {/if}
+                            {foreach $va['feature'] as $kk=>$vv}
+                            <p>{$vv['feature_name']}：{$vv['feature_value_name']}</p>
+                            {/foreach}
+                            {/if}
+                            <p>价格：¥{$va['goods_price']}</p>
+                            <p>库存：{$va['goods_storage']}</p>
+                            <a href="{:url('shop/goods/index')}?gk={$v.goods_id}" class="goods-link">查看商品详情</a>
+                        </li>
+                        {/foreach}
+                        {/if}
+                    </ul>
+                </div>
+
+            </td>
+
+        </tr>
+        {/foreach}
+        {/if}
+        <tr>
+            <td colspan="7">
+                <!-- 占位 -->
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input type="checkbox" id="checkbox_a4" class="chk_1 all" />
+                <label for="checkbox_a4" class="lab-t"></label>
+            </td>
+            <td colspan="8">
+                <label for="checkbox_a4" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:;" class="btn btn-default delete">删除</a>
+                    <!--<button type="button" class="btn btn-default">删除</button>-->
+                    <!--<button type="button" class="btn btn-default">下架</button>-->
+                    <!--<button type="button" class="btn btn-default">设置广告词</button>-->
+                    <!--<button type="button" class="btn btn-default">设置关联版式</button>-->
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$page}
+</div>
+<div id="forCheck"  style="display: none;" class="layui-layer-wrap">
+    <div style="margin: 20px;">
+        <table class="table-check">
+            <tbody><tr>
+                <td class="td-l"><h3>审核通过：</h3></td>
+                <td class="td-r">
+                    <div class="btn-group btn-box-qh">
+                        <button type="button" value="0" class="btn btn-default cus">否</button>
+                        <button type="button" value="1" class="btn btn-default">是</button>
+                    </div>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td colspan="2">
+                    <button gid="" class="btn btn-warning max-bg js-ajax-submit checkSubmit">提交</button>
+                </td>
+            </tr>
+            </tbody></table>
+    </div>
+
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script>
+
+    //审核功能
+    $('.checkSubmit').click(function(){
+        var group = $(this).parent().parent().prev().find('.cus').attr('value');
+
+        var gid = $(this).attr('gid');
+        $.ajax({
+            url:"{:url('seller/goods/check')}",
+            data:{id:gid,verify:group},
+            success:function(result){
+                layer.msg(result.msg);
+                window.location.reload();
+            }
+        });
+        layer.closeAll();
+    });
+
+    $('.forCheck').click(function() {
+        var gid = $(this).attr('gid');
+        $('.checkSubmit').attr('gid',gid);
+        //自定页
+        layer.open({
+            type: 1,
+            skin: 'layui-dbd', //样式类名 layui-layer-demo
+            closeBtn: 1, //不显示关闭按钮
+            title: '商品审核',
+            anim: 2,
+            shadeClose: false, //开启遮罩关闭
+            area: ['300px', '180px'],
+            content: $("#forCheck")
+        });
+    });
+
+    getThreeCategory();
+    //选择第一级分类时加载二级分类
+    $(".firstSelect").unbind('change').on('change',function(){
+        var val = $(this).find('option:selected').attr('value');
+        if(val == 0 || val == null || val == 'undefined'){
+            $(".secondSelect").html('');
+            $(".threeSelect").html('');
+            $(".secondSelect").html('<option value="0">请选择...</option>');
+            $(".threeSelect").html('<option value="0">请选择...</option>');
+            return false;
+        }
+
+        $.ajax({
+            url:'/seller/Goods/getCategory',
+            dataType:'json',
+            data:{ids:val},
+            success:function(result){
+                if(result.code == 0){
+                    alert(result.msg);
+                    return false;
+                }
+                var res = result.data;
+                var strings = '<option value="0">请选择...</option>';
+                for (var i in res) {
+                    strings += '<option value="'+res[i]['category_id']+'">'+res[i]["name"]+'</option>';
+                }
+                $(".secondSelect").html('');
+                $(".threeSelect").html('<option value="0">请选择...</option>');
+                $(".secondSelect").html(strings);
+                getThreeCategory();
+            }
+
+        });
+    });
+
+
+    //当选择二级分类时获取第三级分类
+    function getThreeCategory(){
+        $(".secondSelect").unbind('change').on('change',function(){
+            var val = $(this).find('option:selected').attr('value');
+
+            if(val == 0 || val == null || val == 'undefined'){
+                $(".threeSelect").html('');
+                $(".threeSelect").html('<option value="0">请选择...</option>');
+                return false;
+            }
+
+            $.ajax({
+                url:'/seller/Goods/getCategory',
+                dataType:'json',
+                data:{ids:val},
+                success:function(result){
+                    if(result.code == 0){
+                        alert(result.msg);
+                        return false;
+                    }
+                    var res = result.data;
+                    var strings = '<option value="0">请选择...</option>';
+                    for (var i in res) {
+                        strings += '<option value="'+res[i]['category_id']+'">'+res[i]["name"]+'</option>';
+                    }
+
+                    $(".threeSelect").html('');
+                    $(".threeSelect").html(strings);
+                }
+            });
+        });
+    }
+
+    //分页提交表单
+    $(".pagelist li a").click(function(){
+//        alert($(this).attr('href'));
+    });
+
+
+</script>

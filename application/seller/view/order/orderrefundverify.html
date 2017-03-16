@@ -1,0 +1,120 @@
+{__NOLAYOUT__}
+{include file="layout/header" /}
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<!-- 表单组 -->
+<div class="re-layui order-refund">
+    <form class="verify-form" onkeydown="if(event.keyCode==13)return false;">
+        <input type="hidden" name="orderId" value="{$order_info.order_id}">
+        <input type="hidden" name="type" value="1">
+        <table class="table"><tbody>
+        <tr>
+            <td class="td-l-na">订单号：</td>
+            <td>{$order_info.order_sn}</td>
+        </tr>
+        <tr>
+            <td class="td-l-na">状态：</td>
+            <td>{$order_info.state_desc}</td>
+        </tr>
+        <tr>
+            <td class="td-l-na">实付款：</td>
+            <td id="order_amount">{$order_info.order_amount}</td>
+        </tr>
+        <tr>
+            <td class="td-l-na">申请退款金额：</td>
+            <td>{$refund_info.refund_amount}</td>
+        </tr>
+        <tr class="td-num">
+            <td class="td-l-na">退款金额：</td>
+            <td class="td-r-ipt"><input type="text" name="refund_amount" value="" class="form-control h30 mb5" autocomplete="off"/></td>
+        </tr>
+        <tr>
+            <td class="td-l-na">退款说明：</td>
+            <td style="word-break: break-all;padding-right:15px">{$refund_info.reason_info}</td>
+        </tr>
+        <tr class="voucher-check">
+            <td class="td-l-na">凭证查看：</td>
+
+            <td class="c-img">
+                {foreach $refund_info.img as $img_info}
+                    <img src="{$img_info}@w70_h70.png" width="70" height="70"/>
+                {/foreach}
+            </td>
+
+        </tr>
+        <tr class="b0">
+            <td colspan="4" class="b0">
+                <div class="text-center mt10">
+                    <button type="button" class="btn btn-warning max-bg js-submit">同意退款</button>
+                    <button type="button" class="btn max-bg" onclick="refund_refuse('{$order_info.order_id}')" >拒绝申请</button>
+                </div>
+            </td>
+        </tr>
+        </tbody></table></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_COMMON_PATH}jquery.validation.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+    //拒绝申请
+    function refund_refuse(orderId){
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+        top.layer.open({
+            type: 2,
+            title: '拒绝退款',
+            shadeClose: false,
+            shade: 0.5,
+            skin: 'layui-dbd layui-order-refuse',
+            area: ['500px', '400px'],
+            content: ["OrderRefundRefuse?orderId="+orderId,'auto'],
+            end:function(){
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            }
+        });
+    }
+    // 判断value是否大于两位小数
+    jQuery.validator.addMethod("isFloatGtZero", function(value, element) {
+        return /^([1-9][0-9]*|0)(\.\d{1,2})?$/.test(value) && value > 0;
+    });
+    // 判断整数value   不能大于订单总金额verify
+    jQuery.validator.addMethod("isIntGtAmount", function(value, element) {
+        value=parseFloat(value);
+        var amount = $('#order_amount').text();
+        return value <= amount;
+    });
+    $(function(){
+        $(".verify-form").validate({
+            rules: {
+                refund_amount: {
+                    required: true,
+                    isFloatGtZero: true,
+                    isIntGtAmount:true
+                }
+            },
+            messages: {
+                refund_amount: {
+                    required: '退款金额不能为空',
+                    isFloatGtZero:'退款金额不能小于等于0且是两位小数',
+                    isIntGtAmount:'退款金额不能大于订单总金额'
+                }
+            }
+        });
+        $('button.js-submit').click(function(){
+            if($(".verify-form").valid()){
+                var orderId = '{$order_info.order_id}';
+                var refund_amount = $('input[name="refund_amount"]').val();
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                top.layer.open({
+                    type: 2,
+                    title: '同意退款',
+                    shadeClose: false,
+                    shade: 0.5,
+                    skin: 'layui-dbd',
+                    area: ['300px', '210px'],
+                    content: ["OrderRefundAgree?orderId="+orderId+'&refund_amount='+refund_amount,'no']//iframe的url
+                });
+            }
+        });
+    });
+</script>

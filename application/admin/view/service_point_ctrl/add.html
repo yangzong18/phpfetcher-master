@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<style>
+    .webuploader-pick{
+        background: #fff;
+        padding: 7px 15px;
+        color: #000;
+    }
+    .webuploader-pick-hover{
+        background: #dcdcdc;
+    }
+</style>
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>当点击“摘要”时将跳转至指定的“链接”</p>
+        </li>
+    </ul>
+</div>
+<div class="col-form">
+    <form class="js-ajax-form form-inline" action="addPost" enctype="multipart/form-data" role="form">
+        <span>摘要</span>
+        <div class="input-group">
+            <input type="text" name="abstract" class="form-control text-ra" value="{$service.abstract}" style="width: 200px">
+        </div>
+
+        <span>链接</span>
+        <div class="input-group">
+            <input type="text" name="url" class="form-control" style="width: 200px" value="{$service.url}">
+            <span class="input-group-btn">
+              <button class="btn btn-default js-ajax-submit">提交</button>
+            </span>
+        </div>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

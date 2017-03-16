@@ -1,0 +1,182 @@
+
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>编辑广告位详细信息，其中包括广告位的图文描述、图片以及链接等信息</p>
+            <p><i class="icon-circle"></i>广告位分为首页大屏广告、滚动广告以及商品分类栏广告</p>
+        </li>
+    </ul>
+</div>
+<div class="sheet-box">
+    <form class="js-ajax-form" action="editPost" method="post">
+        <input type="hidden" name="id" value="{$info.id}">
+        <input type="hidden" name="type" id="type" value="{$info.adv_type}">
+        <input type="hidden" name="cate_id" id="cate_id" value="{$info.category_id}">
+        <table class="table">
+            <tbody>
+
+            <tr class="goods-tr-bg">
+                <th colspan="4"><h3>编辑广告位信息</h3></th>
+            </tr>
+
+            <tr>
+                <td width="150px"><div><h3>广告标题*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="adv_name" class="form-control h30 mb5" value="{$info.adv_name}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td width="150px"><div><h3>广告链接*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="adv_link" class="form-control h30 mb5" value="{$info.adv_link}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>广告显示图*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="uploadimg">
+                            <div id="adv_img" class="file-item thumbnail">
+                                <div class="up-imgbox">
+                                    <img src="{$info.adv_img}@w100_h100.png" style="width: 100px;height: 100px;">
+                                </div>
+                                <div>
+                                    <a class="del_pic">删除</a>
+                                </div>
+                                <input type="hidden" name="adv_img" value="{$info.adv_img}" class="imgName-up-item">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>广告分类*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <select name="adv_type" class="form-control" id="adv_type">
+                                {foreach $category as $k=>$v}
+                                <option value="{$k}" {eq name="$info.adv_type" value="$k"}selected = "selected"{/eq}>
+                                {$v}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="category-info" id="goods_category" style="display: none">
+                <td  class="w100">
+                    <div>
+                        <h3>商品分类</h3>
+                    </div>
+                </td>
+                <td class="show-category hide">
+
+                </td>
+                <td class="defalut-category table-handle">
+                    <div class="col-xs-11">
+                        {$info.goods_category}
+                    <span>
+                        <a href="javascript:;" class="edit-category"><i class="icon-edit"></i>编辑</a>
+                    </span>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>广告排序</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="adv_sort" class="form-control h30 mb5" value="{$info.adv_sort}">
+                            <span>请填写自然数。广告位列表将会根据排序由小到大排列显示，默认为0。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">编辑</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+
+                </td>
+            </tr>
+
+            </tbody></table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script type="text/javascript" src="{$Think.JS_PATH}category.js"></script>
+<script type="text/javascript">
+    $(function(){
+        //点击编辑商品分类
+        $(".edit-category").click(function(){
+            var ob = $(this).parents('.category-info');
+            ob.find('.defalut-category').addClass('hide');
+            ob.find('.show-category').removeClass('hide');
+            category.children(0);
+        });
+        category.url = "{:url('getCategory')}";
+        category.level = 2;
+
+
+        //广告位为商品分类时，显示商品分类栏
+        if($('#type').val() == 2){
+            $('#goods_category').show();
+        }else{
+            $('#goods_category').hide();
+        }
+
+        //选择商品广告位，显示商品分类栏
+        $('#adv_type').click(function(){
+            if($('#adv_type option:selected').val() == 2){
+                $('#goods_category').show();
+            }else{
+                $('#goods_category').hide();
+            }
+        })
+
+        //上传图片
+        $('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 1,//上传数量
+            inputName: 'adv_img',//input name值\
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        })
+    })
+</script>

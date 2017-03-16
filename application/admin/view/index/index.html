@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <link rel="stylesheet" href="{$Think.CSS_PATH}base.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}style.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}animate.css" media="screen" title="no title" charset="utf-8">
+    <script src="{$Think.JS_PATH}jquery-2.1.1.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}mCustomScrollbar.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}commonality.js" charset="utf-8"></script>
+    <title>主页</title>
+    <!--[if lt IE 9]>
+    <script src="{$Think.JS_PATH}html5shiv.min.js"></script>
+    <script src="{$Think.JS_PATH}respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- 顶部导航 start -->
+<header>
+    <div class="top-nav">
+        <ul>
+            <li class="fl logo">
+                <a href="#"><img src="{$Think.IMG_PATH}logo.png" alt="" /></a>
+            </li>
+            <li class="fl item-nav">
+                <ul class="">
+                    
+                </ul>
+            </li>
+            <li class="fl search-bar">
+                <form class="" action="" method="post">
+                    <input type="text" name="name" value="" placeholder="商品搜索" class="search-input-text">
+                    <input type="submit" name="name" value="" class="search-input-submit">
+                </form>
+            </li>
+            <li class="fr user-nav">
+                <ul>
+                    <li class="user-admin">
+                        <a href="#">
+                            <img src="{$Think.IMG_PATH}admin-img.png" alt="" />
+                            <span>admin</span>
+                        </a>
+                    </li>
+                    <li class="user-sz">
+                        <a href="#" class="ico-home" data-toggle="tooltip" data-animation="fadeInUp" data-placement="bottom" title="首页"></a>
+                        <a href="#" class="ico-wrench" data-toggle="tooltip" data-animation="fadeInUp" data-placement="bottom" title="修改密码"></a>
+                        <a href="#" class="ico-exit" data-toggle="tooltip" data-animation="fadeInUp" data-placement="bottom" title="退出"></a>
+                    </li>
+                </ul>
+
+            </li>
+        </ul>
+    </div>
+</header>
+<!-- 顶部导航 end -->
+<!-- 左侧菜单 start -->
+<article class="left-container">
+    <div class="left-menu">
+        <ul>
+          <!--  <li class="zbox">
+                <div class="menu-toggle child-cus">
+                    <span><a href="">欢迎界面</a></span>
+                </div>
+            </li>-->
+            {if condition="isset($submenu)"}
+            {foreach $submenu as  $k=>$v}
+            <li class="zbox">
+                <div class="menu-toggle">
+                    <span><!--<a href="{$v.c.'/'.$v.a|url='',false}"></a>-->{$v.name}</span>
+                {if condition="!empty($v.child)"}
+                    <ul {if condition="$top_category_arr[2]['tagname'] neq $k"}class="none"{/if}>
+                        {foreach $v.child as $_k=>$_v}
+                        <li {if condition="$top_category_arr[3]['tagname'] eq $_k" }class="next-cus"{/if}><a href="{$_v.c.'/'.$_v.a|url='',false}">{$_v.name}</a></li>
+                        {/foreach}
+                    </ul>
+                {/if}
+                </div>
+            </li>
+            {/foreach}
+            {/if}
+
+
+            <li class="gn-menu pop-menu">
+                <p class="add hvr_grow"><span>添加常用功能菜单</span></p>
+            </li>
+
+        </ul>
+        <!-- <div class="mask"></div> -->
+    </div>
+</article>
+<!-- 左侧菜单 end -->
+
+<!-- 左侧弹出菜单 start -->
+<article class="tc-left-menu">
+    <ul class="new-menu none">
+        <li class="popup-bt">
+            <div>
+                <h3>常用功能菜单</h3>
+                <p>添加您经常使用的功能到首页侧边栏，方便操作。</p>
+            </div>
+            <i class="icon-remove"></i>
+        </li>
+        <li class="menu-list">
+            <div>
+                <h4>商品</h4>
+                <ul>
+                    <li><a href="#" class="add-style">商品发布</a></li>
+                    <li><a href="#">出售中的商品</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">商品规格</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>商品</h4>
+                <ul>
+                    <li><a href="#">商品发布</a></li>
+                    <li><a href="#">出售中的商品</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                    <li><a href="#" class="add-style">关联版式</a></li>
+                    <li><a href="#">商品规格</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>商品</h4>
+                <ul>
+                    <li><a href="#">商品发布</a></li>
+                    <li><a href="#">出售中的商品</a></li>
+                    <li><a href="#">出售中的商品</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#" class="add-style">商品规格</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>商品</h4>
+                <ul>
+                    <li><a href="#">商品发布</a></li>
+                    <li><a href="#">出售中的商品</a></li>
+                    <li><a href="#" class="add-style">仓库中的商品</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#" class="add-style">关联版式</a></li>
+                    <li><a href="#">商品规格</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>商品</h4>
+                <ul>
+                    <li><a href="#">商品发布</a></li>
+                    <li><a href="#">出售中的商品</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">商品规格</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>商品</h4>
+                <ul>
+                    <li><a href="#">商品发布</a></li>
+                    <li><a href="#">出售中的商品</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">关联版式</a></li>
+                    <li><a href="#">商品规格</a></li>
+                    <li><a href="#">仓库中的商品</a></li>
+                </ul>
+            </div>
+
+
+        </li>
+
+    </ul>
+    <div class="mask"></div>
+</article>
+<!-- 左侧弹出菜单 end -->
+
+<!-- 中间内容 start -->
+<article class="content">
+    <div class="fall-container">
+        <div class="position">
+            <span><a href="#">平台管理</a></span>><span><a href="#">欢迎界面</a></span>
+        </div>
+        <div class="page-content" id="content">
+            <iframe src="/admin/index/welcome" style="width:100%;height: 100%;" frameborder="0" id="appiframe-0" class="appiframe"></iframe>
+        </div>
+    </div>
+</article>
+<!-- 中间内容 end -->
+
+</body>
+
+</html>

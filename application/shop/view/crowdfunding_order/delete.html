@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="mt-layer none">
+    <div class="login-main reg-main">
+        <ul class="">
+            <li class="form-box">
+                <form class="js-ajax-form" action="{:url('shop/crowdfunding_order/delete')}" onkeydown="if(event.keyCode==13)  method="post">
+                <input type="hidden" name="orderId" value="{$order_info.order_id}">
+                <input type="hidden"  name="type" value="1">
+                <div class="user-item">
+                    <p class="fl">删除订单</p>
+                    <p class="clear"></p>
+                </div>
+                <div class="form-item" style="margin: 0 auto;">
+                    <p class="">
+                        <label class="lab-ys">订单编号：</label>
+                        <label class="lab-ys">{$order_info.order_sn}</label>
+                        <i class="clear"></i>
+                    </p>
+                    <p class="adds">
+                        <label class="lab-ys">订单状态：</label>
+                        <label class="lab-ys">{$order_info.state_desc}</label>
+                        <i class="clear"></i>
+                    </p>
+                    <p class="sub numd-sub">
+                        <button type="submit" class="js-ajax-submit">确定</button>
+                        <button type="button" class="btn max-bg return">取消</button>
+                        <i class="clear"></i>
+                    </p>
+                </div>
+                </form>
+            </li>
+            <li class="clear"></li>
+        </ul>
+    </div>
+</div>
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+        });
+    })
+</script>

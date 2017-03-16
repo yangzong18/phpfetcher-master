@@ -1,0 +1,24 @@
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>热门搜索，将显示在前台搜索框下面，前台点击时直接作为关键词进行搜索，多个关键词间请用半角逗号 "," 隔开</p>
+        </li>
+    </ul>
+</div>
+<div class="col-form">
+    <form class="js-ajax-form form-inline" action="addPost" role="form">
+        <span>热门搜索</span>
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" value="{$search}" style="width: 300px">
+            <span class="input-group-btn">
+              <button class="btn btn-default js-ajax-submit">提交</button>
+            </span>
+        </div>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

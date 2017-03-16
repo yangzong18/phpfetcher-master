@@ -1,0 +1,293 @@
+<script src="{$Think.JS_PATH}zoom.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}lib.js" charset="utf-8"></script>
+<!-- content start -->
+<div class="container">
+    <ul class="list-box content-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('shop/crowdfunding/index')}">众筹商品</a> > <a href="javascript:;">商品详情</a></h3>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item content-goods-item marbox">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <li class="mt-content-xx mt-content-raise">
+            <div class="fl">
+                <div id="preview">
+                    <div class="jqzoom" id="spec-n1">
+                        <img src="{$goods.image_main}" jqimg="{$goods.image_main}" width="561" height="337">
+                    </div>
+                    <div id="spec-n5">
+                        <div class="control" id="spec-left">
+                            <!-- <img src="images/left.gif" /> -->
+                        </div>
+                        <div id="spec-list">
+                            <ul class="list-h">
+                                <li><p><img src="{$goods.image_main}" width="561" height="337"></p> </li>
+                                {if condition="!empty($attach)"}
+                                {foreach $attach as $k=>$v}
+                                <li><p><img src="{$v.attachment_url}" width="561" height="337"></p> </li>
+                                {/foreach}
+                                {/if}
+                            </ul>
+                        </div>
+                        <div class="control" id="spec-right">
+                            <!-- <img src="images/right.gif" /> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="fr">
+                <div class="mt-bt"><span>{$goods.name}</span>
+                    <!--<span class="fr collect" dataid="15">点击收藏</span>-->
+                </div>
+                <!--<h3 class="mt-bt"><span></span></h3>-->
+                <ul class="cont-info">
+                    <li class="ms">
+                        <p>每份价格 ¥ <span>{$goods.one_price}</span> 元</p>
+                        <p>总价 ¥ {$goods.total_price} 元</p>
+                    </li>
+                    <li class="ms">
+                        <p>众筹时间： {$goods.start_at|date="Y年m月d日H:i",###}-{$goods.end_at|date="Y年m月d日H:i",###}</p>
+                    </li>
+                    {if condition="!empty($goods.type)"}
+                    <li class="ms">
+                        <p>类型： {$goods.type}</p>
+                    </li>
+                    {/if}
+                    {if condition="!empty($goods.specification)"}
+                    <li class="mt-color mt20">
+                        <!--<p class="bt"><div>规格 {$goods.specification}</div></p>-->
+                        <p>规格： {$goods.specification}</p>
+                        <!--<div>-->
+                            <!--<select class="comm-select" name="">-->
+                                <!--<option>H2240*W8440</option>-->
+                                <!--<option>H2240*W8440</option>-->
+                                <!--<option>H2240*W8440</option>-->
+                                <!--<option>H2240*W8440</option>-->
+                                <!--<option>H2240*W8440</option>-->
+                                <!--<option>H2240*W8440</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+
+                    </li>
+                    {/if}
+                    <li class="ms">
+                        <div class="mb10">
+                            <p>说明： {$goods.description|htmlspecialchars_decode|strip_tags}</p>
+                        </div>
+                    </li>
+                    <li class="mt-color mt-bl-box mt20">
+                        <div class="mb10">
+                            <p>进度： 共{$goods.quotient}份/还剩{$goods.quotient-$goods.sale_number}份</p>
+                            <p class="mt-bl ">{$progress}</p>
+                        </div>
+                        <p class="clear"></p>
+                        <p class="bt">选购数量:</p>
+                        <div>
+                            <input type="text" name="name" id="buyNumber" value="1">
+                            <p class="num">（最多可选 <span>{$goods.limit}</span> 件)</p>
+                        </div>
+                    </li>
+                    <li class="mt-sub">
+                        <ul>
+                            <li class="mt-zx">
+                                <a href="javascript:" class="zx">在线咨询</a>
+                                <div class="none">
+                                    <p><a href="javascript:openQQ('{$setting.qq}')">QQ咨询</a></p>
+                                    <p><a href="javascript:;" class="show-phone">电话咨询</a></p>
+                                </div>
+                            </li>
+                            <!--<li><a href="#">加入购物车</a></li>-->
+                            <li><a  href="javascript:;" id="buy">立即购买</a></li>
+                        </ul>
+
+                    </li>
+
+                </ul>
+
+            </div>
+            <div class="clear"></div>
+        </li>
+        <li class="mt-rafin">
+            <div class="combg-h">
+                <img src="{$goods.image_price}@w1024_h768.png" width="1024" height="768" alt="">
+            </div>
+
+        </li>
+        <li class="mt-cnt-info">
+            <div class="mt-x-cut">
+                <p class="cus">商品实拍</p>
+                <p>商品规格</p>
+                <p>材质说明</p>
+                <p>品质保证</p>
+            </div>
+            <ul class="cnt-info">
+                <li class="cut-goods-info" style="margin-bottom: 99px;">
+                    {if condition="$goodsExtra.goods_real_shot"}
+                    {$goodsExtra.goods_real_shot|htmlspecialchars_decode}
+                    {/if}
+
+                </li>
+                <li class="cut-goods-info" style="margin-bottom: 99px;display: none;" >
+                    {if condition="$goodsExtra.goods_specifications"}
+                    {$goodsExtra.goods_specifications|htmlspecialchars_decode}
+                    {/if}
+
+                </li>
+                <li class="cut-goods-info"  style="margin-bottom: 99px;display: none;">
+                    {if condition="$goodsExtra.goods_material_description"}
+                    {$goodsExtra.goods_material_description|htmlspecialchars_decode}
+                    {/if}
+
+                </li>
+                <li class="cut-goods-info"  style="margin-bottom: 99px;display: none;">
+                    {if condition="$goodsExtra.goods_quality_assurance"}
+                    {$goodsExtra.goods_quality_assurance|htmlspecialchars_decode}
+                    {/if}
+
+                </li>
+            </ul>
+
+        </li>
+    </ul>
+</div>
+
+<form action="{:url('shop/crowdfunding_order/index')}" method="post" class="hide">
+    <input type="text" name="goods_id" id="goods_id" value="" />
+    <input type="submit" id="buy-now" />
+</form>
+<!-- content end -->
+
+<script type="text/javascript">
+    $(function() {
+        //点击显示电话号码
+        $(".show-phone").click(function(){
+            layer.open({
+                title: [
+                    '联系电话'
+                ],
+                anim: 'up',
+                content: '{$service.tel|default="17727982353"}',
+                btn: ['确认']
+            });
+        });
+        $(".jqzoom").jqueryzoom({
+            xzoom: 400,
+            yzoom: 457,
+            offset: 10,
+            position: "left",
+            preload: 1,
+            lens: 1
+        });
+        $("#spec-list").jdMarquee({
+            deriction: "left",
+            width: 565,
+            height: 109,
+            step: 1,
+            speed: 4,
+            delay: 5,
+            control: true,
+            _front: "#spec-right",
+            _back: "#spec-left"
+        });
+        $("#spec-list img").bind("mouseover", function() {
+            var src = $(this).attr("src");
+            $("#spec-n1 img").eq(0).attr({
+                src: src.replace("\/n5\/", "\/n1\/"),
+                jqimg: src.replace("\/n5\/", "\/n0\/")
+            });
+            $(this).css({
+                "border": "2px solid #a08f52",
+                "opacity": ".5"
+            });
+        }).bind("mouseout", function() {
+            $(this).css({
+                "border": "2px solid #a08f52",
+                "opacity": "1"
+            });
+        });
+
+        //购买限制判断
+        var limit = "{$goods.limit}";
+//        $("#buyNumber").change(function(){
+//             var number = $(this).val();
+//            if(parseInt(number) > parseInt(limit)){
+//                layer.msg('超过购买限制');
+//                $("#buy").addClass('not');
+//                return false;
+//            }else{
+//                $("#buy").removeClass("not");
+//            }
+//        });
+
+
+        //点击立即购买
+        var storage = "{$goods.quotient-$goods.sale_number}";
+        var goodsId = "{$goods.id}";
+        var startTime = parseInt("{$goods.start_at}");
+        var endTime = parseInt("{$goods.end_at}");
+
+        var startTimeNum = startTime*1000;
+        var endTimeNum = endTime*1000;
+
+        $("#buy").click(function(){
+
+            var nowTime = new Date();
+            var nowTimeNum = nowTime.getTime();
+
+            //时间判断
+            if( startTimeNum > nowTimeNum ){
+                layer.msg("众筹项目未开始");
+                return false;
+            }
+            if( endTimeNum < nowTimeNum){
+                layer.msg("众筹项目已结束");
+                return false;
+            }
+
+            var number = $('#buyNumber').val();
+
+            if ( !$(this).hasClass('not') ) {
+                //数量判断
+                if ( !isPositiveNum( number ) ) {
+                    layer.msg('商品数量为大于0的整数');
+                    return false;
+                }
+                //商品库存判断
+                if(parseInt(number) > parseInt(storage)){
+                    layer.msg('购买数量超过库存');
+                    return false;
+                }
+
+                //购买限制判断
+                if ( parseInt(number) > parseInt(limit) ) {
+                    layer.msg('超过购买限制');
+                    return false;
+                }
+
+
+                //跳转到添加购物车页面
+                $("#goods_id").val(goodsId+'|'+number);
+                $("#buy-now").trigger('click');
+            }
+        });
+
+
+
+
+    })
+</script>
+

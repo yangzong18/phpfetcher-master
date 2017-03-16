@@ -1,0 +1,126 @@
+<style type="text/css">
+    .ncc-payment-list li:hover, .ncc-payment-list li.using {
+        border: solid 2px #52A452;
+        margin: 10px;
+    }
+    .ncc-payment-list li {
+        vertical-align: top;
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-align: center;
+        display: inline-block;
+        width: 120px;
+        padding: 10px 30px;
+        margin: 11px;
+        border: solid 1px #E6E6E6;
+        border-radius: 4px;
+        position: relative;
+        z-index: 1;
+        background: #ffffff;
+    }
+    .ncc-receipt-info{ margin-bottom: 10px}
+    .ncc-payment-list .logo{ cursor: pointer}
+    input.submit {
+        width: 206px;
+        cursor: pointer;
+        height: 35px;
+        background: #196997;
+        border: none;
+        font-size: 14px;
+        color: #fff;
+    }
+
+</style>
+<div class="container">
+
+    <ul class="cnt-box-item order-goods marbox">
+        <div class="og-box">
+            <form action="{:url('shop/payment/payLogsOrder', array('orderId'=>$orderInfo['id']))}" method="POST" id="buy_form">
+                <input type="hidden" name="pay_sn" value="{$pay_info.pay_sn}">
+                <input type="hidden" id="payment_code" name="payment_code" value="">
+                <div class="ncc-receipt-info">
+                    <div class="ncc-receipt-info-title">
+                        <h2>{$order_remind}在线支付金额：<strong>￥{$pay_amount_online}</strong></h2>
+                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="w50"></th>
+                            <th class="w200 tl">订单号</th>
+                            <th class="tl w150">中意设计</th>
+                            <th class="tl w150">中意大师</th>
+                            <th class="tl w150">预约面积（m<sup>2</sup>）</th>
+                            <!--<th class="tl w150">商家昵称</th>-->
+                            <th class="tl w150">需支诚意金</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td></td>
+                            <td class="tl">{$orderInfo.order_sn}</td>
+                            <td class="tl">{$orderInfo.logs_name}</td>
+                            <td class="tl">{$orderInfo.designer_name}</td>
+                            <td class="tl">{$orderInfo.acreage}</td>
+                            <!--<td class="tl">商家昵称</td>-->
+                            <td class="tl">￥{$orderInfo.deposit}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ncc-receipt-info">
+                    {if count($payment_list)<=0}
+                    <div class="nopay">抱歉，暂时没有符合条件的支付方式，请联系卖家进行后续购买流程</div>
+                    {else}
+                    <div class="ncc-receipt-info-title">
+                        <h2>支付选择</h2>
+                    </div>
+                    <ul class="ncc-payment-list">
+                        {volist name="payment_list" id="val"}
+                        <li payment_code="{$val.payment_code}">
+                            <label for="pay_{$val.payment_code}">
+                                <i></i>
+                                <div class="logo" for="pay_{$val.payment_id}">
+                                    <img src="{$Think.STATIC_COMMON_PATH}/images/payment/{$val.payment_code}_logo.gif" /> </div>
+                            </label>
+                        </li>
+                        {/volist}
+                    </ul>
+                    {/if}
+                </div>
+                {if $pay_amount_online>0}
+                <div class="ncc-bottom tc ">
+                    <input type="button" id="next_button" class="submit" value="确认提交支付" />
+                </div>
+                <h3>订单详情内容可通过查看<a href="{:url('shop/logs_order/detail')}?orderId={$orderInfo['id']}" target="_blank">我的订单</a>进行核对处理。</h3>
+                {/if}
+            </form>
+
+
+        </div>
+    </ul>
+</div>
+
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jquery.validate.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.ncc-payment-list > li').on('click',function(){
+            $('.ncc-payment-list > li').removeClass('using');
+            $(this).addClass('using');
+            $('#payment_code').val($(this).attr('payment_code'));
+        });
+
+        $('#next_button').on('click',function(){
+            if ($('#payment_code').val() == '') {
+                layer.msg('请选择支付方式');
+                return false;
+            }
+            $('#buy_form').submit();
+        });
+    });
+</script>

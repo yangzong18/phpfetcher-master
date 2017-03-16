@@ -1,0 +1,225 @@
+<!-- 表单组 -->
+<style type="text/css">
+    .text-ra{ width: 200px; text-align: center}
+    .form-control {  display:inline}
+    .tips_a a,a:hover{
+        color: white;
+        background-color: #FE713F;
+        padding: 2px 4px;
+        margin: 0 4px;
+        border: 1px solid #F30;
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+    }
+
+    .error{ color: #FE713F; margin-left: 5px;}
+
+</style>
+<div class="sheet-box">
+
+<form id="post_form" method="post" class="js-ajax-form" action="editPost" novalidate="novalidate" name="form1">
+    <input type="hidden" name="form_submit" value="ok" />
+    <input type="hidden" name="payment_id" value="{$payment.payment_id}" />
+    <table class="table">
+        <tbody>
+        
+        <tr class="goods-tr-bg">
+            <th>
+                <h3>{$payment.payment_name}</h3>
+            </th>
+        </tr>
+
+        {if $payment.payment_code=='chinabank'}
+        <tr>
+            <td class="required">网银在线商户号: </td>
+        </tr>
+        <tr>
+            <td class="required">
+                <input type="hidden" name="config_name" value="chinabank_account,chinabank_key" />
+                <input name="chinabank_account" id="chinabank_account" value="{$config_array.chinabank_account}" class="form-control text-ra" type="text">
+                <span class="tips"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="required">网银在线密钥:</td>
+        </tr>
+        <tr>
+            <td class="required">
+                <input name="chinabank_key" id="chinabank_key" value="{$config_array.chinabank_key}" class="form-control text-ra" type="text">
+                <span class="tips"></span>
+            </td>
+        </tr>
+        {elseif $payment.payment_code=='tenpay'}
+        <tr>
+            <td class="required">财付通商户号:</td>
+        </tr>
+        <tr>
+            <td class="required">
+                <input type="hidden" name="config_name" value="tenpay_account,tenpay_key" />
+                <input name="tenpay_account" id="tenpay_account" value="{$config_array.tenpay_account}" class="form-control text-ra" type="text">
+                <span class="tips"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="required">财付通密钥: </td>
+        </tr>
+        <tr>
+            <td class="required">
+                <input name="tenpay_key" id="tenpay_key" value="{$config_array.tenpay_key}" class="form-control text-ra" type="text">
+                <span class="tips"></span>
+            </td>
+        </tr>
+        {elseif $payment.payment_code=='alipay'}
+        <tr>
+            <td class="required">支付宝账号:</td>
+        </tr>
+        <tr>
+            <td class="required">
+                <input type="hidden" name="config_name" value="alipay_service,alipay_account,alipay_key,alipay_partner" />
+                <input type="hidden" name="alipay_service" value="create_direct_pay_by_user" />
+                <input name="alipay_account"  id="alipay_account" value="{$config_array.alipay_account}" class="form-control text-ra" type="text">
+                <span class="tips"></span>
+            </td>
+
+        </tr>
+        
+        <tr>
+            <td  class="required">交易安全校验码（key）:</td>
+        </tr>
+
+        <tr>
+            <td class="required">
+                <input name="alipay_key" id="alipay_key" value="{$config_array.alipay_key}" class="form-control text-ra" type="text">
+                <span class="tips"></span>
+            </td>
+        </tr>
+        <tr>
+            <td   class="required">合作者身份（partner ID）:
+            </td>
+        </tr>
+        <tr>
+            <td class="required tips_a">
+                <input name="alipay_partner" id="alipay_partner" value="{$config_array.alipay_partner}" class="form-control text-ra" type="text">
+                <a href="https://b.alipay.com/order/pidKey.htm?pid=2088001525694587&product=fastpay"  target="_blank">获得我的 key 和 partner ID</a>
+                <span class="tips"></span>
+            </td>
+        </tr>
+        {/if}
+
+
+        <tr>
+            <td class="required">启用:<input type="hidden" value="{$payment.payment_state}" name="payment_state" id="payment_state"></td>
+        </tr>
+        <tr>
+            <td class="required">
+                <div class="btn-group btn-box-qh">
+                    <button type="button" nctype="payment_state" ncvalue="1" class="btn btn-default  {if $payment.payment_state=='1'}cus{/if}">是</button>
+                    <button type="button" nctype="payment_state" ncvalue="0" class="btn btn-default {if $payment.payment_state=='0'}cus{/if}">否</button>
+                </div>
+                <span class="tips"></span>
+            </td>
+        </tr>
+
+        </tbody>
+        <tfoot>
+        <tr class="tfoot">
+        <td>
+            <button type="submit" id="form_bt_save" class="btn btn-info"><i class="icon-cut"></i> 保存</button>
+            <button type="button" onclick="history.go(-1)" class="btn btn-warning"><i class="icon-link"></i> 返回</button>
+        </td>
+        </tr>
+        </tfoot>
+    </table>
+</form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jquery.validate/jquery.validate.js" charset="utf-8"></script>
+<script>
+$(document).ready(function(){
+
+        //启用按钮
+        $('button[nctype="payment_state"]').click(function(){
+            var ncvalue = $(this).attr('ncvalue');
+            $('#payment_state').val(ncvalue);
+        });
+
+        var payment_code = "{$payment.payment_code}";
+        var form_validate = {};
+        switch(payment_code){
+            case 'chinabank':
+                form_validate={
+                            rules : {
+                                chinabank_account: {
+                                        required: true
+                                    },
+                                    chinabank_key: {
+                                        required: true
+                                    }
+                                   },
+                            messages : {
+                                chinabank_account: {
+                                            required: '网银在线商户号不能为空'
+                                        },
+                                chinabank_key: {
+                                    required: '网银在线密钥不能为空'
+                                }
+                              }
+                };
+                break;
+            case 'tenpay':
+                form_validate={
+                    rules : {
+                        tenpay_account: {
+                            required: true
+                        },
+                        tenpay_key: {
+                            required: true
+                        }
+                    },
+                    messages : {
+                        tenpay_account:{
+                            required: '财付通商户号不能为空'
+                        },
+                        tenpay_key:{
+                            required: '财付通密钥不能为空'
+                        }
+                    }
+                };
+                break;
+            case 'alipay':
+                form_validate={
+                        rules : {
+                            alipay_account: {
+                                required: true
+                            },
+                            alipay_key: {
+                                required: true
+                            },
+                            alipay_partner: {
+                                required: true
+                            }
+                        },
+                        messages : {
+                            alipay_account: {
+                                required: '支付宝账号不能为空'
+                            },
+                            alipay_key: {
+                                required: '交易安全校验码（key）不能为空'
+                            },
+                            alipay_partner: {
+                                required: '合作者身份（partner ID）不能为空'
+                            }
+                        }
+                };
+                break;
+        }
+
+    jQuery('#post_form').validate(form_validate);
+
+
+});
+</script>

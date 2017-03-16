@@ -1,0 +1,457 @@
+<div class="container">
+    <ul class="list-box content-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3>提交意向</h3>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <form class="js-ajax-form" action="{:url('shop/logsOrder/add')}" method="post">
+        <ul class="list-goods-item mt-sub-inton marbox">
+            <li class="mt-inton-from">
+                    <div>
+                        <label for=""><span>*</span>您的称呼</label>
+                        <input type="text" name="user_name" value="" id="user_name">
+                    </div>
+                    <div>
+                        <input type="radio" checked="true" name="gender" value="1">
+                        <label for="">先生</label>
+                        <input type="radio" name="gender" value="2">
+                        <label for="">女士</label>
+                    </div>
+                    <div>
+                        <label for=""><span>*</span>面积</label>
+                        <input type="text" name="acreage" value="" id="acreage">
+                        <span>m <sup>2</sup></span>
+                    </div>
+                    <div>
+                        <label for=""><span>*</span>联系电话</label>
+                        {if condition=" ($goods['type'] eq 1) and ($isLogin eq 1)  "}
+                            <input disabled="true" type="text" value="{$user['phone']}" id="phone">
+                            <input type="hidden" name="phone" value="{$user['phone']}" id="phone">
+                        {else/}
+                            <input type="text" name="phone" value="" id="phone">
+                        {/if}
+                    </div>
+                    <div>
+                        <label for=""><span>*</span>户型图</label>
+                        <a href="javascript:;" class="file diagram btn">
+                           <span>上传户型图</span>
+                       <!--  <input type="file" name="" id=""> -->
+                       </a>
+                    </div>
+                    <div>
+                        <label for=""><span>*</span>楼盘名称</label>
+                        <input type="text" name="building_name" id="building_name">
+                    </div>
+                    <div>
+                        <label for=""><span>*</span>详细地址</label>
+                        <select class="comm-select" name="province" id="province">
+                            <option key-id="0"  value="">请选择地区</option>
+                        </select>
+                        <label for="">省</label>
+                        <select class="comm-select" name="city" id="city">
+                            <option key-id="0"  value="">请选择地区</option>
+                        </select>
+                        <label for="">市（州）</label>
+                        <select class="comm-select" name="area" id="area">
+                            <option key-id="0"  value="">请选择地区</option>
+                        </select>
+                        <label for="">区（县）</label>
+                        <input type="text" class="w250" name="address" id="address">
+                    </div>
+                    <div>
+                        <label for=""><span>*</span>户型</label>
+                        {foreach  $houseType as $key => $type}
+                             <input type="radio" {if condition="$key eq 1"} checked="true"{/if} name="house_type" value="{$key}">
+                             <label for="">{$type}</label>
+                        {/foreach}
+                    </div>
+            </li>
+            <li>
+                <div class="order-thumbnail-carousel">
+                    <div class="order-thumbnail-carousel-lt font-color-gray">&lt;</div>
+                    <div class="order-thumbnail-carousel-gt font-color-gray">&gt;</div>
+                    <ul class="uploadimg-attachment" style="margin-left: 0px;">
+
+                    </ul>
+                    <!-- <ul style="margin-left: 0px;">
+                        <li>
+                            <a href="#"><img src="images/img-lz-4.jpg"></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="images/img-lz-5.jpg"></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="images/img-lz-1.jpg"></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="images/img-lz-2.jpg"></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="images/img-lz-3.jpg"></a>
+                        </li>
+                    </ul> -->
+                </div>
+            </li>
+
+            <li class="mt-sjs-box">
+                <ul>
+                    <li>
+                        <h3 class="combg-b">中意设计</h3>
+                        <div class="mt-wz-box logs-unit">
+                            <a href="{:url('shop/logs/detail', array('id'=>$goods['id']))}" class="mt-img"><img src="{$goods.cover}@w180_h140.png" alt="" /></a>
+                            <div class="mt-w">
+                                <p class="bt"><a href="{:url('shop/logs/detail', array('id'=>$goods['id']))}">{if condition="mb_strlen($goods.name,'utf-8') > 14"}{$goods.name|mb_substr=0,14,'utf-8'}...{else /}{$goods.name}{/if}</a></p>
+                                <p class="jg">价格 ￥<span>{$goods.prize}</span></p>
+                                <p class="mj">面积 {$goods.acreage}m<sup>2</sup></p>
+                            </div>
+                            <div class="mt-pot">
+                                <a href="{:url('shop/logs/detail', array('id'=>$goods['id']))}">查看详情</a>
+                                <a href="javascript:;" class="replace-logs">更换</a>
+                                <input type="hidden" name="logs_goods_id" id="logs_goods_id" value="{$goods.id}" />
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <h3 class="combg-b">中意设计师</h3>
+                        <div class="mt-wz-box desinger-unit">
+                            <a href="{:url('shop/Designers/detail',['designer_id'=>$designer.designer_id])}" class="mt-img"><img src="{$designer['designer_avatar']}@w180_h140.png" alt="" /></a>
+                            <div class="mt-w">
+                                <p class="bt"><a href="{:url('shop/Designers/detail',['designer_id'=>$designer.designer_id])}">{if condition="mb_strlen($designer.designer_name,'utf-8') > 14"}{$designer.designer_name|mb_substr=0,14,'utf-8'}...{else /}{$designer.designer_name}{/if}</a></p>
+                                <p class="jg">{$designer.level_name}</p>
+                                <p class="mj">经验：<span>{$designer.designer_year}</span>年</p>
+                            </div>
+                            <div class="mt-pot">
+                                <a href="{:url('shop/Designers/detail',['designer_id'=>$designer.designer_id])}">查看详情</a>
+                                <a href="javascript:;" class="replace-sj">更换</a>
+                                <input type="hidden" name="designer_id" id="designer_id" value="{$designer.designer_id}" />
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="mt-sjs-box mt-sjs-tearx">
+                <ul>
+                    <li>
+                        <h3 class="combg-b">给设计师留言</h3>
+                        <div class="mt-wz-box">
+                            <textarea name="message" rows="8" placeholder="请输入您的设计需求"></textarea>
+                        </div>
+                    </li>
+                    <li>
+                        {if condition="$isLogin eq 1"}
+                            <p class="btn-sub submit-logs-login" id="submit-work"><a href="javascript:;">提交意向</a></p>
+                        {else/}
+                            <p class="btn-sub submit-logs-nologin" id="submit-work"><a href="javascript:;">提交意向</a></p>
+                        {/if}
+                        <button class="btn js-ajax-submit hide" id="submit">添加</button>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </form>
+</div>
+<!-- cut start -->
+    <div class="mt-layer none">
+        <div class="login-main mt-layer-cut">
+            <ul class="">
+                <li class="form-box">
+                    <!-- <form class="" action="index.html" method="post"> -->
+                        <div class="user-item">
+                            <p class="fl">验证手机号</p>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="form-item">
+                            <p class="user"><input disabled="true" type="text" class="user_phone" placeholder="手机号"></p>
+                            <p class="pwd"><input type="text" class="auth_code" value="" placeholder="验证码">
+                                <span class="mt-code">免费获得验证码</span>
+                            </p>
+                            <p class="sub"><input type="button" class="submit-auth" value="确认"></p>
+                        </div>
+                    <!-- </form> -->
+                </li>
+                <li class="clear"></li>
+            </ul>
+        </div>
+    </div>
+    <!-- cut end -->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader/webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(function() {
+
+    //更换设计师
+    $(document).on('click', '.replace-sj', function(){
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['100%', '100%'],
+            skin: 'mt-layui-layer', //样式类名
+            closeBtn: 1,
+            anim: 2,
+            shadeClose: false, //开启遮罩关闭
+            content: '{:url("shop/Designers/change")}'
+        })
+    });
+    //更换商品
+    $(document).on('click', '.replace-logs', function(){
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['100%', '100%'],
+            skin: 'mt-layui-layer', //样式类名
+            closeBtn: 1,
+            anim: 2,
+            shadeClose: false, //开启遮罩关闭
+            content: '{:url("shop/Logs/change")}'
+        })
+    });
+
+    //登陆时候提交意向
+    $(document).on('click', '.submit-logs-login', function(){
+        form_submit();
+    });
+    function form_submit(){
+        var $btn = $(this).find('a');
+        var $form=$(".js-ajax-form");
+        $form.ajaxSubmit({
+            url: $btn.data('action') ? $btn.data('action') : $form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+            dataType: 'json',
+            beforeSubmit: function (arr, $form, options) {
+                $(this).prop('disabled', true);
+            },
+            success: function (data, statusText, xhr, $form) {
+                layer.msg(data.msg);
+                if (data.code == 1) {
+                    location.href = data.url;
+                }else{
+                    $(this).prop('disabled',false);
+                }
+            },
+            error:function(xhr,e,statusText){
+                layer.msg(statusText);
+            }
+        });
+        return false;
+    }
+
+    if($('.order-thumbnail-carousel ul li').length == 0){
+        $('.order-thumbnail-carousel').hide();
+    }
+	//主图上传
+    $('.diagram').uploader({
+        server: '{:url("index/index/uploadFile")}',//上传路径
+        container: '.uploadimg-attachment',//图片容器
+        num:4,//上传数量
+        inputName:'attachment[]',//input
+        swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+        btnDsab:'#submit-work',
+        imgBtn:'.diagram'
+    })
+
+	area(1, $("#province"), 0 );
+	//省点击
+	$("#province").change(function(){
+		var id = parseInt( $(this).find("option:selected").attr('key-id') );
+        if ( id > 0 ) {
+            area(id, $("#city"), 1 );
+        }
+	});
+	//市点击
+	$("#city").change(function(){
+        var id = parseInt( $(this).find("option:selected").attr('key-id') );
+        if ( id > 0 ) {
+            area(id, $("#area"), 2 );
+        }
+	});
+    var verification = function() {
+        var name = $('#user_name').val();
+        if ( trim( name ) == '' ) {
+            layer.msg('姓名不能为空');
+            return false;
+        }
+        var acreage = $("#acreage").val();
+        if ( trim( acreage ) == '' ) {
+            layer.msg('请填写面积');
+            return false;
+        }
+        var address = $("#address").val();
+        if ( trim( address ) == '' ) {
+            layer.msg('详细地址不能为空');
+            return false;
+        }
+        var building_name = $("#building_name").val();
+        if ( trim( building_name ) == '' ) {
+            layer.msg('楼盘名称不能为空');
+            return false;
+        }
+        var phone = $("#phone").val();
+        if ( !isPhone( phone ) ) {
+            layer.msg('请输入正确的手机号码');
+            return false;
+        }
+        var area = $("#area").val();
+        if ( trim( area ) == '' ) {
+            layer.msg('请选择地址信息');
+            return false;
+        }
+        return true;
+    }
+    //未登录的
+    $('.submit-logs-nologin').click(function() {
+        var result = verification();
+        if ( result ) {
+            var phone = $("#phone").val();
+            layer.open({
+                type: 1,
+                title: false,
+                area: ['612px', '328px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                content: $(".mt-layer"),
+                success: function(layero, index){
+                    $('.layui-layer-msg').css('color','#fff')
+                    $(".user_phone").val( phone );
+                    $(".auth_code").val('');
+                    $(".mt-code").click(function(){
+                        var phone = $(".user_phone").val();
+                        var p = $(this).parent();
+                        if (!p.hasClass("have_auth_code")) {
+                            $.get('{:url("shop/login/getAuthCode")}?phone=' + phone, function (response) {
+                                response = eval('(' + response + ')');
+                                layer.msg(response.msg);
+                                if(response.code != 2) {
+                                    return false;
+                                }
+                                if (response.code == 2) {
+                                    p.addClass("have_auth_code");
+                                    var time = 60;
+                                    var code_time = setInterval(function () {
+                                        if (time == 0) {
+                                            clearInterval(code_time);
+                                            $(".mt-code").html("获取验证码").parent().removeClass("have_auth_code");
+                                            return;
+                                        }
+                                        $(".mt-code").html("获取验证码(" + (time--) + ")");
+                                    }, 1000);
+                                }
+                            })
+                        }
+                    });
+                    $(".submit-auth").click(function(){
+                        var phone = $(".user_phone").val();
+                        var verify_code = $(".auth_code").val();
+                        var name   = $("#user_name").val();
+                        var gender = $('input[name="gender"]:checked').val();
+                        //验证码登录
+                        $.post('{:url("shop/login/authCode")}', {
+                            phone : phone,
+                            code  : verify_code,
+                            name  : name,
+                            gender: gender
+                        }, function( response ){
+                            if ( response.code == 1 ) {
+                                layer.close(index);
+                                $("#submit-work").removeClass('submit-logs-nologin');
+                                $("#submit-work").addClass('submit-logs-login');
+                                form_submit();
+                            } else {
+                                layer.msg(response.msg);
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    })
+})
+
+function area(parentId, target, deep) {
+    $.get("{:url('api/address/areaList')}?parent_id="+parentId+'&deep='+deep, function( response ){
+        if ( response.code == 1 ) {
+        	var option = '<option key-id="0" value="">请选择地区</option>';
+        	for (var i = 0; i < response.data.length; i++) {
+        		option += '<option key-id="'+response.data[i][0]+'" value="'+response.data[i][1]+'">'+response.data[i][1]+'</option>';
+        	}
+        	target.empty();
+        	target.append( option );
+        }
+    });
+}
+
+/*
+ * @param designer 设计师对象
+ */
+function changeDesinger( designer ) {
+    var url  = "{:url('shop/Designers/detail')}/designer_id/"+designer.designer_id;
+    var html = '<a href="'+url+'" class="mt-img"><img src="'+designer.designer_avatar+'@w232_h211.png" alt="" /></a>\
+                <div class="mt-w">\
+                    <p class="bt"><a href="'+url+'">'+designer.designer_name+'</a></p>\
+                    <p class="jg">'+designer.level_name+'</p>\
+                    <p class="mj">经验：<span>'+designer.designer_year+'</span>年</p>\
+                </div>\
+                <div class="mt-pot">\
+                    <a href="'+url+'">查看详情</a>\
+                    <a href="javascript:;" class="replace-sj">更换</a>\
+                    <input type="hidden" name="designer_id" id="designer_id" value="'+designer.designer_id+'" />\
+                </div>';
+    $(".desinger-unit").empty();
+    $(".desinger-unit").append( html );
+}
+
+/*
+ * @param logs 设计师对象
+ */
+function changeLogs( logs ) {
+    var url  = "{:url('shop/shop/logs/detail')}/id/"+logs.id;
+    var html = '<a href="'+url+'" class="mt-img"><img src="'+logs.cover+'@w232_h211.png" alt="" /></a>\
+                            <div class="mt-w">\
+                                <p class="bt"><a href="'+url+'">'+logs.name+'</a></p>\
+                                <p class="jg">价格 ￥<span>'+logs.prize+'</span></p>\
+                                <p class="mj">面积 '+logs.acreage+'m<sup>2</sup></p>\
+                            </div>\
+                            <div class="mt-pot">\
+                                <a href="'+url+'">查看详情</a>\
+                                <a href="javascript:;" class="replace-logs">更换</a>\
+                                <input type="hidden" name="logs_goods_id" id="logs_goods_id" value="'+logs.id+'" />\
+                            </div>\
+                        </div>';
+    $(".logs-unit").empty();
+    $(".logs-unit").append( html );
+}
+</script>
+<!--[if lt IE 10 ]>
+<script>
+    function hasIEPlugin(name){
+        try {
+            new ActiveXObject(name);
+            return true;
+        } catch (ex){
+            return false;
+        }
+    }
+    //检测Flash
+    var tips = $(
+            "<div style = 'color: red;text-align: center;'>" +
+            "FLASH版本过低，会导致不能上传图片，点击更新（" +
+            "<a href='https://get2.adobe.com/cn/flashplayer/' target='_blank'>链接地址</a>" +
+            "），安装后请刷新当前页面" +
+            "</div>"
+    );
+    if(!hasIEPlugin("ShockwaveFlash.ShockwaveFlash")){
+        $("body").prepend(tips);
+    }
+</script>
+<![endif]-->

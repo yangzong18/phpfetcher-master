@@ -1,0 +1,75 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="mt-layer none">
+    <div class="login-main reg-main">
+        <ul class="">
+            <li class="form-box">
+                <form class="js-ajax-form" method="post" action="{:url('shop/order/orderReceive')}" onkeydown="if(event.keyCode==13) return false;">
+                <input type="hidden" name="orderId" value="{$order_info.order_id}">
+                <input type="hidden" name="form_submit" value="ok" />
+                <div class="user-item">
+                    <p class="fl">确认收货</p>
+                    <p class="clear"></p>
+                </div>
+                <div class="form-item" style="margin: 0 auto;">
+                    <p class="">
+                        <label class="lab-ys">订单编号：</label>
+                        <label class="lab-wz">{$order_info.order_sn}</label>
+                        <i class="clear"></i>
+                    </p>
+                    <p class="adds">
+                        <label class="lab-wz">请注意：如果你尚未收到货品请不要点击“确认”。大部分被骗案件都是由于提前确认付款被骗的，请谨慎操作！ </label>
+                        <i class="clear"></i>
+                    </p>
+                    <p class="sub numd-sub">
+                        <button type="button" class="js-ajax-submit">确定</button>
+                        <button type="button" class="btn max-bg return">取消</button>
+                        <i class="clear"></i>
+                    </p>
+                </div>
+                </form>
+            </li>
+            <li class="clear"></li>
+        </ul>
+    </div>
+</div>
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}ajaxForm.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+
+        });
+        $('.js-ajax-submit').click(function(){
+            var $btn = $(this);
+                var $form=$(".js-ajax-form");
+                $form.ajaxSubmit({
+                    url: $btn.data('action') ? $btn.data('action') : $form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+                    dataType: 'json',
+                    beforeSubmit: function (arr, $form, options) {
+                        $btn.data("loading",true);
+                        var text = $btn.text();
+                        //按钮文案、状态修改
+                        $btn.text(text + '中...').prop('disabled', true).addClass('disabled');
+                    },
+                    success: function (data, statusText, xhr, $form) {
+                        var text = $btn.text();
+                        //按钮文案、状态修改
+                        $btn.removeClass('disabled').prop('disabled', false).text(text.replace('中...', '')).parent().find('span').remove();
+                        layer.msg(data.msg);
+                        if (data.code == 1) {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        }
+                    },
+                    error:function(xhr,e,statusText){
+                        layer.msg(statusText);
+                    }
+                });
+        });
+    })
+</script>

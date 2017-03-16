@@ -1,0 +1,77 @@
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="editPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>帐号基本信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td class="w150">
+                    <h3>登录帐号</h3>
+                </td>
+                <td>
+                    {$data.account}
+                </td>
+                <td class="w100">
+                    <h3>姓名</h3>
+                </td>
+                <td>
+                    {$data.member_name}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>联系方式</h3>
+                </td>
+                <td>
+                    {$data.phone}
+                </td>
+                <td>
+                    <h3>邮箱地址</h3>
+                </td>
+                <td>
+                    {$data.email}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>角色</h3>
+                </td>
+                <td >
+                    {$roleList[$roleId]['name']}
+                </td>
+                <td>
+                    <h3>部门</h3>
+                </td>
+                <td>
+                    {$data.department}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>备注</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    {$data.remark}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>启用状态</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    {$data.status_text}
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+

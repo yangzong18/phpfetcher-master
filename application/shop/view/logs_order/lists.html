@@ -1,0 +1,141 @@
+<!-- content start -->
+<div class="container">
+    <ul class="list-box content-box mt-fina-raise mt-odr-list">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('/shop/user/index')}">个人中心</a> > <a href="{:url('shop/order/orderList')}">我的订单</a></h3>
+                </li>
+                <li class="mt-fn-bt">
+                    <p><a href="{:url('shop/order/orderList')}">商品订单</a> </p>
+                    <p><a href="{:url('shop/logs_order/lists')}" class="cus">整装订单</a></p>
+                    <p><a href="#">分期订单</a></p>
+                    <p><a href="{:url('shop/crowdfunding_order/lists')}">众筹订单</a></p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item shopp-item marbox mt-odr-list">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <li class="shop-seach">
+            <div>
+                <form class="cart_search" onsubmit="return valiSearch('cart_search');" action="{:url('lists')}" method="get">
+                    <input type="text" id="cart_search" name="logs_name" class="text goods_name_1" value="{$logs_name|default=''}" autocomplete="off" >
+                    <ul class="cache-seach"></ul>
+                    {if !empty($typeA)}
+                    <input type="hidden" name="type" value="{$typeA}">
+                    {/if}
+                    <input type="submit" value="" class="sub">
+
+
+                </form>
+            </div>
+        </li>
+        <li class="mt-list-box">
+            <div class="mt-odr-bt">
+                <p><a href="{:url('shop/logs_order/lists')}?type=all" {if $typeA == 'all'}class="combg-b"{/if}>所有订单</a></p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=measure" {if $typeA == 'measure'}class="combg-b"{/if}>待免费量房</a>{if($array.measure > 0)}<span>{$array.measure}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=pay" {if $typeA == 'pay'}class="combg-b"{/if}>待付诚意金</a>{if($array.pay > 0)}<span>{$array.pay}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=design" {if $typeA == 'design'}class="combg-b"{/if}>待设计</a>{if($array.design > 0)}<span>{$array.design}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=designed" {if $typeA == 'designed'}class="combg-b"{/if}>待确认</a>{if($array.designed > 0)}<span>{$array.designed}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=sign" {if $typeA == 'sign'}class="combg-b"{/if}>待签合同</a>{if($array.sign > 0)}<span>{$array.sign}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=accept" {if $typeA == 'accept'}class="combg-b"{/if}>待验收</a>{if($array.accept > 0)}<span>{$array.accept}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=exchange" {if $typeA == 'exchange'}class="combg-b"{/if}>待兑换商品</a>{if($array.exchange > 0)}<span>{$array.exchange}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=finish" {if $typeA == 'finish'}class="combg-b"{/if}>已完成</a>{if($array.finish > 0)}<span>{$array.finish}</span>{/if}</p>
+                <p><a href="{:url('shop/logs_order/lists')}?type=close" {if $typeA == 'close'}class="combg-b"{/if}>已关闭</a>{if($array.close > 0)}<span>{$array.close}</span>{/if}</p>
+            </div>
+        </li>
+        {if count($list) > 0}
+        {volist name="list" id="val"}
+        <li class="order-goods order-goods-table">
+            <div class="og-box">
+                <table class="combg-h">
+                    <tr>
+                        <th class="w135"></th>
+                        <th class="w230 text-left">中意设计</th>
+                        <th>中意大师</th>
+                        <th>进度</th>
+                        <th>预约面积（<span>m<sup>2</sup></span>）</th>
+                        <th>交易状态</th>
+                        <th>诚意金状态</th>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="order-goods-table-check">
+                            <div>
+                                <form>
+                                    <!--<input type="checkbox" />-->
+                                </form>
+                                <span>{$val.created_at}</span>
+                            </div>
+                            <div>
+                                订单号：<span>{$val.order_sn}</span>
+                            </div>
+                            <div>
+                                <a class="qq-kf" href="javascript:openQQ('{$setting.qq}')">QQ售中客服</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <p><a class="img" href="{:url('shop/logs/detail', array('id'=>$val.logs_goods_id))}"><img data-original="{$val.goods_cover}" class="lazy" alt="" width="133" height='121' /></a></p>
+                            <p>{if condition="mb_strlen($val.goods_name,'utf-8') > 14"}{$val.goods_name|mb_substr=0,14,'utf-8'}...{else /}{$val.goods_name}{/if}</p>
+                        </td>
+                        <td>
+                            <p><a class="img" href="{:url('shop/designers/detail', array('designer_id'=>$val.designer_id))}"><img data-original="{$val.designer_avatar}" class="lazy" alt="" width="133" height='121' /></a></p>
+                            <p>{$val.designer_name}</p>
+                        </td>
+                        <td><p class="state">{$val.speed_name}</p></td>
+                        <td rowspan="2">
+                            <p class="price">{$val.acreage}</p>
+                        </td>
+                        <td rowspan="2">
+                            <p class="state">{$val.order_status_name}</p>
+                            <p><a href="detail?orderId={$val.id}" class="a-info">订单详情</a></p>
+                        </td>
+                        {if condition="$val.order_status gt 2 and $val.speed_status gt 2"}
+                        <td rowspan="2"><p class="state">已支付</p></td>
+                        {else/}
+                        <td rowspan="2"><p class="state">待支付</p></td>
+                        {/if}
+                    </tr>
+                </table>
+            </div>
+        </li>
+        {/volist}
+        {else}
+        <li class="order-goods order-goods-table">
+            <div class="og-box" style="height: 200px;text-align: center;font-size: 20px;">
+                <p>您还没有此类相关的订单</p>
+            </div>
+        </li>
+        {/if}
+        <li class="order-goods-table-pages">
+            <div>
+                <div class="clear"></div>
+                {$page}
+            </div>
+        </li>
+    </ul>
+</div>
+<!-- content end -->
+<style>
+    .mt-list-box .mt-odr-bt p a{
+        width: 110px;
+    }
+</style>
+<script language="javascript">
+    var sobj  = { placeholder: "/static/shop/images/loading.jpg",effect: "fadeIn"}
+    //图片加载
+    $("img.lazy").lazyload(sobj);
+
+</script>

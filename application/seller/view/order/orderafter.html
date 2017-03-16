@@ -1,0 +1,59 @@
+<div>
+        <table><tbody>
+        <tr>
+            <td>订单编号：</td>
+            <td>{$order_info.order_sn}</td>
+        </tr>
+        <tr>
+            <td>创建日期：</td>
+            <td>{$order_info.add_time | date='Y-m-d H:i:s',###}</td>
+        </tr>
+
+        <tr>
+            <td>订单状态：</td>
+            <td>{$order_info.state_desc}</td>
+        </tr>
+
+        <tr>
+            <td>订单信息：</td>
+            <table style="margin:0 auto;">
+                <tbody>
+                <tr>
+                    <td>收货人信息：</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>收货人：</td>
+                    <td>{$order_info.extend_order_common.reciver_name}</td>
+                </tr>
+                <tr>
+                    <td>联系电话：</td>
+                    <td>
+                        {if ($order_info.extend_order_common.reciver_info.mob_phone)}
+                        {$order_info.extend_order_common.reciver_info.mob_phone}
+                        {else/}
+                        {$order_info.extend_order_common.reciver_info.tel_phone}
+                        {/if}
+                    </td>
+                </tr>
+                <tr>
+                    <td>收货人地址：</td>
+                    <td>{$order_info.extend_order_common.reciver_info.address}</td>
+                </tr>
+                </tbody>
+            </table>
+        </tr>
+
+        <tr>
+            <td>商品信息：</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>优惠金额：</td>
+            <td></td>
+        </tr>
+        </tbody>
+        </table>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

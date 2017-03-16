@@ -1,0 +1,87 @@
+<!-- content start -->
+<div class="container">
+    <ul class="list-box">
+        <li class="goods-sort mt-fina-raise">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="">
+                    <h3><span>分期与众筹</span></h3>
+                </li>
+                <li class="mt-fn-bt">
+                    <p><a href="{:url('shop/Finance/index')}">分期作品</a> </p>
+                    <p class="cus"><a class="cus"  href="{:url('shop/crowdfunding/index')}">原木众筹</a></p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item marbox mt-fina-raise">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <!--<li class="mt-ph">-->
+            <!--<p><a href="#" class="cus">综合</a></p>-->
+            <!--<p><a href="#">销量</a></p>-->
+            <!--<p><a href="#">价格</a></p>-->
+            <!--<p><a href="#">上架时间</a></p>-->
+        <!--</li>-->
+        <li class="mt-content goods-tc5">
+            {if condition="!empty($list)"}
+            {foreach $list as $k=>$v}
+
+            <div class="fl">
+                <p>
+                    <span class="mt-fina cus" style="display: block;">
+                        {if condition="$v.start_at gt time()"}
+                            预热中
+                            {elseif condition="$v.start_at lt time() && $v.end_at gt time()"}
+                            众筹进行中
+                            {elseif condition="$v.end_at lt time()"}
+                            众筹已结束
+                        {/if}
+                    </span>
+                    <a href="{:url('shop/crowdfunding/detail')}/goodsId/{$v.id}">
+                        <img class="lazy" data-original="{$v.image_main}"  width="275" height="189" alt="" />
+                    </a>
+                        <span class="mt-ms">
+                         <i class="fl">名称：{if condition="mb_strlen($v.name,'utf-8') > 14"}{$v.name|mb_substr=0,14,'utf-8'}...{else /}{$v.name}{/if}</i>      <i class="fr">时间：{$v.start_at|date='Y-m-d H:i',###}~{$v.end_at|date="Y-m-d H:i",###}</i><br />
+                          <i class="fl">描述：{if condition="mb_strlen(strip_tags(htmlspecialchars_decode($v.description)),'utf-8') > 30"}{$v.description|htmlspecialchars_decode|strip_tags|mb_substr=0,30,'utf-8'}...{else /}{$v.description|htmlspecialchars_decode|strip_tags}{/if}</i>
+                        </span>
+                </p>
+            </div>
+            {/foreach}
+            {/if}
+
+        </li>
+        <li>
+            <div class="clear"></div>
+            <div class="pagelist">
+                {$page}
+                <!--<ul>-->
+                    <!--<li><a href="#"> 上一页 </a></li>-->
+                    <!--<li><a href="#" class="cus"> 1 </a></li>-->
+                    <!--<li><a href="#"> 2 </a></li>-->
+                    <!--<li><a href="#"> 3 </a></li>-->
+                    <!--<li><a href="#"> 4 </a></li>-->
+                    <!--<li><a href="#"> 下一页 </a></li>-->
+                <!--</ul>-->
+            </div>
+        </li>
+
+    </ul>
+</div>
+<!-- content end -->
+<script>
+    $(function(){
+        //图片加载
+        $("img.lazy").lazyload({
+            placeholder: "{$Think.IMG_PATH}loading.jpg",
+            effect: "fadeIn"
+        })
+    });
+</script>

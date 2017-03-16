@@ -1,0 +1,164 @@
+<div class="prompt-box">
+    <!-- <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>规格将会对应到商品发布的规格，规格值由店铺自己添加。</p>
+            <p><i class="icon-circle"></i>默认安装中会添加一个默认颜色规格，请不要删除，只有这个颜色规格才能在商品详细页显示为图片。</p>
+        </li>
+    </ul> -->
+</div>
+<div class="col-form">
+    <form class="form-inline" role="form" act="{:url('seller/logsOrder/index')}">
+        <span>订单状态</span>
+        <div class="form-group">
+            <select class="form-control" style="min-width:1px;" name="speed_status">
+                {foreach $speedStatus as $key => $status}
+                <option {if $param.speed_status==$key}selected{/if} value="{$key}">{$status}</option>
+                {/foreach}
+            </select>
+        </div>
+        <span>商品名称</span>
+        <div class="form-group">
+            <input type="text" class="form-control" name="goods_name" value="{$param.goods_name|default=''}">
+        </div>
+        <span>订单编号</span>
+        <div class="form-group">
+            <input type="text" class="form-control" name="order_sn" value="{$param.order_sn|default=''}">
+        </div>
+        <div class="form-group">
+            <button class="btn" type="submit">搜索</button>
+            <button type="button" id="outorder" class="btn btn-info">导出订单</button>
+        </div>
+    </form>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr>
+            <!--<th class="w10"></th>-->
+            <th class="w50"></th>
+            <th class="w150"></th>
+            <th class="text-center">下单日期</th>
+            <th class="w150">订单编号</th>
+            <th class="w150">设计师</th>
+            <th class="w150">预约面积（m<sup>2</sup>）</th>
+            <th class="w150">进度</th>
+            <th class="w150">交易状态</th>
+            <th class="w150">诚意金状态</th>
+            <th class="w300">交易操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="10">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $datas as $vo}
+        <tr class="goods-tr-t0">
+            <!--<td  class="chk-one">-->
+                <!--<input type="checkbox" id="checkbox_a2_{$vo.id}" value="{$vo.id}" class="chk_1 data_check" />-->
+                <!--<label for="checkbox_a2_{$vo.id}" class="lab-t"></label>-->
+            <!--</td>-->
+            <td>
+                <a href="{:url('shop/logs/detail', array('id'=>$vo['logs_goods_id']))}" target="_blank" class="bt-images"><img class="w50" src="{$vo.goods_cover}@w100_h70.png" alt=""></a>
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/logs/detail', array('id'=>$vo['logs_goods_id']))}"  target="_blank">{$vo.goods_name}</a></dt>
+                </dl>
+            </td>
+            <td>{$vo.created_at}</td>
+            <td>{$vo.order_sn}</td>
+            <td>{$vo.designer_name}</td>
+            <td>{$vo.acreage}</td>
+            <td>{$vo.speed_name}</td>
+            <td>
+                {$vo.order_status_name}<br/>
+                <a href="{:url('seller/logsOrder/detail')}?orderId={$vo.id}">订单详情</a>
+            </td>
+            {if $vo.order_status gt 2 and $vo.speed_status gt 2}
+            <td>已支付</td>
+            {else/}
+            <td>待支付</td>
+            {/if}
+            <td class="table-handle">
+                {if condition="$vo.order_status neq 5"}
+                {switch name="vo.speed_status"}
+                {case value="1"}
+                <!--待量房-->
+                <span><a href="javascript:;" onclick="order_measure('{$vo.id}')"><i class="icon-building"></i>确认量房</a></span>
+                <span><a href="javascript:;" onclick="order_cancel('{$vo.id}')"><i class="icon-remove"></i>取消</a></span>
+                {/case}
+                {case value="2"}
+                <!--待支付诚意金-->
+                <span><a href="javascript:;" onclick="order_cancel('{$vo.id}')"><i class="icon-remove"></i>取消</a></span>
+                {/case}
+                {case value="3"}
+                <!--待设计-->
+                <span><a href="javascript:;" onclick="order_design('{$vo.id}')"><i class="icon-gift"></i>设计</a></span>
+                {/case}
+                {case value="4"}
+                <!--待确认设计-->
+                {if $vo.unsatisfy_info == ''}
+                /
+                <!--<span><a href="javascript:;" onclick="order_offline('{$vo.id}',1)"><i class="icon-gift"></i>预约线下</a></span>-->
+                <!--<span><a href="javascript:;" onclick="order_offline('{$vo.id}',2)"><i class="icon-gift"></i>签订合同</a></span>-->
+                {else /}
+                <span><a href="javascript:;" onclick="exchange_goods('{$vo.id}')"><i class="icon-gift"></i>兑换商品</a></span>
+                {/if}
+                {/case}
+                {case value="5"}
+                <!--待签合同-->
+                {if $vo.is_offline == 0}
+                <span><a href="javascript:;" onclick="order_offline('{$vo.id}',1)"><i class="icon-gift"></i>线下预约</a></span>
+                {/if}
+                <span><a href="javascript:;" onclick="order_offline('{$vo.id}',2)"><i class="icon-gift"></i>签订合同</a></span>
+                {/case}
+                {case value="6"}
+                <!--待确认验收-->
+                {if $vo.is_verify == 0}
+                <span><a href="javascript:;" onclick="order_speed('{$vo.id}',1)"><i class="icon-gift"></i>上传进度</a></span>
+                <span><a href="javascript:;" onclick="order_speed('{$vo.id}',2)"><i class="icon-gift"></i>通知验收</a></span>
+                {else/}
+                /
+                {/if}
+                {/case}
+                {default /}/
+                {/switch}
+                {else/}
+                /
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        <!--<tr>-->
+            <!--<td class="text-center">-->
+                <!--<input type="checkbox" id="checkbox_a1" class="chk_1 all" />-->
+                <!--<label for="checkbox_a1" class="lab-t"></label>-->
+            <!--</td>-->
+            <!--<td colspan="5">-->
+                <!--<label for="checkbox_a1" class="text-left pr15">全选</label>-->
+                <!--<div class="btn-group">-->
+                    <!--<a href="javascript:;" class="btn btn-default delete">删除</a>-->
+                <!--</div>-->
+            <!--</td>-->
+        <!--</tr>-->
+    </table>
+    {$page}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}logsOrder.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+
+    $('#outorder').click(function(){
+        window.location='outOrder';
+    });
+</script>
+
+
+
+

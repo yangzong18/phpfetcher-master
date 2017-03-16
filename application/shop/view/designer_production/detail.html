@@ -1,0 +1,107 @@
+
+<!-- content start -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content list-alliance">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="list-alliance-head h-content-container">
+            <div class="h-content-logo-lt"></div>
+            <div class="h-content-logo-rt"></div>
+            <div class="font-color-pink">实例展示详情</div>
+        </div>
+        <div class="show-details h-content-container">
+            <div class="show-details-content">
+                <div class="show-details-content-title">
+                    <div>
+                        <span class="font-color-gold">楼盘（名称）：</span>&nbsp;&nbsp;<span class="font-color-gold">{$info.production_name}</span>&nbsp;&nbsp;
+                        {if $info.fav == 1}
+                        <span class="show-btn-like font-color-gray show-btn-like-active" dataId="{$info.production_id}" flag="1">喜欢这款</span>
+                        {else/}
+                        <span class="show-btn-like font-color-gray" dataId="{$info.production_id}" flag="0">喜欢这款</span>
+                        {/if}
+                    </div>
+                    <div>
+                        <div class="font-color-gray">设计师&nbsp;&nbsp;<a href="{:url('shop/designers/detail')}?designer_id={$info.designer_id}" class="font-color-blue">{$info.designer_name}</a></div>
+                    </div>
+                </div>
+                <div class="show-details-content-info font-color-gray">
+                    <div>
+                        <div>
+                            <span>设计风格：</span>&nbsp;&nbsp;
+                            <span>{$info.category_name}</span>
+                        </div>
+                        <div>
+                            <span>户型：</span>&nbsp;&nbsp;
+                            <span>{$info.type_name}</span>
+                        </div>
+                        <div>
+                            <span>面积：</span>&nbsp;&nbsp;
+                            <span>{$info.building_area}m<sup>2</sup></span>
+                        </div>
+                    </div>
+                    <div>
+                        <span>说明：</span>
+                        {if $info.remark!= ''}
+                        <span>{$info.remark}</span>
+                        {else/}
+                        <span>暂无</span>
+                        {/if}
+                    </div>
+                </div>
+                <div class="show-details-content-img">
+                    <img src="{$info.cover}@w1100_h618.png" />
+                </div>
+
+                {foreach $image as $vo}
+                <div class="show-details-content-imglist">
+                    {foreach $vo as $v1}
+                    {if $v1 == ''}
+                    <div style="display: none"><img src="{$v1}" /></div>
+                    {else/}
+                    <div><img src="{$v1}@w528_h351.png" /></div>
+                    {/if}
+                    {/foreach}
+                </div>
+                {/foreach}
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content end -->
+<script >
+    $(function(){
+        $(".show-btn-like").click(function () {
+            //判断是否登录
+            var login   = parseInt('{$isLogin}');
+            if( login == 0 ) {
+                layer.msg('请先登录');
+                window.location.href = '{:url("shop/login/login")}';
+            }
+            var dataId = $(this).attr('dataId');
+            var flag = $(this).attr('flag');
+            var $_this = $(this);
+            if( flag == 1){
+                $.getJSON('{:url("api/Favorites/delFav")}?data=' + dataId+'&&type=1', function (result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $(".show-btn-like").toggleClass("show-btn-like-active");
+                        $_this.attr('flag',0);
+                    }
+                });
+            }else{
+                $.getJSON('{:url("api/Favorites/addFav")}?data=' + dataId+'&&type=1', function (result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $(".show-btn-like").toggleClass("show-btn-like-active");
+                        $_this.attr('flag',1);
+                    }
+                })
+            }
+
+        });
+    })
+
+</script>
+

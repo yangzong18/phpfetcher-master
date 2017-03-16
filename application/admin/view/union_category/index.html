@@ -1,0 +1,88 @@
+
+<div class="col-form">
+    <form class="form-inline" role="form" style="float: left">
+        <span>分类名称</span>
+        <div class="input-group">
+            <input type="text" name="cate_name" class="form-control" value="{$cate_name}">
+            <span class="input-group-btn">
+              <button class="btn btn-default search" type="button">搜索</button>
+            </span>
+        </div>
+    </form>
+    <ul>
+        <li class="text-right" style="margin-right: 20px;">
+            <a href="add" class="btn btn-info"><i class="icon-plus"></i> 添加商家分类</a>
+        </li>
+    </ul>
+</div>
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>整装联盟分类列表，分类由店铺自己添加</p>
+            <p><i class="icon-circle"></i>分类列表根据排序由小到大排列显示</p>
+        </li>
+    </ul>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr>
+            <th class="w10"></th>
+            <th class="w150">排序</th>
+            <th class="w200">分类名称</th>
+            <th class="w400">说明</th>
+            <th class="w200">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $datas as $vo}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                <input type="checkbox" id="checkbox_a2_{$vo.cate_id}" value="{$vo.cate_id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$vo.cate_id}" class="lab-t"></label>
+            </td>
+            <td class="text-center">
+                <div class="one-text sort">
+                    <input type="text" class="form-control h30 mb5 w50" key-id="{$vo.cate_id}" value="{$vo.px}" readonly/>
+                </div>
+            </td>
+            <td>{$vo.cate_name}</td>
+            <td>{$vo.cate_description}</td>
+            <td class="table-handle">
+                <span>
+                    <a href="edit?id={$vo.cate_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a  class="js-ajax-delete" href="delete?id={$vo.cate_id}"><i class="icon-trash"></i>删除</a>
+                </span>
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="5">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$datas->render();}
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+

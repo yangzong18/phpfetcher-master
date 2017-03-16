@@ -1,0 +1,125 @@
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="addPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="2">
+                    <h3>新增导航</h3>
+                </th>
+            </tr>
+            <tr>
+                <td width="100px">
+                    <div>
+                        <h3>导航类型*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <select name="type" class="form-control" style="width: 118px;">
+                                <option value="0" selected="selected">首页导航</option>
+                                <!-- <option value="1">商品分类</option> -->
+                                <!-- <option value="2">文章导航</option> -->
+                                <!-- <option value="3">活动导航</option> -->
+                                <option value="4">招商加盟</option>
+                                <option value="5">客户服务</option>
+                                <option value="6">新手帮助</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>标题*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="title">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>链接*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="url">
+                            <span>当填写 "链接" 后点击标题将直接跳转至链接地址。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <!--2016-12-28 暂时注释掉-->
+            <tr style="display: none">
+                <td>
+                    <div>
+                        <h3>所在位置</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <select name="location" class="form-control" style="width: 118px;">
+                                <option value="0" selected="selected">头部</option>
+                                <option value="1">中部</option>
+                                <option value="2">底部</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>新窗口打开</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <select name="new_open" class="form-control" style="width: 118px;">
+                                <option value="0" selected="selected">否</option>
+                                <option value="1">是</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>排序</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w118" name="sort">
+                            <span>请填写自然数。规格列表将会根据排序进行由小到大排列显示。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button class="btn btn-warning max-bg js-ajax-submit">添加</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1);">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

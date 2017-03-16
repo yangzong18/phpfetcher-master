@@ -1,0 +1,187 @@
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>请选择原木整装所包含的商品</p>
+        </li>
+    </ul>
+</div>
+<!-- 表单组 -->
+<div class="sheet-box table-form-default">
+    <form class="js-ajax-form" action="addPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4" class="pl15">
+                    <h3 class="text-left">关联商品信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td  class="w100">
+                    <div>
+                        <h3>整装商品</h3>
+                    </div>
+                </td>
+                <td >
+                    <img class="w50" src="{$goods.cover}" alt="{$goods.name}">
+                    <b>{$goods.name}</b>
+                </td>
+            </tr>
+
+            <tr>
+                <td  class="w100">
+                    <div>
+                        <h3>关联商品</h3>
+                    </div>
+                </td>
+                <td class="link">
+                    {foreach $linkList as $link} 
+                        <span class="label label-default f14">{$link['goods_name']}*{$link['number']} <a link-id="{$link['id']}" class="delete-link" href="javascript:;">x</a></span>
+                    {/foreach}
+                </td>
+            </tr>
+           
+            <tr class="goods-tr-t0">
+                <td>
+                    <div>
+                        <h3>设置关联</h3>
+                    </div>
+                </td>
+                <td class="text-left">
+                    <div class="form-inline col-form">
+                        <span>商品名称</span>
+                        <div class="input-group">
+                            <input class="form-control" id="goods-name" type="text">
+                            <span class="input-group-btn">
+                              <button class="btn btn-default search-goods" type="button">搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="goods-box  mt20">
+                        <ul class="goods-list">
+                        </ul>
+                    </div>
+                    <div class="pagelist form-inline">
+                        <div id="pager"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="button" class="btn max-bg" onclick="window.history.back(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+<script src="{$Think.JS_PATH}pagination/jquery.pagination.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+var logsGoodsId = parseInt( '{$goods.id}' );
+$(function(){
+    //商品列表检索
+    $(".search-goods").click(function(){
+        search( 0 );
+    });
+   //回车键进行商品列表检索，罗婷加
+    $('#goods-name').keydown(function(e){
+        if(e.keyCode == 13){
+            e.preventDefault();
+            //模拟点击登陆按钮，触发上面的 Click 事件
+            $(".search-goods").trigger("click");
+        }
+    });
+
+    var search = function(page) {
+        var name = $("#goods-name").val();
+        if ( trim( name ) == '' ) {
+            return false;
+        }
+        $.post('{:url("seller/logs/inquire")}', {
+            name : name,
+            page : page,
+        }, function( response ){
+            var html = '';
+            for (var i = 0; i < response.data.data.length; i++) {
+                html += '<li>\
+                            <a href="javascript:;" class="img-link"><img class="w100 h100" src="'+response.data.data[i].goods_image_main+'" alt="" /></a>\
+                            <p><b>'+response.data.data[i].goods_name+'</b></p>\
+                            <a href="javascript:;" goods-id="'+response.data.data[i].goods_id+'" goods-name="'+response.data.data[i].goods_name+'" class="goods-link choice-good">选择</a>\
+                        </li>';
+            }
+            //数据显示
+            $(".goods-list").empty();
+            $(".goods-list").append( html );
+            //初始化分页
+            var pager = $('#pager').paginate({
+                pageIndex: response.data.page, 
+                totlePageCount: response.data.total_page, 
+                styleURL : '{$Think.JS_PATH}pagination/defaultStyles/style.css',
+            });
+            $('#pager a').unbind('click');
+            $('#pager a').click(function(){
+                search( pager.getPageIndex() );
+            });
+            //选择商品触发
+            $(".choice-good").unbind('click');
+            $(".choice-good").click(function(){
+                var goodsId   = $(this).attr('goods-id');
+                var goodsName = $(this).attr('goods-name');
+                layer.open({
+                    content: '请输入数量 : <input type="text"  class="form-control h30 mb5" id="goods-number" /><span class="error-trr"></span>',
+                    btn: ['提交', '取消'],
+                    shadeClose: false, //开启遮罩关闭
+                    yes: function(index){
+                        var result = true;
+                        //进行数据提交
+                        var number = $("#goods-number").val();
+                        $.post('{:url("seller/logs/link")}', {
+                            logs_goods_id : logsGoodsId,
+                            number   : number,
+                            goods_id : goodsId
+                        }, function( response ) {
+                            if ( response.code == 0 ) {
+                                $('.error-trr').text(response.msg).css('color', 'red');
+                                result = false;
+                            } else {
+                                layer.msg('添加成功');
+                                //追加信息
+                                $('.link').append('<span class="label label-default f14">'+goodsName+'*'+number+' <a link-id="'+response.data+'" class="delete-link" href="javascript:;">x</a></span>');
+                            }
+                        });
+                        if (  result == false) {
+                            return false;
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    //关系删除
+    $(document).on('click', '.delete-link', function(){
+        var linkId = $(this).attr('link-id');
+        var ob     = $(this);
+        $.post('{:url("seller/logs/deleteLink")}', {
+            link_id : linkId
+        }, function( response ){
+            if ( response.code == 1 ) {
+                layer.msg('删除成功');
+                ob.parent().remove();
+            } else {
+                layer.msg('删除失败');
+            }
+        });
+    })
+})
+</script>
+
+

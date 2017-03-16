@@ -1,0 +1,153 @@
+<!-- content start -->
+<div class="container">
+    <ul class="list-box">
+        <li class="goods-sort mt-suc-item">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="opreate-success hide">
+                    <p>商品已经成功加入购物车</p>
+                </li>
+                <li>
+                    <div class="mt-goods">
+                        <div>
+                            <a class="goods_detail" href="">
+                                <img id="goods_img" src="" alt="" /></a>
+                        </div>
+                        <div>
+                            <p id="goods_sku"></p>
+                            <p id="goods_name"></p>
+                            <p id="goods_price"></p>
+                            <p id="sale_price"></p>
+                        </div>
+                    </div>
+                </li>
+                <li class="mt-btn opreate-success hide">
+                    <a class="goods_detail" href="">查看商品详情</a>
+                    <a href="{:url('shop/carts/index')}">去购物车结算</a>
+                </li>
+                <li class="opreate-error hide">
+                    <p>商品加入购物车失败</p>
+                </li>
+                <li class="mt-btn opreate-error hide">
+                    <a href="{:url('shop/living_museum/index')}">继续购物</a>
+                </li>
+            </ul>
+
+        </li>
+    </ul>
+    <ul class="marbox mb50">
+        <li>
+            <div class="order-thumbnail h-content-container list-goods-item guess-goods-item">
+                <div class="order-thumbnail-head font-color-pink">
+                    猜你喜欢
+                </div>
+                <div class="order-thumbnail-carousel mt-content goods-tc">
+                    <div class="order-thumbnail-carousel-lt font-color-gray">&lt;</div>
+                    <div class="order-thumbnail-carousel-gt font-color-gray">&gt;</div>
+                    {foreach $goodsList as $goods}
+                    <div class="fl">
+                        <p class="box">
+                            <a href="{:url('shop/goods/index',['gk'=>$goods.goods_id])}">
+                                <img class="lazy" data-original="{$goods.goods_image_main}" width="360" height="216" alt="" src="{$goods.goods_image_main}" style="display: inline;">
+                            </a>
+                        </p>
+                        <div class="mt-wz">
+                            <p><a href="{:url('shop/goods/index',['gk'=>$goods.goods_id])}">{if condition="mb_strlen($goods.goods_name,'utf-8') > 18"}{$goods.goods_name|mb_substr=0,18,'utf-8'}...{else /}{$goods.goods_name}{/if}</a></p>
+                            <p>
+                                <span>已售：<i>{$goods.goods_sale_number}</i>件</span>
+                                <span class="fr">抢购价：<i>￥{$goods.goods_price}</i></span>
+                            </p>
+                        </div>
+                    </div>
+                    {/foreach}
+                    <!--ul>
+                        {foreach $goodsList as $val}
+                        <li>
+                            <a href="{:url('shop/goods/index',['gk'=>$val.goods_id])}">
+                                <img src="{$val.goods_image_main}@w378_h227.png" /></a>
+                        </li>
+                        {/foreach}
+                    </ul-->
+                </div>
+            </div>
+
+        </li>
+    </ul>
+
+</div>
+<!-- content end -->
+
+<script type="text/javascript">
+var storage = parseInt( '{$storage}' );
+$(function(){
+	switch ( storage ) {
+		//商品不存在或者库存不足
+        case 0:
+            $(".opreate-error").removeClass('hide');
+            break;
+        //用户登陆，直接加入购物车了
+        case 1:
+            $(".opreate-success").removeClass('hide');
+            $("#goods_img").attr('src', '{$goodsInfo.goods_image_main}@w205_h104.png');
+            $("#goods_name").html('{$goodsInfo.goods_name}');
+            $("#goods_price").html("{:ncPriceFormat($goodsInfo.goods_price)}"+"*"+"{$number}");
+            $("#goods_sku").html("商品编号："+"{$goodsInfo.goods_sku}");
+            $(".goods_detail").attr('href', "{:url('shop/goods/index',['gk'=>$goodsInfo.goods_id])}");
+            $("#sale_price").html("优惠："+"{:ncPriceFormat($goodsInfo.goods_market_price*$number-$goodsInfo.goods_price*$number)}"+"元");
+            break;
+        //用户未登陆，需要存入localstorage
+        case 2:
+            var status = inquire('{$sku}', parseInt('{$number}'));
+            if ( status ) {
+            	$(".opreate-success").removeClass('hide');
+                $("#goods_img").attr('src', '{$goodsInfo.goods_image_main}@w205_h104.png');
+                $("#goods_name").html('{$goodsInfo.goods_name}');
+                $("#goods_price").html("{:ncPriceFormat($goodsInfo.goods_price)}"+"*"+"{$number}");
+                $("#goods_sku").html("商品编号："+"{$goodsInfo.goods_sku}");
+                $(".goods_detail").attr('href', "{:url('shop/goods/index',['gk'=>$goodsInfo.goods_id])}");
+                $("#sale_price").html("优惠："+"{:ncPriceFormat($goodsInfo.goods_market_price*$number-$goodsInfo.goods_price*$number)}"+"元");
+            }
+            break;
+	}
+
+    //图片加载
+    $("img.lazy").lazyload({
+        placeholder: "{$Think.IMG_PATH}loading.jpg",
+        effect: "fadeIn"
+    })
+
+
+})
+
+function inquire(sku, number) {
+	var temp     = localStorage.getItem('cart') ? localStorage.getItem('cart') : '';
+	//如果一个数据都没有, 则直接加入
+	if ( temp == '' ) {
+        localStorage.setItem('cart', sku+'|'+number);
+        return true;
+	}
+	var tempList = temp.split(',');
+	//判断该商品是否已经加入
+	var cart = new Array();
+	var unit = null;
+	for (var i = 0; i < tempList.length; i++) {
+		unit = tempList[i].split('|');
+		//如果找到了，则追加数量
+		if ( sku == unit[0] ) {
+			unit[1] = parseInt(unit[1])+number;
+			tempList[i] = unit.join('|');
+			localStorage.setItem('cart', tempList.join(','));
+			return true;
+		}
+	}
+	//如果没有找到，则直接追加
+	tempList.push(sku+'|'+number);
+    localStorage.setItem('cart', tempList.join(','));
+	return true;
+}
+</script>

@@ -1,0 +1,109 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}textarea.css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{$Think.CSS_PATH}style.css" media="screen" title="no title" charset="utf-8">
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="re-layui order-send">
+    <form class="js-ajax-form" action="{:url('seller/delivery/editDeliver')}" method="post" onkeydown="if(event.keyCode==13)return false;">
+        <input type="hidden" name="orderId" value="{$order_info.order_id}">
+        <input type="hidden"  name="s" value="{$s}">
+        <input type="hidden"  name="type" value="1">
+        <table class="table"><tbody>
+        <tr>
+            <td class="td-l-na">物流单号：</td>
+            <td>{$order_info.shipping_code}</td>
+        </tr>
+        <tr>
+            <td class="td-l-na">订单编号：</td>
+            <td>{$order_info.order_sn}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">状态：</td>
+            <td>{$order_info.state_desc}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">收货人：</td>
+            <td>
+                {if $s == 1}
+                {$order_info.extend_order_common.reciver_name}
+                {else}
+                {$order_info.extend_order_common.receiver_name}
+                {/if}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">联系方式：</td>
+            <td>{$order_info.extend_order_common.reciver_info.phone}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">收货地址：</td>
+            <td>{$order_info.extend_order_common.reciver_info.address}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">物流信息：</td>
+            <td><textarea id="area" name="delivery" class="form-control" style="height:200px;">{$order_info.delivery}</textarea></td>
+        </tr>
+
+        <tr class="b0">
+            <td colspan="4" class="b0">
+                <div class="text-center mt10">
+                    <button type="submit" class="btn btn-warning max-bg js-ajax-submit" id="judge">确定</button>
+                    <button type="button" class="btn max-bg return">取消</button>
+                </div>
+            </td>
+        </tr>
+
+        </tbody></table></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        //取消按钮操作
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+            return false;
+        });
+        window.onload = function(){
+            document.getElementById('area').addEventListener('keydown',function(e){
+                if(e.keyCode!=13) return;
+                e.preventDefault();
+                var el = $(this).get(0);
+                var pos = 0;
+                if ('selectionStart' in el) {
+                    pos = el.selectionStart;
+                    el.focus();
+                } else if ('selection' in document) {
+                    el.focus();
+                    var Sel = document.selection.createRange();
+                    var SelLength = document.selection.createRange().text.length;
+                    Sel.moveStart('character', -el.value.length);
+                    pos = Sel.text.length - SelLength;
+                }
+                var value = this.value;
+                this.value = value.substr(0,pos)+'\r\n'+value.substr(pos);
+                setSelectionRange(this,pos+1,pos+1);
+            });
+        };
+    })
+    function setSelectionRange(input, selectionStart, selectionEnd) {
+        if (input.setSelectionRange) {
+            input.focus();
+            input.setSelectionRange(selectionStart, selectionEnd);
+        }
+        else if (input.createTextRange) {
+            var range = input.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', selectionEnd);
+            range.moveStart('character', selectionStart);
+            range.select();
+        }
+    }
+</script>

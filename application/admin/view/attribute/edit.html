@@ -1,0 +1,159 @@
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="{:url('admin/attribute/editPost')}" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>商品属性信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>属性名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="attribute_name" value="{$data.attribute_name}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>排序</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="sort" value="{$data.sort}">
+                            <span>请填写自然数。规格列表将会根据排序进行由小到大排列显示。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>是否显示</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="btn-group-radio col-xs-11">
+                        {if condition="$data.visual eq 1"}
+                            <div class="btn-group btn-box-qh">
+                                <button type="button" class="btn btn-default btn-radio" value="0">否</button>
+                                <button type="button" class="btn btn-default btn-radio cus" value="1">是</button>
+                            </div>
+                            <input type="hidden" id="status" name="visual" value="1" />
+                        {else/}
+                            <div class="btn-group btn-box-qh">
+                                <button type="button" class="btn btn-default cus btn-radio" value="0">否</button>
+                                <button type="button" class="btn btn-default btn-radio" value="1">是</button>
+                            </div>
+                            <input type="hidden" id="status" name="visual" value="0" />
+                        {/if}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="3">
+                    <h3>属性值信息</h3>
+                </th>
+            </tr>
+
+            <tr class="text-center">
+                <td>排序</td>
+                <td>属性可选值</td>
+                <td>操作</td>
+            </tr>
+            <tbody class="attribute">
+                {foreach $attributeValueList as $key => $attributeValue}
+                    <tr class="die">
+                        <td>
+                            <input type="hidden" value="{$attributeValue['id']}" name="edit_value_id[]">
+                            <input type="text" class="form-control h30 w50 value-sort" value="{$attributeValue['sort']}"  name="edit_value_sort[]">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control h30 w100 value-name" value="{$attributeValue['feature_value']}" name="edit_value[]">
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                {/foreach}
+            </tbody>
+            <tr>
+                <td  colspan="3">
+                    <a class="btn btn-default h30 add-value"><i class=" icon-plus-sign"></i> 添加一个属性值</a>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <input type="hidden" name="feature_id" value="{$data.feature_id}" />
+                        <a href="javascript:;" class="btn btn-warning max-bg pre-submit">编辑</a>
+                        <button class="btn btn-warning max-bg js-ajax-submit hide">编辑</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(function(){
+    //表单提交前的预处理
+    $(".pre-submit").click(function(){
+        var attributeValue = '';
+        var attributeSort = '';
+        //进行匹配，如果没有填写属性名称或者属性指，那么该属性判定无效
+        $(".die").each(function(){
+            attributeValue = $(this).find('.value-name').val();
+            if ( trim( attributeValue ) == '' ) {
+                $(this).remove();
+            }
+            //如果没有排序。则默认排序0
+            attributeSort = $(this).find('.value-sort').val();
+            if ( trim( attributeSort ) == '' || isNaN( attributeSort ) ) {
+                $(this).find('.value-sort').val(0);
+            }
+        });
+        //进行提交
+        $(".js-ajax-submit").trigger('click');
+    });
+    //添加一个属性
+    $(".add-value").click(function(){
+        var number = $('.attribute tr').length+1;
+        var html = '<tr class="die">\
+                        <td>\
+                            <input type="text" class="form-control h30 w50 value-sort" value="" name="add_value_sort[]">\
+                        </td>\
+                        <td>\
+                            <input type="text" class="form-control h30 w100 value-name" value="" name="add_value[]">\
+                        </td>\
+                        <td  class="table-handle">\
+                            <span>\
+                                <a href="javascript:" class="remove-value"><i class="icon-trash"></i>移除</a>\
+                            </span>\
+                        </td>\
+                    </tr>';
+        $(".attribute").append(html);
+    });
+    //绑定移除事件
+    $(document).on("click", ".remove-value",function(){
+        $(this).parent().parent().parent().remove();
+    });
+})
+</script>

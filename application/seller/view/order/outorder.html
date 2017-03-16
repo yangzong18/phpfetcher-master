@@ -1,0 +1,142 @@
+<div class="col-form">
+    <form class="form-inline" id="order_form" role="form" action="{:url('seller/order/outOrder')}" style="float:left;">
+        <div class="form-group">
+            <select name="orderState" class="form-control export_state" >
+                {foreach $orderState as $k => $v}
+                <option {if $searchOrderState==$k}selected{/if} value="{$k}">{$v}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="form-group">
+            <select name="searchType" class="form-control export_type">
+                {foreach $search as $key => $val}
+                <option {if $searchType==$key}selected{/if} value="{$key}">{$val}</option>
+                {/foreach}
+            </select>
+            <input type="text" class="form-control export_name" name="searchValue" value="{$searchValue}">
+
+        </div>
+        <span>起始时间</span>
+        <div class="input-group">
+            <input type="text" name="start" value="{$param.start|default=''}" class="skinblue export_start form-control text-ra workinput wicon pr30 w80" placeholder="起始时间">
+        </div>
+        <span>结束时间</span>
+        <div class="input-group">
+            <input type="text" name="end" value="{$param.end|default=''}" class="skinblue export_end form-control text-ra workinput wicon pr30 w80" placeholder="结束时间">
+        </div>
+        <div class="form-group">
+            <button class="btn search_button" type="submit">搜索</button>
+            <button  type="button" id="out" class="btn btn-info export_button">导出</button>
+            <b>【订单数：{$pageTotal}】</b>
+            <span style="float:left;position: absolute ;font-size: 8px;color: red;margin-left: 180px;">*建议一次导出不超过1000条</span>
+        </div>
+    </form>
+    <div class="clear"></div>
+</div>
+<div class="table-form-default">
+    <table class="table mt20">
+        <tr>
+            <th></th>
+            <th class="w150">商品</th>
+            <th class="w150">单价</th>
+            <th class="w150">数量</th>
+            <th class="w150">实付款</th>
+            <th class="w150">交易状态</th>
+            <th class="w150">运单号</th>
+        </tr>
+
+
+        <tr class="">
+            <td colspan="6">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+
+        {volist name="list" id="val"}
+        <tbody>
+        <tr class="goods-tr-bg">
+
+            <td colspan="7">
+                <span>订单编号：{$val.order_id}</span>
+                <span>下单时间：{$val.add_time|date='Y-m-d H:i:s',###}</span>
+                <span>订单编号：{$val.order_sn}</span>
+            </td>
+        </tr>
+        {foreach $val.extend_order_goods as $k=> $goods_info}
+        <tr class="goods-tr-t0">
+            <td>
+                <a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}"><img class="bt-images" src="{$goods_info.goods_image}@w100_h70.png" alt=""></a>
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}">{$goods_info.goods_name}</a></dt>
+                    <dd>
+                        {volist name="$goods_info.sku_name" key="key" id="value"}
+                        {$key} : {$value}<br>
+                        {/volist}
+                    </dd>
+                </dl>
+            </td>
+            <td>{$goods_info.goods_price}</td>
+            <td>{$goods_info.goods_num}</td>
+            {if ($val.goods_count > 1 && $k == 0) || ($val.goods_count == 1)}
+            <td rowspan="{$val.goods_count}" {if ($val.goods_count > 1)} style="border-left:1px solid #ddd"{/if} >
+                <dl class="goods-name">
+                    <dt>{$val.order_amount}</dt>
+                    <dd>
+                        {if($val.shipping_fee==0)}
+                        （免运费）
+                        {else/}
+                        运费：{$val.shipping_fee}
+                        {/if}
+                    </dd>
+                </dl>
+            </td>
+            <td rowspan="{$val.goods_count}">
+                <p>{$val.state_desc}</p>
+                <p><a href="{:url('Seller/Order/orderDetail')}?order_id={$val.order_id}">订单详情</a></p>
+                {if($val.if_lock)}
+                <p><a href="{:url('Seller/Order/orderAfter')}?order_id={$val.order_id}">售后详情</a></p>
+                {/if}
+            </td>
+            <td rowspan="{$val.goods_count}">{$val.shipping_code}</td>
+
+            {/if}
+        </tr>
+        {/foreach}
+        </tbody>
+        {/volist}
+    </table>
+    {$page}
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<link rel="stylesheet" href="{$Think.JS_PATH}artDialog/skins/default.css" media="screen" title="no title" charset="utf-8">
+<!--导出-->
+<script>
+    $(".search_button").click(function(){
+        var start = $('.export_start').val();
+        var end = $('.export_end').val();
+        if(start > end){
+            layer.msg('起始时间应该小于结束时间！');
+            return false;
+        }else{
+            $('#order_form').submit();
+        }
+    });
+
+    $('.export_button').click(function(){
+        var state = $('.export_state :selected').val();
+        var type = $('.export_type :selected').val();
+        var name = $('.export_name').val();
+        var start = $('.export_start').val();
+        var end = $('.export_end').val();
+        if(start > end){
+            layer.msg('起始时间应该小于结束时间！');
+            return false;
+        }
+
+        window.open('exportOrder?orderState='+state+'&searchType='+type+'&searchValue='+name+'&start='+start+'&end='+end,'_blank');
+        window.location.href = "{:url('seller/order/lists')}";
+    });
+</script>

@@ -1,0 +1,165 @@
+
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>添加楼层模板信息</p>
+        </li>
+    </ul>
+</div>
+<div class="sheet-box">
+    <form class="js-ajax-form" action="editPost" method="post" enctype="multipart/form-data">
+        <table class="table">
+            <tbody>
+
+            <tr class="goods-tr-bg">
+                <th colspan="4"><h3>添加楼层模板信息</h3></th>
+            </tr>
+            <tr>
+                <td width="150px"><div><h3>楼层模板名称*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="hidden" name="id" value="{$info.id}">
+                            <input type="text" name="name" class="form-control h30 mb5" value="{$info.name}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>楼层模板文件*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="uploader white" style="margin-left: 15px;width: 38.5%;">
+                        <input type="text" class="filename" readonly style="width: 80%;" value="{$info.template_path}"/>
+                        <input type="button" name="file" class="button" value="上传模板" style="width: 20%;"/>
+                        <input type="file" name="template_html" size="30" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>楼层模板布局图*</h3>
+                    </div>
+                </td>
+                <!--<td>-->
+                    <!--<div class="col-xs-12">-->
+                        <!--<div class="uploadimg-cover">-->
+                        <!--</div>-->
+                        <!--<div class="clear"></div>-->
+                        <!--<div class="w380">-->
+                            <!--<span class="input-group-btn one-text">-->
+                            <!--<a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload main-cover-upload">-->
+                              <!--<span><i class="icon-circle-arrow-up"></i> 图片上传</span>-->
+                            <!--</a>-->
+                            <!--</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</td>-->
+                <td>
+                    <div class="col-xs-5">
+                        <div class="uploadimg">
+                            <div id="img_url" class="file-item thumbnail">
+                                <div class="up-imgbox">
+                                    <img src="{$info.img_url}@w100_h100.png" style="width: 100px;height: 100px;">
+                                </div>
+                                <div>
+                                    <a class="del_pic">删除</a>
+                                </div>
+                                <input type="hidden" name="img_url" value="{$info.img_url}" class="imgName-up-item">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>楼层布局图片数量*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="hidden" name="img_number_old" value="{$info.img_number}">
+                            <input type="text" name="img_number" class="form-control h30 mb5" readonly value="{$info.img_number}">
+                            <span>请填写自然数。务必与模板中图片的数量一致</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>排序</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="sort" class="form-control h30 mb5" value="{$info.sort}">
+                            <span>请填写自然数。楼层模板列表将会根据排序由小到大排列显示，默认为0。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">提交</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+
+                </td>
+            </tr>
+
+            </tbody></table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js?t=20161124" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+$(function(){
+    //主图上传
+//    $('.main-cover-upload').uploader({
+//        server: '/index/index/uploadFile',//上传路径
+//        container: '.uploadimg-cover',//图片容器
+//        num:1,//上传数量
+//        inputName:'template_img'//input name值
+//    })
+
+    //修改模板图片上传
+    $('.btn-one-upload').uploader({
+        server: '{:url("index/index/uploadFile")}',//上传路径
+        container: '.uploadimg',//图片容器
+        swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+        num: 1,//上传数量
+        inputName: 'img_url',//input name值
+        btnDsab:'.js-ajax-submit',
+        imgBtn:'.btn-one-upload'
+    })
+});
+
+
+</script>

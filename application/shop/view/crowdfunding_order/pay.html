@@ -1,0 +1,168 @@
+<style type="text/css">
+    .ncc-payment-list li:hover, .ncc-payment-list li.using {
+        border: solid 2px #52A452;
+        margin: 10px;
+    }
+    .ncc-payment-list li {
+        vertical-align: top;
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-align: center;
+        display: inline-block;
+        width: 120px;
+        padding: 10px 30px;
+        margin: 11px;
+        border: solid 1px #E6E6E6;
+        border-radius: 4px;
+        position: relative;
+        z-index: 1;
+        background: #ffffff;
+    }
+    .ncc-receipt-info{ margin-bottom: 10px}
+    .ncc-payment-list .logo{ cursor: pointer}
+    input.submit {
+        width: 206px;
+        cursor: pointer;
+        height: 35px;
+        background: #196997;
+        border: none;
+        font-size: 14px;
+        color: #fff;
+    }
+
+</style>
+<div class="container">
+    <!--购买导航-->
+    <ul class="list-box content-box order-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('shop/crowdfunding/index')}">众筹商品</a>  > <a href="javascript:;">用户付款</a></h3>
+                </li>
+                <li class="order-lc">
+                    <div>
+                        <p>订单生成</p>
+                        <span></span>
+                    </div>
+                    <div class="cus">
+                        <p>用户付款</p>
+                        <span></span>
+                    </div>
+                    <div>
+                        <p>付款成功</p>
+                        <span></span>
+                    </div>
+                    <div class="">
+                        <p>商家发货</p>
+                    </div>
+
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!--购买导航 END -->
+
+
+    <ul class="cnt-box-item order-goods marbox">
+        <div class="og-box">
+            <form action="{:url('shop/payment/paycrowdorder')}" method="POST" id="buy_form">
+                <input type="hidden" name="pay_sn" value="{$pay_info.pay_sn}">
+                <input type="hidden" id="payment_code" name="payment_code" value="">
+                <div class="ncc-receipt-info">
+                    <div class="ncc-receipt-info-title">
+                        <h2>{$order_remind}在线支付金额：<strong>￥{$pay_amount_online}</strong></h2>
+                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="w50"></th>
+                            <th class="w200 tl">订单号</th>
+                            <th class="tl w150">支付方式</th>
+                            <th class="tl">金额</th>
+                            <th class="w150">物流</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {if count($order_list) >1}
+                        <tr>
+                            <th colspan="20">由于您的商品由不同商家发出，此单将分为<?php echo count($output['order_list']);?>个不同子订单配送！</th>
+                        </tr>
+                        {/if}
+
+                        {volist name="order_list" id="order"}
+                        <tr>
+                            <td></td>
+                            <td class="tl">{$order.order_sn}</td>
+                            <td class="tl">{$order.payment_state}</td>
+                            <td class="tl">￥{$order.order_amount}</td>
+                            <td>快递</td>
+                        </tr>
+                        {/volist}
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ncc-receipt-info">
+                    {if count($payment_list)<=0}
+                    <div class="nopay">抱歉，暂时没有符合条件的支付方式，请联系卖家进行后续购买流程</div>
+                    {else}
+                    <div class="ncc-receipt-info-title">
+                        <h2>支付选择</h2>
+                    </div>
+                    <ul class="ncc-payment-list">
+                        {volist name="payment_list" id="val"}
+                        <!--2017-3-9   众筹暂时取消网银支付-->
+                        {if $val.payment_code != 'chinabank'}
+                        <li payment_code="{$val.payment_code}">
+                            <label for="pay_{$val.payment_code}">
+                                <i></i>
+                                <div class="logo" for="pay_{$val.payment_id}">
+                                    <img src="{$Think.STATIC_COMMON_PATH}/images/payment/{$val.payment_code}_logo.gif" /> </div>
+                            </label>
+                        </li>
+                        {/if}
+                        {/volist}
+                    </ul>
+                    {/if}
+                </div>
+                {if $pay_amount_online>0}
+                <div class="ncc-bottom tc ">
+                    <input type="button" id="next_button" class="submit" value="确认提交支付" />
+                </div>
+                <h3>订单详情内容可通过查看<a href="{:url('shop/crowdfunding_order/detail')}?order_id={$order_list[0]['order_id']}" target="_blank">我的订单</a>进行核对处理。</h3>
+                {/if}
+            </form>
+
+
+        </div>
+    </ul>
+</div>
+
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jquery.validate.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.ncc-payment-list > li').on('click',function(){
+            $('.ncc-payment-list > li').removeClass('using');
+            $(this).addClass('using');
+            $('#payment_code').val($(this).attr('payment_code'));
+        });
+
+        $('#next_button').on('click',function(){
+            if ($('#payment_code').val() == '') {
+                layer.msg('请选择支付方式');
+                return false;
+            }
+            $('#buy_form').submit();
+        });
+    });
+</script>

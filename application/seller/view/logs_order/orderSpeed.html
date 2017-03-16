@@ -1,0 +1,122 @@
+{__NOLAYOUT__}
+{include file="layout/header" /}
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="re-layui log-order-speed">
+    <form class="js-ajax-form" action="{:url('seller/logsOrder/orderSpeed')}" method="post">
+        <input type="hidden" name="orderId" value="{$order_info.id}">
+        <input type="hidden"  name="type" value="1">
+        <input type="hidden" name="flag" value="{$flag}">
+        <table class="table">
+            <tr>
+                <td class="td-l-na">订单编号：</td>
+                <td>{$order_info.order_sn}</td>
+            </tr>
+
+            <tr>
+                <td class="td-l-na">预约账号：</td>
+                <td>{$order_info.phone}</td>
+            </tr>
+
+            {if $flag eq 1}
+            <tr>
+                <td class="td-l-na">上次进度更新：</td>
+                <td>{$date} （第一次更新从合同签订日开始计算）</td>
+            </tr>
+
+            <tr class="td-textarea">
+                <td class="td-l-na">备注说明*：</td>
+                <td>
+                    <textarea name="speedDesc" placeholder="备注说明应小于140字" rows="2" class="form-control"></textarea>
+                </td>
+            </tr>
+
+            <tr class="upload-box">
+                <td class="td-l-na"><div><h3>上传进度*：</h3></div></td>
+                <td>
+                    <div>
+                        <div class="uploadimg">
+
+                        </div>
+                        <div class="btn-up-zbox">
+                            <div class="clear"></div>
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            {else/}
+
+            <tr>
+                <td class="td-l-na">合同签订日期：</td>
+                <td>{$date}</td>
+            </tr>
+
+            <tr>
+                <td class="td-l-na">施工完成日期*：</td>
+                <td>
+                    <input type="text" name="finishTime" class="skinblue1 form-control text-ra workinput wicon pr30 w120" placeholder="完成日期" >
+                </td>
+            </tr>
+
+            <tr class="td-textarea">
+                <td class="td-l-na">备注说明：</td>
+                <td>
+                    <textarea name="finishDesc" rows="2" placeholder="备注说明应小于140字" class="form-control"></textarea>
+                </td>
+            </tr>
+
+            {/if}
+
+            <tr class="b0">
+                <td colspan="2" class="b0">
+                    <div class="text-center mt15">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">确定</button>
+                        <button class="btn max-bg return" >取消</button>
+                    </div>
+
+                </td>
+            </tr>
+        </table></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+            return false;
+        });
+
+        //上传图片
+        $('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 4,//上传数量
+            inputName: 'speed_img[]',//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        })
+
+        $(".skinblue1").jeDate({
+            minDate:  $.nowDate(0),
+            skinCell: "jedateblue",
+            format: 'YYYY-MM-DD'
+        });
+
+    })
+</script>
+<style>
+    .table tbody tr td{
+        width: 150px;
+        border-top: hidden;
+    }
+</style>

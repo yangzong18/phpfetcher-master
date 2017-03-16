@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <link rel="stylesheet" href="{$Think.CSS_PATH}base.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}style.css" media="screen" title="no title" charset="utf-8">
+    <script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}placeholder.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}ajaxForm.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}idangerous.swiper.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jquery.validation.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jQuery.md5.js" charset="utf-8"></script>
+    <title>木筑网-注册</title>
+    <!--[if lt IE 9]>
+      <script src="{$Think.JS_PATH}IE9.js"></script>
+      <script src="{$Think.JS_PATH}html5shiv.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        $(function() {
+            var browser = {
+                versions: function() {
+                    var u = navigator.userAgent,
+                        app = navigator.appVersion;
+                    var ios = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+                    var android = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+                    if (ios) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+                    }
+                    if (android) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+
+                    }
+                }(),
+            }
+
+        })
+    </script>
+
+</head>
+
+<body>
+
+    <!-- content start  -->
+    <div class="container">
+        <div class="login-logo">
+            <div class=" marbox">
+                <p>
+                    <a href="/"><img src="{$Think.IMG_PATH}logo.png" alt="" /></a>
+                </p>
+                <p class="info">
+                    <a href="/"><img src="{$Think.IMG_PATH}logo-info.png" alt="" /></a>
+                </p>
+            </div>
+        </div>
+        <div class="login-main reg-main">
+            <ul class="marbox">
+                <li class="form-box">
+                    <form class="" id="signupForm" action="registerDo" method="post">
+                        <div class="user-item">
+                            <p class="fl">用户注册</p>
+                            <p class="fr"><a href="{$helpUrl['url']}" {if condition="$helpUrl.new_open eq 1"} target="_blank" {/if} >新手帮助</a></p>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="form-item">
+                            <p class="">
+                                <label class="lab-ys">手机号</label>
+                                <span><input type="text" id="phone" name="phone" data-placement="top"  class="intxt required" value=""></span>
+                            </p>
+                            <p class="yz-info">
+                                <label class="lab-ys">验证码</label>
+                                <span class="yzm righttooltip"><input type="text" name="authCode" id="authCode" data-placement="top" class="intxt  required" value="" maxlength="6"></span>
+                                <a id="getAuthCode" href="javascript:void(0);">点击获取</a>
+                                <label for="authCode" id="sms-error-msg" style="display: none;margin-left: 88px;position: relative;bottom:10px;color: #ffffff"></label>
+                            </p>
+                            <p class="">
+                                <label class="lab-ys">密&nbsp;&nbsp;&nbsp;码</label>
+                                <span><input maxlength="18" autocomplete="off" type="password" id="pwd" name="password" data-placement="top" class="intxt required" value="" placeholder="请录入6-18位字符密码"></span>
+                            </p>
+                            <p class="">
+                                <label class="lab-ys">再次输入</label>
+                                <span><input maxlength="18" type="password" name="repeat_password" data-placement="top" class="intxt required" value="" placeholder="请录入6-18位字符密码"></span>
+                            </p>
+                            <p class="">
+                                <label class="lab-ys">邮&nbsp;&nbsp;&nbsp;箱</label>
+                                <span><input type="text" name="email" data-placement="top" class="intxt required email" value=""></span>
+                            </p>
+                            <p class="wz">
+                                <span>
+                                <label for="mt-wzd">阅读并同意</label>
+                                <input type="checkbox"  id="mt-wzd" class="required" name="terms" value="">
+                              </span>
+                            </p>
+                            <p class="sub">
+                                <span><input type="button" id="submitBtn" value="注 册"></span>
+                            </p>
+                        </div>
+                    </form>
+                    <div class="db-info">
+                        <a href="login" title="" class="fr">已有账号登录</a>
+                    </div>
+                </li>
+                <li class="clear"></li>
+            </ul>
+
+        </div>
+    </div>
+    <!-- content end -->
+    {include file="layout/footer" /}
+
+    <script type="text/javascript">
+        $(function () {
+
+            var code = false;
+            var flag = false;
+
+          $('.form-item p.wz span input').click(function() {
+              if(this.checked){
+                $('.form-item p.wz span label').text('我已阅读条款')
+                  layer.open({
+                      type: 2,
+                      title: false,
+                      area: ['500px', '600px'],
+                      skin: 'mt-layui-layer', //样式类名
+                      closeBtn: 1,
+                      anim: 2,
+                      scrollbar: false,
+                      shadeClose: false, //开启遮罩关闭
+                      content: "{:url('shop/login/read')}"
+                  })
+              }else{
+                $('.form-item p.wz span label').text('阅读并同意')
+              }
+          })
+
+            jQuery.validator.addMethod("isMobile", function(value, element) {
+                var length = value.length;
+                var regPhone = /^1([3-9]{1})([0-9]{1})([0-9]{8})$/;
+                return this.optional(element) || (length == 11 && regPhone.test(value));
+            }, "请正确填写您的手机号码");
+
+            jQuery.validator.addMethod("codeTrue", function(value, element) {
+                    return !(code == false && $("#authCode").val().length > 0)
+            });
+            //校验密码：只能输入6-18个字母、数字、下划线
+            jQuery.validator.addMethod("iszw", function(value, element) {
+                value = $.trim(value);
+                if(value=='') {
+                    return false;
+                    element.val('');
+                }
+                var patrn=/^(\w){6,18}$/;
+                return patrn.test(value);
+            }, "请录入6-18位字符密码");
+
+            //表单验证
+            $("#signupForm").validate({
+                rules: {
+                    phone: {
+                        required: true,
+                        isMobile:true,
+                        remote  : {
+                            url :'checkPhone',
+                            type:'post',
+                            async: false,  // true为异步，false为同步
+                            data:{
+                                phone : function(){
+                                    return $('#phone').val();
+                                }
+                            }
+                        }
+                    },
+                    authCode: {
+                        required: true,
+                        codeTrue:true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 18,
+                        iszw:true
+                },
+                    terms:{
+                        required: true
+                    },
+                    repeat_password: {
+                        required: true,
+                        equalTo: '#pwd',
+                        minlength: 6,
+                        iszw:true
+                    },
+                    email: {
+                        required: true,
+                        email:true
+                    }
+                },
+                messages: {
+                    terms:{
+                        required: '请勾选阅读条款'
+                    },
+                    phone: {
+                        required: '请输入您的电话号码',
+                        isMobile:'请正确填写您的手机号码',
+                        remote:'手机号码已注册，请直接登录'
+                    },
+                    authCode: {
+                        required: '请输入验证码',
+                        codeTrue:'验证码错误'
+                    },
+                    password: {
+                        required: '请输入密码',
+                        minlength: '密码不能小于6位数',
+                        maxlength: '密码最多为18位',
+                        iszw : '建议使用字母、数字或下划线组合，6-18个字符'
+                    },
+                    repeat_password: {
+                        required: '请再次输入密码',
+                        equalTo: '两次密码输入不一致',
+                        minlength: '密码不能小于6位数',
+                        iszw : '建议使用字母、数字或下划线组合，6-18个字符'
+                    },
+                    email: {
+                        required: '请输入E-Mail',
+                        email: '请输入正确格式的E-Mail'
+                    }
+                },
+                errorClass: "error",
+                success: 'valid',
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).tooltip('destroy').removeClass(errorClass);
+                },
+                errorPlacement: function (label, element) {
+                    $(element).tooltip('destroy'); /*必需*/
+                    $(element).attr('title', $(label).text()).tooltip('show');
+                }
+            });
+
+               //短信验证码验证
+
+                $("#authCode").keyup(function () {
+                    if ($(this).val().length == 6) {
+                        if ($("#signupForm").validate().element($("#phone"))) {
+                            $.ajax({
+                                url: "verifyCode",
+                                type: "post",
+                                dataType: 'json',
+                                data: {
+                                    code: $(this).val(),
+                                    phone: $("#phone").val()
+                                },
+                                success: function (data) {
+                                    if (data.code == 1) {
+                                        code = true;
+                                        $("#sms-error-msg").hide();
+                                        $("#authCode").tooltip('destroy')
+                                    } else {
+                                        if(data.data == 2) flag = true;
+                                        $("#sms-error-msg").html(data.msg)
+                                        $("#authCode").attr('data-original-title', $("#sms-error-msg").text()).tooltip('show');
+                                        //$("#sms-error-msg").hide();
+                                        code = false;
+                                        return false;
+                                    }
+                                },
+                                error: function () {
+                                    code = false;
+                                    $("#sms-error-msg").html("验证码错误11");
+                                    $("#sms-error-msg").show();
+                                }
+                            });
+                        }else {
+                           // $("#authCode").attr('title', '验证码错误').tooltip('show');
+//                          $("#phone").focus();
+                        }
+                    } else {
+                        $("#sms-error-msg").hide();
+                        return false;
+                    }
+                });
+
+
+
+                //点击获取验证码按钮
+                $("#getAuthCode").on("click", function () {
+                    var result = $("#signupForm").validate().element($("#phone"));
+                    if ( result ) {
+                       var p = $(this).parent();
+                        if (!p.hasClass("auth_code")) {
+                            $.ajax({
+                                url: 'getAuthCode',
+                                data: {
+                                    phone: $("#phone").val()
+                                },
+                                dataType: 'json',
+                                async: false,
+                                type: 'get',
+                                success: function (data) {
+                                    if ( data.code != 2) {
+                                        layer.msg(data.msg);
+                                    }
+                                    else{
+                                        layer.msg(data.msg);
+                                        p.addClass("auth_code");
+                                        var time = 60;
+                                        var code_time = setInterval(function () {
+                                            if (time == 0) {
+                                                clearInterval(code_time);
+                                                $("#getAuthCode").html("获取验证码").parent().removeClass("auth_code");
+                                                return;
+                                            }
+                                            $("#getAuthCode").html("获取验证码(" + (time--) + ")");
+                                        }, 1000);
+                                    }
+                                },
+                                error: function (data) {
+                                    layer.msg('请检测手机号是否正确');
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        $("#phone").focus();
+                    }
+
+                });
+
+            //点击注册按钮
+               $('#submitBtn').click(function(){
+                    var $btn = $("#signupForm");
+                   if($("#signupForm").valid() && code == true){
+                       var $form=$("#signupForm");
+                       // $form.find('input[type="password"]').each(function(){
+                       //     var value = $.trim($(this).val());//去掉首尾空格
+                       //     $(this).val($.md5(value));
+                       // });
+                       $form.ajaxSubmit({
+                           url: $btn.data('action') ? $btn.data('action') : $form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+                           dataType: 'json',
+                           beforeSubmit: function (arr, $form, options) {
+                               $btn.data("loading",true);
+                               var text = $btn.text();
+
+                               //按钮文案、状态修改
+                               $btn.text(text + '中...').prop('disabled', true).addClass('disabled');
+                           },
+                           success: function (data, statusText, xhr, $form) {
+                               var text = $btn.text();
+
+                               //按钮文案、状态修改
+                               $btn.removeClass('disabled').prop('disabled', false).text(text.replace('中...', '')).parent().find('span').remove();
+                               layer.msg(data.msg);
+                               if (data.code == 1) {
+                                   window.location.href = data.url;
+                               }
+                           },
+                           error:function(xhr,e,statusText){
+                               layer.msg(statusText);
+                               reloadPage(window);//刷新当前页
+                           }
+                       });
+                   }else{
+                       if(flag == true) {
+                           $("#authCode").attr('data-original-title', '验证码已过期，请重新获取').tooltip('show');}
+                     //$("#authCode").attr('data-original-title', '验证码错误').tooltip('show');
+
+                   }
+
+               });
+
+            });
+</script>

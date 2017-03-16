@@ -1,0 +1,52 @@
+{__NOLAYOUT__}
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<meta charset="UTF-8">
+<!-- 修改地址弹出 start -->
+<div class="mt-layer replace-box none">
+  <div class="marbox">
+    <div class="user-item">
+        <p class="fl">全部设计师</p>
+        <p class="clear"></p>
+    </div>
+    <div class="design-item">
+      <div class="scroll">
+        <ul class="list">
+            {foreach $designerList as $designer}
+                <li>
+                    <img src="{$designer['designer_avatar']}@w232_h211.png" alt="" />
+                    <div class="">
+                        <p><span>{$designer['designer_name']}</span><span>{$designer['level_name']}</span></p>
+                        <p class="fr"><a href="javascript:;" desinger-id="{$designer.designer_id}" desinger-avatar="{$designer.designer_avatar}" desinger-name="{$designer.designer_name}" level-name="{$designer.level_name}" desinger-year="{$designer.designer_year}" class="choice-desinger">选 定</a></p>
+                    </div>
+                </li>
+            {/foreach}
+        </ul>
+        <div class="pagelist">
+          <ul>
+            <li>{$designerList->render()}</li>
+          </ul>
+       </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    $(".choice-desinger").click(function(){
+        designer = {
+            designer_id : $(this).attr('desinger-id'),
+            designer_avatar : $(this).attr('desinger-avatar'),
+            designer_name : $(this).attr('desinger-name'),
+            level_name : $(this).attr('level-name'),
+            designer_year : $(this).attr('desinger-year'),
+        }
+        parent.changeDesinger( designer );
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);
+    });
+})
+</script>

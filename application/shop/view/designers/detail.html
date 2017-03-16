@@ -1,0 +1,88 @@
+<div class="container list-stylist">
+    <ul class="list-box">
+        <li class="goods-sort mt-fina-raise">
+            <div class="marbox1">
+                <div class="fl-l">
+                    <ul class="marbox">
+                        <li class="mt-xb">
+                            <div>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </li>
+                        <li class="mt-position">
+                            <h3><a href="{:url('shop/designers/index')}">设计师分类</a> > 设计师详情 > {$info.designer_name}</h3>
+                        </li>
+                    </ul>
+                    <ul class="stylist cont-stylist combg-h2">
+                        <li>
+                            <div class="fl">
+                                <p><img src="{$info.designer_avatar}@w267_h241.png" alt=""></p>
+                            </div>
+                            <div class="fr">
+                                <div>
+                                    <h3>{$info.designer_name}<span>{$levelList[$info.level_id]['name']}</span> <a href="{:url('shop/logsOrder/index', array('dk'=>$info.designer_id))}">预约TA</a></h3>
+                                    <p><span>人气 {$info.hot}</span> <span>经验值 {$experience}</span></p>
+                                </div>
+                                <div>
+                                    <p><span>所属部门：</span><span>{$info.company}</span></p>
+                                    <p><span>工作年限：</span><span>{$info.designer_year}年</span></p>
+                                    <p><span>擅长风格：</span><span>{$info.designer_style}</span></p>
+                                    <p><span>设计理念：</span><span>{$info.designer_idea}</span></p>
+                                </div>
+
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div>
+                                <h3><span class="combg-b">代表作品</span></h3>
+                            </div>
+                            <div class="cnt-sty">
+                                <ul>
+                                    {foreach $production as $val}
+                                    <li>
+                                        <a href="{:url('shop/designer_production/detail',['id'=>$val.production_id])}" class="mt-link"><img src="{$val.imgs}" alt="" /></a>
+                                        <p><a href="{:url('shop/designer_production/detail',['id'=>$val.production_id])}">设计主题：{if condition="mb_strlen($val.production_name,'utf-8') > 12"}{$val.production_name|mb_substr=0,12,'utf-8'}...{else /}{$val.production_name}{/if}</a> <span>面积：{$val.building_area} m<sup>2</sup></span></p>
+                                        <p>说明：{if condition="mb_strlen($val.remark,'utf-8') > 10"}{$val.remark|mb_substr=0,10,'utf-8'}...{else /}{$val.remark}{/if}</p>
+                                    </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                            <div class="clear"></div>
+                            {$page}
+                        </li>
+                    </ul>
+                </div>
+                <div class="fr-r">
+                    <ul class="stylist-right combg-h2">
+                        <li>
+                            <div class="r-box">
+                                <h3><span>本月设计之星</span></h3>
+                                {foreach $teamDesigner as $val}
+                                <div>
+                                    <a href="{:url('shop/designers/detail',['designer_id'=>$val.designer_id])}" class="mt-link"><img src="{$val.designer_avatar}@w180_h160.png" alt="" /></a>
+                                    <p><a href="{:url('shop/designers/detail',['designer_id'=>$val.designer_id])}">{$val.designer_name}</a> {$levelList[$val.level_id]['name']}</p>
+                                </div>
+                                {/foreach}
+                                <p class="clear"></p>
+                            </div>
+                            <div class="r-box lc">
+                                <h3><span>最新案例</span></h3>
+                                {foreach $newCases as $val}
+                                <div>
+                                    <a href="{:url('shop/designer_production/detail',['id'=>$val.production_id])}" class="mt-link"><img src="{$val.imgs}@w180_h140.png" alt="" /></a>
+                                    <p><a href="{:url('shop/designer_production/detail',['id'=>$val.production_id])}">{if condition="mb_strlen($val.production_name,'utf-8') > 5"}{$val.production_name|mb_substr=0,5,'utf-8'}...{else /}{$val.production_name}{/if}</a> 面积：{$val.building_area} m<sup>2</sup></p>
+                                </div>
+                                {/foreach}
+                                <p class="clear"></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+
+            </div>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,99 @@
+<!-- content start -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="order-details h-content-container">
+            <div class="order-details-head">
+                <p class="font-color-pink">整装预约详情</p>
+            </div>
+            <div class="order-details-body mt-new-box order-details-body-six">
+                <div>
+                    <p>提交意向</p>
+                    <span></span>
+                </div>
+                <div>
+                    <p>免费量房</p>
+                    <span></span>
+                </div>
+                <div>
+                    <p>支付诚意金</p>
+                    <span></span>
+                </div>
+                <div>
+                    <p>查看效果图</p>
+                    <span></span>
+                </div>
+                <div>
+                    <p>预约线下</p>
+                    <span></span>
+                </div>
+                <div class="cus">
+                    <p>兑换商品</p>
+                </div>
+            </div>
+            <div class="order-details-footer font-color-pink">
+                张先生，您好！您提交的申请已经完成审核，您可以兑换以下商品！
+            </div>
+        </div>
+        <div class="order-info h-content-container mb50">
+            <div class="order-info-table">
+                <table>
+                    <tr class="font-color-white">
+                        <td>订单号</td>
+                        <td>生成日期</td>
+                        <td>预约面积</td>
+                        <td>进度</td>
+                    </tr>
+                    <tr class="font-color-pink">
+                        <td>{$orderInfo.order_sn}</td>
+                        <td>{$orderInfo.created_at|date='Y-m-d H:i',###}</td>
+                        <td>{$orderInfo.acreage}m<sup>2</sup></td>
+                        <td>兑换商品</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-goods-cash">
+                <ul>
+                    {if !empty($goods_list)}
+                    {foreach $goods_list as $val}
+                    <li>
+                        <a href="javascript:void(0);" class="mt-img" title="">
+                            <img class="lazy" src="{$val.goods_image_main}"  alt="" />
+                        </a>
+                        <div class="combg-h">
+                            <p><a href="javascript:void(0);">{$val.goods_name}</a>
+                                <br>
+                                <a href="javascript:void(0);">市场价:￥{:ncPriceFormat($val.goods_price)}</a>
+                            </p>
+                            <p><a href="javascript:void(0);" class="exchange" sku="{$val.goods_sku}">兑换商品</a></p>
+                        </div>
+                    </li>
+                    {/foreach}
+                    {else /}<span class="font-color-pink">无兑换商品</span>
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form action="{:url('shop/buy/index')}" method="post" class="hide">
+    <input type="text" name="cart_id[]" id="cart_id" value="" />
+    <input type="text" name="ifcart" value="0" />
+    <input type="text" name="is_exchange" value="1" />
+    <input type="text" name="logs_order_id" value="{$orderInfo.id}" />
+    <input type="submit" id="buy-now" />
+</form>
+<!-- content end -->
+<script type="text/javascript">
+    $(function() {
+        //点击立即兑换
+        $(".exchange").click(function() {
+            $("#cart_id").val($(this).attr('sku') + '|' + 1);
+            $("#buy-now").trigger('click');
+        })
+    });
+</script>

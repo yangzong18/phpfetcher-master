@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <link rel="stylesheet" href="{$Think.CSS_PATH}base.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}style.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}hd-style.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}common.css" media="screen" title="no title" charset="utf-8">
+    <script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}idangerous.swiper.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jquery.colorbox-min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jquery.lazyload.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}commonality.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}loop.js" charset="utf-8"></script>
+    <script language="javascript">
+        var layz_image = "{$Think.IMG_PATH}loading.jpg";
+    </script>
+    <script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+    <title>木筑网-首页</title>
+    <!--[if lt IE 9]>
+      <script src="{$Think.JS_PATH}/html5shiv.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        $(function() {
+            var browser = {
+                versions: function() {
+                    var u = navigator.userAgent,
+                        app = navigator.appVersion;
+                    var ios = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+                    var android = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+                    if (ios) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+                        $('.qq-kf').attr('href','http://wpa.qq.com/msgrd?v=3&uin={$setting.qq}&site=qq&menu=yes')
+                    }
+                    if (android) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+                        $('.qq-kf').attr('href','http://wpa.qq.com/msgrd?v=3&uin={$setting.qq}&site=qq&menu=yes')
+
+                    }
+                }()
+            }
+
+        })
+    </script>
+
+</head>
+
+<body>
+    <!-- header start -->
+    <div class="header">

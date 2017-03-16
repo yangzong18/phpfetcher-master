@@ -1,0 +1,150 @@
+<!-- content start -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content details-alliance account-content">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="h-content-container account-container">
+            <div class="details-alliance-head font-color-pink">
+                <a href="{:url('/shop/user/index')}" class="font-color-pink">个人中心</a>
+                &nbsp;&gt;&nbsp;
+                <a href="{:url('/shop/user/info')}" class="font-color-pink">我的信息</a>
+                &nbsp;&gt;&nbsp;
+                <a href="javascript:;" class="font-color-pink">账号信息</a>
+            </div>
+            <div class="account_mes ac_bd_top">
+                <dl>
+                    <dt>用户名</dt>
+                    <dd>{$member_info.account}</dd>
+                </dl>
+                <dl>
+                    <dt>邮&nbsp;&nbsp;&nbsp;箱</dt>
+                    <dd><span id="email">{$member_info.email}</span><a href="javascript:;" class="mod-btn editemail">修改</a></dd>
+                </dl>
+                <dl>
+                    <dt>注册手机</dt>
+                    <dd>{$member_info.phone}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="h-content details-alliance account-content">
+        <div class="h-content-container account-container">
+            <div class="details-alliance-head font-color-pink">
+                <a href="javascript:;" class="font-color-pink">收货地址</a>
+                &nbsp;&gt;&nbsp;
+                <a href="javascript:;" class="font-color-pink">联系方式</a>
+            </div>
+            {if count($address_list) > 0 && !empty($address_list)}
+            {foreach $address_list as $addressInfo}
+            <div class="ac_bd_top account-check" id="default_{$addressInfo.address_id}">
+                {if $addressInfo.is_default == 1}
+                <label>默认地址</label>
+                {else}
+                <label onclick="set_default('{$addressInfo.address_id}')">设置为默认地址</label>
+                {/if}
+
+            </div>
+            <div class="account_mes_short">
+                <div class="account_mes ac_bd_top account_mes_del">
+                    <dl>
+                        <dt>收货人/联系人</dt>
+                        <dd>{$addressInfo.true_name}</dd>
+                    </dl>
+                    <dl>
+                        <dt>联系电话</dt>
+                        <dd>{if $addressInfo.mob_phone}{$addressInfo.mob_phone}{else}{$addressInfo.tel_phone}{/if}<a href="javascript:;" class="mod-btn" onclick="edit_address('{$addressInfo.address_id}')">修改</a></dd>
+                    </dl>
+                    <dl>
+                        <dt>物流配送地址</dt>
+                        <dd>{$addressInfo.area_info} {$addressInfo.address}</dd>
+                    </dl>
+                    <a href="javascript:;" class="del-btn" onclick="delete_address('{$addressInfo.address_id}')">删除按钮</a>
+                </div>
+            </div>
+            {/foreach}
+            {else}
+            <div style="height: 200px;font-size: 15px;color: #80716c;">
+                <dl>
+                    <dd>收货地址为空，请添加新的收获地址</dd>
+                </dl>
+            </div>
+            {/if}
+            {if count($address_list) < 10}
+            <div class="ac_bd_top account-add">
+                <a href="javascript:;" class="add-btn" onclick="add_address()">添加新的地址</a>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+<!-- content end -->
+<script>
+    $(function(){
+        $('.editemail').click(function(){
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['500px', '200px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                scrollbar: false,
+                shadeClose: false, //开启遮罩关闭
+                content:  '{:url("shop/user/editemail")}?random=Math.random()'
+            });
+        })
+    });
+    function set_default(address_id){
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['500px', '150px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                scrollbar: false,
+                shadeClose: false, //开启遮罩关闭
+                content:  '{:url("shop/user/setdefault")}?address_id='+address_id
+            });
+    }
+    function edit_address(address_id){
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['612px', '560px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                scrollbar: false,
+                shadeClose: false, //开启遮罩关闭
+                content: '{:url("shop/user/editaddress")}?address_id='+address_id+'&random=Math.random()'
+            });
+    }
+    function add_address(){
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['612px', '520px'],
+            skin: 'mt-layui-layer', //样式类名
+            closeBtn: 1,
+            anim: 2,
+            scrollbar: false,
+            shadeClose: false, //开启遮罩关闭
+            content:  '{:url("shop/user/addAddress")}?random=Math.random()'
+        });
+    }
+    function delete_address(address_id){
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['500px', '150px'],
+            skin: 'mt-layui-layer', //样式类名
+            closeBtn: 1,
+            anim: 2,
+            scrollbar: false,
+            shadeClose: false, //开启遮罩关闭
+            content:  '{:url("shop/user/deladdress")}?random=Math.random()&address_id='+address_id
+        });
+    }
+</script>

@@ -1,0 +1,141 @@
+<script src="{$Think.JS_PATH}/jquery.lazyload.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}/jquery.colorbox-min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}/swf/swfobject_modified.js"></script>
+<style type="text/css">
+    .goods-ym div ul li .btn-info {  width: 120px;  }
+    .goods-ym div ul li .collect {
+
+        border: 1px solid #afaead;
+        height: 40px;
+        padding: 5px 6px 4px 26px;
+        line-height: 30px;
+        margin-top: 15px;
+        cursor: pointer;
+    }
+
+
+</style>
+<!-- content start -->
+<div class="container">
+    <!--分类选择 start-->
+    <ul class="list-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+
+                <li class="">
+                    <h3><span>实例缩略图</span></h3>
+                </li>
+                <li class="mt-add mt-xfn">
+                    <h3>风格分类</h3>
+                    <div class="add">
+                        <p><a href="index" {if !isset($category_id)}class="cus"{/if}>全部</a></p>
+                        {foreach $category as $k=>$val}
+
+                        <p><a href="index?style={$k}" {if isset($category_id) && $k == $category_id}class="cus"{/if}>{$val}</a></p>
+
+                        {/foreach}
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!--分类选择 end-->
+    <ul class="list-goods-item marbox">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <li class="goods-ym">
+            {if condition="isset($list)"}
+            {foreach $list as $k=>$v}
+            <div class="fl">
+                <a href="{:url('shop/designer_production/detail')}?id={$v.production_id}"  ><img  data-original="{$v.cover}@w561_h337.png" class="mt-box lazy" width="561" height="337" alt="" /></a>
+                <ul>
+                    <li>
+                        <p class="fl"><a href="{:url('shop/designer_production/detail')}?id={$v.production_id}" class="bt">楼盘（名称）：{$v.production_name|htmlspecialchars}</a></p>
+                        <p class="fr">面积：{$v.building_area}㎡</p>
+                    </li>
+                    <li>
+                        {if $v.remark != ''}
+                        <p class="fl">说明：{if condition="mb_strlen($v.remark,'utf-8') > 14"}{$v.remark|mb_substr=0,14,'utf-8'}...{else /}{$v.remark}{/if}</p>
+                        {else/}
+                        <p class="fl">说明：暂无</p>
+                        {/if}
+                        <p class="fr">&nbsp;
+                        {if $v.fav == 1}
+                            <a href="javascript:void(0)" class="collect" style="border-color: rgb(227, 105, 106); color: rgb(227, 105, 106); background-image: url({$Think.IMG_PATH}ico-x-1.png);" dataId="{$v.production_id}">已收藏</a>
+                        {else/}
+                            <a href="javascript:void(0)" class="collect" dataId="{$v.production_id}">点击收藏</a>
+                        {/if}
+                        </p>
+                        <p class="fr"><a href="{:url('shop/designer_production/detail')}?id={$v.production_id}" class="btn-info">查看详情</a></p>
+                    </li>
+                </ul>
+            </div>
+            {/foreach}
+            {/if}
+        </li>
+        <li>
+            <div class="clear"></div>
+            <div class="pagelist">
+                {$page}
+            </div>
+        </li>
+    </ul>
+</div>
+<!-- content end -->
+<script language="javascript">
+    var sobj  = { placeholder: "/static/shop/images/loading.jpg",effect: "fadeIn"}
+    //图片加载
+    $("img.lazy").lazyload(sobj);
+
+</script>
+
+<script >
+$(function(){
+
+    //收藏以及取消整装商品
+    $('.collect').click(function() {
+        //判断是否登录
+        var login = parseInt('{$isLogin}');
+        if (login == 0) {
+            layer.msg('请先登录');
+            window.location.href = '{:url("shop/login/login")}';
+        }
+        var $_this = $(this);
+        var dataId = $(this).attr('dataId');
+        if ($(this).text() == '点击收藏') {
+            $.getJSON('{:url("api/Favorites/addFav")}?data=' + dataId+'&&type=1', function (result) {
+                layer.msg(result.msg);
+                if (result.code == 1) {
+                    $_this.css({
+                        'border-color': '#e3696a',
+                        'color': '#e3696a',
+                        'background-image': "url('{$Think.IMG_PATH}ico-x-1.png')"
+                    })
+                    $_this.text('已收藏')
+                }
+            })
+        } else if ($(this).text() == '已收藏') {
+            $.getJSON('{:url("api/Favorites/delFav")}?data=' + dataId+'&&type=1', function (result) {
+                layer.msg(result.msg);
+                if (result.code == 1) {
+                    $_this.css({
+                        'border-color': '#afaead',
+                        'color': '#afaead',
+                        'background-image': "url('{$Think.IMG_PATH}ico-x-2.png')"
+                    })
+                    $_this.text('点击收藏')
+                }
+            });
+        }
+    });
+})
+
+</script>

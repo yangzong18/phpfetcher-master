@@ -1,0 +1,245 @@
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>规格将会对应到商品发布的规格，规格值由店铺自己添加。</p>
+            <p><i class="icon-circle"></i>默认安装中会添加一个默认颜色规格，请不要删除，只有这个颜色规格才能在商品详细页显示为图片。</p>
+        </li>
+    </ul>
+</div>
+<div class="col-form">
+    <form class="form-inline" role="form" act="{:url('seller/crowdfunding/index')}">
+        <!--<span>商品名称</span>-->
+        <div class="input-group">
+            <select class="form-control" name="search_name">
+                {if condition="isset($search_name)"}
+                {if condition=" $search_name eq 1"}
+                <option selected value="1">商品名称</option>
+                <option value="2">项目编号</option>
+                {else \}
+                <option  value="1">商品名称</option>
+                <option selected value="2">项目编号</option>
+                {/if}
+                {else \}
+                <option  value="1">商品名称</option>
+                <option  value="2">项目编号</option>
+                {/if}
+            </select>
+        </div>
+        <div class="form-group">
+            <!--<input type="text" class="form-control" name="name" value="{$param.name|default=''}">-->
+            {if condition="isset($name)"}
+            <input type="text" name="goods_name" value="{$name}" class="form-control">
+            {elseif condition="isset($goods_id)" \}
+            <input type="text" name="goods_name" value="{$goods_id}" class="form-control">
+            {else \}
+            <input type="text" name="goods_name"  class="form-control">
+            {/if}
+        </div>
+        <span>审核状态</span>
+        <div class="form-group">
+            <select class="form-control" name="verify">
+                <option value="2">全部状态</option>
+                <option value="3" {if condition="$param.verify eq 3"} selected {/if} >待审核</option>
+                <option value="1" {if condition="$param.verify eq 1"} selected {/if}>审核通过</option>
+                <option value="0" {if condition="$param.verify eq 0"} selected {/if}>审核未通过</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button class="btn" type="submit">搜索</button>
+        </div>
+    </form>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+
+        <tr>
+
+            <th class="w10">
+
+            </th>
+            <th class="w10">
+            </th>
+            <th class="w150">项目名称</th>
+            <th class="w120">项目编号</th>
+            <th class="w60">众筹总价</th>
+            <th class="w60">份额</th>
+            <th class="w100">发布时间</th>
+            <th class="w100">审核时间</th>
+            <th class="w100">项目状态</th>
+            <th class="w100">审核状态</th>
+            <th class="w240">暂停</th>
+            <th class="w400">操作</th>
+        </tr>
+        {foreach $datas as $vo}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                <input type="checkbox" id="checkbox_a2_{$vo.id}" value="{$vo.id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$vo.id}" class="lab-t"></label>
+            </td>
+            <td>
+                <a href="{:url('shop/crowdfunding/detail')}?goodsId={$vo.id}" class="bt-images"><img class="w50" src="{$vo.image_main}@w50_h38.png" alt=""></a>
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/crowdfunding/detail')}?goodsId={$vo.id}">{$vo.name}</a></dt>
+                </dl>
+            </td>
+            <td>{$vo.serial_number}</td>
+            <td>{$vo.total_price}</td>
+            <td>{$vo.quotient}</td>
+            <td>{$vo.created_at|date='Y-m-d H:i:s',###}</td>
+            <td>{if condition="$vo.sell_time"}{$vo.sell_time|date='Y-m-d H:i:s',###}{else /}/{/if}</td>
+            <td>{$vo.state_name}</td>
+            <td  class="table-handle"><span>
+                    {if condition="$vo.verify eq 3"}
+                            待审核
+                        {elseif condition="$vo.verify eq 1"}
+                            审核通过
+                        {elseif condition="$vo.verify eq 0"}
+                            审核未通过
+                    {/if}
+                </span>
+            </td>
+            <td>
+                <div class="btn-group btn-box-qh" gid="{$vo.id}">
+
+                {if condition="$vo.is_pause eq 0"}
+                    <button type="button" value="0" class="btn forLock cus">否</button>
+                    <button type="button" value="1" class="btn forLock ">是</button>
+                {else \}
+                    <button type="button" value="0" class="btn forLock">否</button>
+                    <button type="button" value="1" class="btn forLock cus">是</button>
+                {/if}
+                </div>
+            </td>
+            <td class="table-handle">
+
+                {if condition="$vo.verify eq 3"}
+                    <span>
+                        <a class="forCheck" href="javascript:;" gid="{$vo.id}"><i class="icon-wrench"></i>审核</a>
+                    </span>
+
+                {/if}
+                <span>
+                    <a href="{:url('seller/crowdfunding/edit', array('id'=>$vo['id']))}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a class="js-ajax-delete" href="{:url('seller/crowdfunding/delete', array('id'=>$vo['id']))}"><i class="icon-trash"></i>删除</a>
+                </span>
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="5">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:;" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$datas->render();}
+</div>
+
+<div id="forCheck"  style="display: none;" class="layui-layer-wrap">
+    <div style="margin: 20px;">
+        <table class="table-check">
+            <tbody><tr>
+                <td class="td-l"><h3>审核通过：</h3></td>
+                <td class="td-r">
+                    <div class="btn-group btn-box-qh">
+                        <button type="button" value="0" class="btn btn-default cus">否</button>
+                        <button type="button" value="1" class="btn btn-default">是</button>
+                    </div>
+                </td>
+            </tr>
+            <tr class="tr-btn">
+                <td colspan="2">
+                    <button gid="" class="btn btn-warning max-bg js-ajax-submit checkSubmit">提交</button>
+                </td>
+            </tr>
+            </tbody></table>
+    </div>
+
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script>
+    //审核功能
+    $('.checkSubmit').click(function(){
+        var group = $(this).parent().parent().prev().find('.cus').attr('value');
+        var gid = $(this).attr('gid');
+        $.ajax({
+            url:"{:url('seller/crowdfunding/check')}",
+            data:{id:gid,verify:group},
+            success:function(result){
+                layer.msg(result.msg);
+                window.location.reload();
+            }
+        });
+        layer.closeAll();
+    });
+
+    $('.forCheck').click(function() {
+        var gid = $(this).attr('gid');
+        $('.checkSubmit').attr('gid',gid);
+        //自定页
+        layer.open({
+            type: 1,
+            skin: 'layui-dbd', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            title: '商品审核',
+            anim: 2,
+            shadeClose: false, //开启遮罩关闭
+            area: ['300px', '180px'],
+            content: $("#forCheck")
+        });
+    });
+
+
+    $(function(){
+        $('.forLock').click(function(){
+            if($(this).hasClass('cus')){
+                var thisId = $(this);
+                var value = $(this).val();
+                var gid = $(this).parent().attr('gid');
+                $.ajax({
+                    url:"{:url('seller/crowdfunding/changeLock')}",
+                    data:{gid:gid,val:value},
+                    success:function(result){
+                        if(result.code == 1){
+                            thisId.addClass('cus');
+                            var brother = thisId.siblings();
+                            brother.removeClass('cus');
+                        }else{
+                            thisId.removeClass('cus');
+                            var brother = thisId.siblings();
+                            brother.addClass('cus');
+                        }
+                        layer.msg(result.msg);
+                    },
+                    error:function(){
+                        layer.msg('状态请求发送失败');
+                    }
+                })
+            }
+        });
+    });
+
+</script>
+

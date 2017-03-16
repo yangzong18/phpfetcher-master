@@ -1,0 +1,52 @@
+{__NOLAYOUT__}
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<meta charset="UTF-8">
+<!-- 修改地址弹出 start -->
+<div class="mt-layer replace-box none">
+  <div class="marbox">
+    <div class="user-item">
+        <p class="fl">全部设计</p>
+        <p class="clear"></p>
+    </div>
+    <div class="design-item">
+      <div class="scroll">
+        <ul class="list">
+            {foreach $datas as $logs}
+                <li>
+                    <img src="{$logs['cover']}@w232_h211.png" alt="" />
+                    <div class="">
+                        <p><span>{$logs['name']|mb_substr=0,10,'UTF-8'}</span><span></span></p>
+                        <p class="fr"><a href="javascript:;" logs-id="{$logs.id}" logs-acreage="{$logs.acreage}" logs-name="{$logs.name}" logs-prize="{$logs.prize}" logs-cover="{$logs.cover}" class="choice-logs">选 定</a></p>
+                    </div>
+                </li>
+            {/foreach}
+        </ul>
+        <div class="pagelist">
+          <ul>
+            <li>{$datas->render()}</li>
+          </ul>
+       </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    $(".choice-logs").click(function(){
+        logs = {
+            id : $(this).attr('logs-id'),
+            acreage : $(this).attr('logs-acreage'),
+            name : $(this).attr('logs-name'),
+            prize : $(this).attr('logs-prize'),
+            cover : $(this).attr('logs-cover'),
+        }
+        parent.changeLogs( logs );
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);
+    });
+})
+</script>

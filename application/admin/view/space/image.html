@@ -1,0 +1,92 @@
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>规格将会对应到商品发布的规格，规格值由店铺自己添加。</p>
+            <p><i class="icon-circle"></i>默认安装中会添加一个默认颜色规格，请不要删除，只有这个颜色规格才能在商品详细页显示为图片。</p>
+        </li>
+    </ul>
+</div>
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+
+            <th class="w10">
+                
+            </th>
+            <th class="w150">排序</th>
+            <th class="w400">规格</th>
+            <th class="w200">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $datas as $vo} 
+        <tr class="goods-tr-t0">
+            <td  class="chk-one mult-delete-checkbox">
+                {if condition="$vo.is_color neq 1"}
+                <input type="checkbox" id="checkbox_a2_{$vo.feature_id}" value="{$vo.feature_id" class="chk_1" />
+                <label for="checkbox_a2_{$vo.feature_id}" class="lab-t"></label>
+                {/if}
+            </td>
+            <td class="text-center">
+                <div class="one-text sort">
+                    <input type="text" class="form-control h30 mb5 w50" key-id="{$vo.feature_id}" value="{$vo.sort}" />
+                </div>
+            </td>
+            <td>{$vo.attribute_name}</td>
+            <td class="table-handle">
+                {if condition="$vo.is_color neq 1"}
+                <span>
+                    <a href="edit?id={$vo.feature_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a  class="js-ajax-delete" href="delete?id={$vo.feature_id}"><i class="icon-trash"></i>删除</a>
+                </span>
+                {else/}
+                <span>
+                    <a href="javascript:;"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a href="javascript:;"><i class="icon-trash"></i>删除</a>
+                </span>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="5">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="multDelete" class="btn btn-default mult-delete">删除</a>
+                </div>
+            </td>
+        </tr>
+        {$datas->render();}
+    </table>
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+$(function(){
+    //批量删除
+    $(".mult-delete").click(function(e){
+        
+    });
+})
+</script>
+
+

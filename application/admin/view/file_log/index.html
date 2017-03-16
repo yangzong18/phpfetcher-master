@@ -1,0 +1,78 @@
+<div class="prompt-box">
+    <ul>
+        <li class="list-desc">
+            <p class="current-catelog">目录结构:<a href="javascript:;" file-path="">log</a></p>
+        </li>
+    </ul>
+</div>
+<div class="table-form-default">
+    <table class="table">
+        <tbody id="file-data-list">
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function(){
+        //初始化
+        loopFile("");
+        //绑定导航菜单
+        $(document).on("click", ".current-catelog a",function(){
+            var path = $(this).attr("file-path");
+            $(this).nextAll("a").remove();
+            loopFile(path);
+        });
+    });
+
+    function loopFile(path) {
+        $.post("{:url('admin/file_log/loopFile')}", {
+            path : path
+        }, function( data ){
+            var response = data.data;
+            console.log(response);
+            var html = "";
+            var unit;
+            for (var i = 0; i < response.length; i++) {
+                unit = response[i];
+                html += '<tr>';
+                for (var j = 0; j < unit.length; j++) {
+                    if (unit[j].isDir == 1) {
+                        html += '<td class="align-center">\
+                                <a href="javascript:;" class="touch-file" file-path="'+unit[j].filePath+'">\
+                                    <img src="'+unit[j].icon+'">\
+                                    <span>'+unit[j].fileName+'</span>\
+                                </a>\
+                            </td>';
+                    } else {
+                        html += '<td class="align-center">\
+                                    <a href="javascript:;" class="down-file" file-path="'+unit[j].filePath+'">\
+                                        <img src="'+unit[j].icon+'">\
+                                        <span>'+unit[j].fileName+'</span>\
+                                    </a>\
+                              </td>';
+                    }
+
+                }
+                if ( unit.length < 4 ) {
+                    var k = 4-unit.length;
+                    for (var h = 0; h < k; h++) {
+                        html += '<td></td>';
+                    }
+                }
+                html += '</tr>';
+            };
+            $("#file-data-list").empty();
+            $("#file-data-list").append(html);
+            $(".touch-file").unbind("click");
+            $(".touch-file").click(function(){
+                var path = $(this).attr( 'file-path' );
+                $(".current-catelog").append('<a href="javascript:;" file-path="'+path+'"> '+path+'</a>');
+                loopFile(path);
+            });
+            //下载文档
+            $(".down-file").click(function(){
+                var path = $(this).attr("file-path");
+                window.open('downloadFile?file='+ path);
+            });
+        });
+    }
+</script>

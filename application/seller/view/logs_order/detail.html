@@ -1,0 +1,274 @@
+<td colspan="2">
+    <div class="mt-goods-spec">
+        <div class="mt-bt">
+            <p class="cus">订单详情</p>
+            <p class=""><a href="{:url('seller/logs_order/index')}">订单列表</a></p>
+        </div>
+    </div>
+</td>
+<div class="sheet-box">
+    <table class="table">
+        <tbody>
+        <tr class="goods-tr-bg">
+            <th colspan="2"><h3>整装订单详情</h3></th>
+        </tr>
+        <!--订单信息-->
+        <tr>
+            <td class="w150"><div><h3>订单信息</h3></div></td>
+            <td>
+                <div>订单编号：{$orderInfo.order_sn}</div>
+                <div>创建日期：{$orderInfo.created_at|date='Y-m-d H:i',###}</div>
+                <div>进度：{$orderInfo.speed_state}</div>
+                <div>订单状态：{$orderInfo.order_state}</div>
+            </td>
+        </tr>
+
+        <!--收货人信息-->
+        <tr>
+            <td><div><h3>收货人信息</h3></div></td>
+            <td>
+                <div>预约人：{$orderInfo.user_name}</div>
+                <div>联系电话：{$orderInfo.phone}</div>
+                <div>配送地址：{$orderInfo.province}{$orderInfo.city}{$orderInfo.area}{$orderInfo.address}</div>
+                {if $orderInfo.payment_name!= ''}<div>支付方式：{$orderInfo.payment_name}</div>{/if}
+            </td>
+        </tr>
+
+        <!--商品信息-->
+        <tr class="goods-tr-t0">
+            {if $orderInfo.message != ''}
+            <td rowspan="6"><div><h3>商品信息</h3></div></td>
+            {else/}
+            <td rowspan="5"><div><h3>商品信息</h3></div></td>
+            {/if}
+            <td>
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/logs/detail', array('id'=>$logsInfo['id']))}"><img src="{$logsInfo.cover}@w100_h75.png" class="w100"/></a></dt>
+                    <dd>
+                        商品名称：{$logsInfo.name}
+                        <br>
+                        商品价格：{$logsInfo.prize}万元
+                    </dd>
+                </dl>
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/designers/detail', array('designer_id'=>$designer['designer_id']))}"><img src="{$designer['designer_avatar']}@w100_h90.png" class="w100" /></a></dt>
+                    <dd>
+                        设计师姓名：{$designer.designer_name}<br>
+                        设计师等级：{$designer.level_name}<br>
+                        设计师年限：{$designer.designer_year}年
+                    </dd>
+                </dl>
+            </td>
+        </tr>
+        {if $orderInfo.message != ''}
+        <tr class="goods-tr-t0">
+            <td>{$orderInfo.message}</td>
+        </tr>
+        {/if}
+        <tr class="goods-tr-t0">
+            <td>
+                {foreach $houseImage as $vo}
+                <a href="{$vo}" target="_blank"><img src="{$vo}@w100_h62.png" class="w100"/></a>
+                {/foreach}
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>面积：{$orderInfo.acreage}<span>m<sup>2</sup></span></td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>应付金额：{$orderInfo.deposit}元</td>
+        </tr>
+
+        <!--量房数据-->
+        {if $orderInfo.speed_status gt 1}
+        <tr class="goods-tr-t0">
+            <td rowspan="2"><div><h3>量房数据</h3></div></td>
+            <td>
+                {foreach $commonInfo.measure_image as $vo}
+                <a href="{$vo}" target="_blank"><img src="{$vo}@w100_h100.png" class="w100"/></a>
+                {/foreach}
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>
+                {$commonInfo.measure_info.measure_data}
+            </td>
+        </tr>
+        {/if}
+
+        <!--显示取消原因-->
+        {if $orderInfo.order_status == 5}
+        <tr class="goods-tr-t0">
+            <td><div><h3>取消原因</h3></div></td>
+            <td>
+                <div style="word-break:break-all;">{$orderInfo.cancel_reason}</div>
+            </td>
+        </tr>
+        {/if}
+
+        <!--设计-->
+        {if $orderInfo.speed_status egt 3}
+        {if $commonInfo.design_image != ''}
+        <tr class="goods-tr-t0">
+            {if $orderInfo.unsatisfy_info != '' }
+            <td><div><h3>设计</h3></div></td>
+            {else/}
+            <td><div><h3>设计</h3></div></td>
+            {/if}
+            <td>
+                设计师：{$designer.designer_name}
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td  colspan="2">
+                {foreach $commonInfo.design_image as $key => $val}
+                {foreach $val as $k => $vo}
+                <a href="{$vo}" target="_blank"><img src="{$vo}@w100_h60.png" class="w100"/></a>
+                {/foreach}
+                {/foreach}
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td colspan="2" style="word-break:break-all;">
+                {if $commonInfo.is_modify ==1 }
+                {$commonInfo.modify_info.modifyInfo}
+                {else/}
+                无修改
+                {/if}
+            </td>
+        </tr>
+
+        {if $orderInfo.unsatisfy_info != '' }
+        <tr class="goods-tr-t0">
+            <td colspan="2">
+                不满意后，联系用户方式：{$orderInfo.unsatisfy_info}
+            </td>
+        </tr>
+        {/if}
+
+        {/if}
+        {/if}
+
+        <!--线下预约-->
+        {if $orderInfo.is_offline == 1}
+        <tr class="goods-tr-t0">
+            <td rowspan="3"><div><h3>预约线下</h3></div></td>
+            <td>
+                设计师：{$designer.designer_name}
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>时间：{$commonInfo.offline_info.offlineTime}</td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td><div style="word-break: break-all">线下地址：{$commonInfo.offline_info.address}</div></td>
+        </tr>
+        {/if}
+
+        <!--兑换商品-->
+        {if $orderInfo.speed_status eq 8}
+        <tr class="goods-tr-t0">
+            <td><div><h3>兑换商品</h3></div></td>
+            <td>
+                兑换商品
+            </td>
+        </tr>
+        {/if}
+
+        <!--合同-->
+        {if $orderInfo.speed_status gt 5 and $orderInfo.speed_status neq 8}
+        <tr class="goods-tr-t0">
+            {if $commonInfo.contract_info.contractDesc != ''}
+            <td rowspan="3"><div><h3>合同</h3></div></td>
+            {else/}
+            <td rowspan="2"><div><h3>合同</h3></div></td>
+            {/if}
+            <td>
+                时间：{$commonInfo.contract_info.contractTime}
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>合同编号：{$commonInfo.contract_info.contractNumber}</td>
+        </tr>
+        {if $commonInfo.contract_info.contractDesc != ''}
+        <tr class="goods-tr-t0">
+            <td><div style="word-break: break-all">备注说明：{$commonInfo.contract_info.contractDesc}</div></td>
+        </tr>
+        {/if}
+
+
+        <!--施工进度-->
+        {if $count == 1 }
+        <tr class="goods-tr-t0">
+            <td><div><h3>施工进度</h3></div></td>
+            <td>暂无</td>
+        </tr>
+        {else/}
+        <tr class="goods-tr-t0">
+            <td rowspan="{$count}"><div><h3>施工进度</h3></div></td>
+        </tr>
+        {foreach $speedList as $val}
+        <tr class="goods-tr-t0">
+            <td>
+            <dl>
+                <dt>时间：{$val.time|date='Y-m-d',###}<br><div style="word-break: break-all">备注说明：{$val.speedDesc}</div></dt>
+                <dd>
+                    {foreach $val.speed_img as $vo}
+                    <a href="{$vo}" target="_blank"><img src="{$vo}@w100_h60.png" class="w100" /> </a>
+                    {/foreach}
+                </dd>
+            </dl>
+            </td>
+        </tr>
+        {/foreach}
+        {/if}
+        {/if}
+
+        <!--通知验收-->
+        {if $orderInfo.is_verify == 1}
+        <tr class="goods-tr-t0">
+            {if $commonInfo.accept_info.finishDesc == ''}
+            <td><div><h3>通知验收</h3></div></td>
+            <td>
+                时间：{$commonInfo.accept_info.finishTime}
+            </td>
+            {else/}
+            <td rowspan="2"><div><h3>通知验收</h3></div></td>
+            <td>
+                时间：{$commonInfo.accept_info.finishTime}
+            </td>
+            {/if}
+        </tr>
+        {if $commonInfo.accept_info.finishDesc != ''}
+        <tr class="goods-tr-t0">
+            <td><div style="word-break: break-all">备注说明：{$commonInfo.accept_info.finishDesc}</div></td>
+        </tr>
+        {/if}
+        {/if}
+
+        <!--验收-->
+        {if $orderInfo.speed_status eq 7}
+        <tr class="goods-tr-t0">
+            <td><div><h3>验收</h3></div></td>
+            <td>
+                <div>时间：{$orderInfo.finish_time|date='Y-m-d',###}</div>
+                <div>验收完成</div>
+            </td>
+        </tr>
+        {/if}
+
+        </tbody></table>
+</div>
+
+
+
+
+
+
+
+
+

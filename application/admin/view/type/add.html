@@ -1,0 +1,194 @@
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>关联规格不是必选项，它会影响商品发布时的规格及价格的录入。不选为没有规格。</p>
+            <!--罗婷修改 2/9 -start- -->
+            <!--<p><i class="icon-circle"></i>关联品牌不是必选项，它会影响商品发布时的品牌选择。</p>-->
+            <!--罗婷修改 2/9 -end- -->
+            <p><i class="icon-circle"></i>属性值可以添加多个，每个属性值之间需要使用逗号隔开。</p>
+            <p><i class="icon-circle"></i>选中属性的“显示”选项，该属性将会在商品列表页显示。</p>
+        </li>
+    </ul>
+</div>
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="addPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>商品类型基本信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>类型*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 w400" name="type_name">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>排序</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="sort">
+                            <span>请填写自然数。类型列表将会根据排序进行由小到大排列显示。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>选择关联规格</h3>
+                    </div>
+                </td>
+                <td class="chk-one">
+                    {foreach $specificationsList as $specifications}
+                        <div class="input-group-list">
+                            <input type="checkbox" id="checkbox_a2_{$specifications.feature_id}" class="chk_1" name="type_specifications[]" value="{$specifications.feature_id}"/>
+                            <label for="checkbox_a2_{$specifications.feature_id}" class="lab-t"></label>
+                            <label class="font-min" for="checkbox_a2_{$specifications.feature_id}">{$specifications.attribute_name}</label>
+                        </div>
+                    {/foreach}
+                </td>
+            </tr>
+            
+        </table>
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="5">
+                    <h3>商品类型属性信息</h3>
+                </th>
+            </tr>
+
+            <tr class="text-center">
+                <td>排序</td>
+                <td>属性名称</td>
+                <td>属性可选值</td>
+                <td>显示</td>
+                <td>操作</td>
+            </tr>
+            <tbody class="attribute">
+                <tr class="die">
+                    <td>
+                        <input type="text" class="form-control h30 w50 attribute-sort" name="attribute_sort[]">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control h30 w100 attribute-name" name="attribute_name[]">
+                    </td>
+                    <td>
+                        <textarea rows="1" class="form-control attribute-value" name="attribute_value[]"></textarea>
+                    </td>
+                    <td  class="chk-one">
+                        <input type="hidden" value="0" name="attribute_show[]"> 
+
+                        <input type="checkbox" id="show_attribute_1" class="chk_1" />
+                        <label for="show_attribute_1" class="lab-t"></label>
+                    </td>
+                    <td  class="table-handle">
+                        <span>
+                            <a href="javascript:" class="remove-attribute"><i class="icon-trash"></i>移除</a>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+            <tr>
+                <td  colspan="5">
+                    <a class="btn btn-default h30 add-attribute"><i class=" icon-plus-sign"></i> 添加一个属性</a>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <a href="javascript:;" class="btn btn-warning max-bg pre-submit">添加</a>
+                        <button class="btn btn-warning max-bg js-ajax-submit hide">添加</button>
+                        <a href="javascript:window.history.go(-1);"><button type="button" class="btn max-bg">返回</button></a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+$(function(){
+    //表单提交前的预处理
+    $(".pre-submit").click(function(){
+        var attributeName  = '';
+        var attributeValue = '';
+        var  attributeSort = '';
+        //进行匹配，如果没有填写属性名称或者属性指，那么该属性判定无效
+        $(".die").each(function(){
+            attributeName = $(this).find('.attribute-name').val();
+            attributeValue= $(this).find('.attribute-value').val();
+            if ( trim( attributeName ) == '' || trim( attributeValue ) == '' ) {
+                $(this).remove();
+            }
+            //如果没有排序。则默认排序0
+            attributeSort = $(this).find('.attribute-sort').val();
+            if ( trim( attributeSort ) == '' || isNaN( attributeSort ) ) {
+                $(this).find('.attribute-sort').val(0);
+            }
+        });
+        //进行提交
+        $(".js-ajax-submit").trigger('click');
+    });
+    //提交是否显示
+    $(document).on("click", '.die input[type="checkbox"]',function(){
+        if ( $(this).is(":checked") ) {
+            $(this).prev().val(1);
+        } else {
+            $(this).prev().val(0);
+        }
+    });
+    //添加一个属性
+    $(".add-attribute").click(function(){
+        var number = $('.attribute tr').length+1;
+        var html = '<tr  class="die">\
+                        <td>\
+                            <input type="text" class="form-control h30 w50 attribute-sort" name="attribute_sort[]">\
+                        </td>\
+                        <td>\
+                            <input type="text" class="form-control h30 w100 attribute-name" name="attribute_name[]">\
+                        </td>\
+                        <td>\
+                            <textarea rows="1" class="form-control attribute-value" name="attribute_value[]"></textarea>\
+                        </td>\
+                        <td  class="chk-one">\
+                            <input type="hidden" value="0" name="attribute_show[]">\
+                            <input type="checkbox" id="show_attribute_'+number+'" class="chk_1" />\
+                            <label for="show_attribute_'+number+'" class="lab-t"></label>\
+                        </td>\
+                        <td  class="table-handle">\
+                            <span>\
+                                <a href="javascript:;" class="remove-attribute"><i class="icon-trash"></i>移除</a>\
+                            </span>\
+                        </td>\
+                    </tr>';
+        $(".attribute").append(html);
+    });
+    //绑定移除事件
+    $(document).on("click", ".remove-attribute",function(){
+        $(this).parent().parent().parent().remove();
+    });
+})
+</script>

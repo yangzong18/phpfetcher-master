@@ -1,0 +1,50 @@
+<style type="text/css">
+    .ncc-payment-list li:hover, .ncc-payment-list li.using {
+        border: solid 2px #52A452;
+        margin: 10px;
+    }
+    .ncc-payment-list li {
+        vertical-align: top;
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-align: center;
+        display: inline-block;
+        width: 120px;
+        padding: 10px 30px;
+        margin: 11px;
+        border: solid 1px #E6E6E6;
+        border-radius: 4px;
+        position: relative;
+        z-index: 1;
+        background: #ffffff;
+    }
+    .ncc-receipt-info{ margin-bottom: 10px}
+    .ncc-payment-list .logo{ cursor: pointer}
+    input.submit {
+        width: 206px;
+        cursor: pointer;
+        height: 35px;
+        background: #196997;
+        border: none;
+        font-size: 14px;
+        color: #fff;
+    }
+</style>
+<div class="container">
+    <ul class="cnt-box-item order-goods marbox">
+        <div class="og-box">
+            <div class="ncc-receipt-info">
+                <div class="ncc-receipt-info-title">
+                    <h1 style="color: #c98c8c">{$msg}</h1>
+                </div>
+            </div>
+
+            <div class="ncc-bottom tc">
+                <a href="{:url('shop/index/index')}">继续购物</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="{:url('shop/logsOrder/detail', array('orderId'=>$logs_order_id))}" class="submit">查看订单</a>
+            </div>
+
+
+        </div>
+    </ul>
+</div>

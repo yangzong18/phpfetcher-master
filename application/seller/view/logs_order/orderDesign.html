@@ -1,0 +1,139 @@
+{__NOLAYOUT__}
+{include file="layout/header" /}
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="re-layui log-order-design">
+    <form class="js-ajax-form" action="{:url('seller/logsOrder/orderDesign')}" method="post">
+        <input type="hidden" name="orderId" value="{$order_info.id}">
+        <input type="hidden"  name="type" value="1">
+        <table class="table">
+        <tr>
+            <td class="td-l-na">订单编号：</td>
+            <td>{$order_info.order_sn}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">预约账号：</td>
+            <td>{$order_info.phone}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">预约地址：</td>
+            <td>{$order_info.province} {$order_info.city} {$order_info.area} {$order_info.address}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">设计师：</td>
+            <td>{$designer.designer_name}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">联系方式：</td>
+            <td>{$designer.designer_phone}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">上传设计图：</td>
+            <td>
+                <select id="house_style" class="form-control" style="width: 150px">
+                    {foreach $house_style as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">&nbsp;</td>
+            <td>
+                <div>
+                    {foreach $house_style as $k=>$v}
+                    <div class="uploadimg{$k}" style_id ="{$k}" style="display: none;">
+                        {if $common_info.is_modify == 1 and isset($common_info['design_image'][$k])}
+                        {foreach $common_info['design_image'][$k] as $key => $val}
+                        <div class="file-item thumbnail">
+                            <div class="up-imgbox">
+                                <img src="{$val}@w100_h100.png" style="width: 100px;height: 100px;">
+                            </div>
+                            <div>
+                                <a class="del_pic">删除</a>
+                            </div>
+                            <input type="hidden" name="img_url{$k}[]" value="{$val}" class="imgName-up-item">
+                        </div>
+                        {/foreach}
+                        {/if}
+                    </div>
+                    <div class="clear" style_id ="{$k}" style="display: none;"></div>
+                    <div class="w380" id="img_div{$k}" style_id ="{$k}" style="display: none;">
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                    </div>
+                    {/foreach}
+                </div>
+                <span>首图尺寸建议1100*661，其余尺寸建议528*351</span>
+            </td>
+        </tr>
+
+        <tr class="b0">
+            <td colspan="4" class="b0">
+                <div class="text-center mt15">
+                    <button type="submit" class="btn btn-warning max-bg js-ajax-submit">确定</button>
+                    <button class="btn max-bg return" >取消</button>
+                </div>
+
+            </td>
+        </tr>
+        </table></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        //初始化设计图片类型
+        var houseType = $("#house_style").find("option:selected").val();
+        $("div[style_id="+houseType+"]").show();
+        $('#img_div'+houseType).addClass("hadClick").find('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg'+houseType,//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 2,//上传数量
+            inputName: "img_url"+houseType+"[]",//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:$('#img_div'+houseType).addClass('hadClick').find('.btn-one-upload')
+        });
+
+        $('.return').click(function(){
+            parent.layer.close(index);
+            return false;
+        });
+
+        //house_style变化时，先把之前的图片隐藏掉，显示已选中的图片div
+        $("#house_style").change(function () {
+            $("div[style_id="+houseType+"]").hide();
+            houseType = $(this).find("option:selected").val();
+            $("div[style_id="+houseType+"]").show();
+            if( !$('#img_div'+houseType).hasClass('hadClick') ){
+                $('#img_div'+houseType).addClass("hadClick").find('.btn-one-upload').uploader({
+                    server: '{:url("index/index/uploadFile")}',//上传路径
+                    container: '.uploadimg'+houseType,//图片容器
+                    swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+                    num: 2,//上传数量
+                    inputName: "img_url"+houseType+"[]", //input name值
+                    btnDsab:'.js-ajax-submit',
+                    imgBtn:$('#img_div'+houseType).addClass('hadClick').find('.btn-one-upload')
+                });
+            }
+        });
+    })
+</script>
+<style>
+    .table tbody tr td{
+        width: 100px;
+        border-top: hidden;
+    }
+</style>

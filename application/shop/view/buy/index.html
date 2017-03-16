@@ -1,0 +1,360 @@
+<div class="container">
+    <ul class="list-box content-box order-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('/shop/Living_museum/index')}">木筑生活馆</a> > 提交订单</h3>
+                </li>
+                <li class="order-lc">
+                    <div class="cus">
+                        <p>订单生成</p>
+                        <span></span>
+                    </div>
+                    <div class="">
+                        <p>用户付款</p>
+                        <span></span>
+                    </div>
+                    <div>
+                        <p>付款成功</p>
+                        <span></span>
+                    </div>
+                    <div class="">
+                        <p>商家发货</p>
+                    </div>
+
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="cnt-box-item order-adds marbox">
+        <li class="bt">
+            <h3>收货地址</h3>
+        </li>
+        <li>
+            <div class="mt-number">
+                <div class="person" style="display: none">
+                    <p>选择收货地址</p>
+                </div>
+                <div class="detail">
+                    <ul>
+                        <li class="adds" style="display: none">
+                            <select class="comm-select" name="" >
+                            </select>
+                        </li>
+                           <li class="adds-info" style="display: none">
+                               <p class="go-into">详细地址 <span id="address_info"></span></p>
+                               <div>
+                                   <p>收货人 <span id="true_name"></span></p>
+                                   <p>联系电话 <span id="phone"></span></p>
+                               </div>
+                           </li>
+                        <li class="add-rem">
+                            <p><a  class="add-adds" href="javascript:">添加地址</a></p>
+                            <p><a  class="alter-adds" href="javascript:" style="display: none">修改地址</a></p>
+                            <input type="hidden" id="province" value="">
+                            <input type="hidden" id="city" value="">
+                            {if condition="$servicePoint"}
+                            <input type="hidden" value="{$servicePoint.url}" id="near-store">
+                            {/if}
+                        </li>
+                       </ul>
+
+                   </div>
+                <div class="mt-link-shop">
+                    <a href="javascript:" class="get-near-store">查看附近门店>></a>
+                </div>
+               </div>
+           </li>
+
+       </ul>
+       <ul class="cnt-box-item order-goods marbox">
+           <div class="og-box">
+               <form id="add_form" action="{:url('shop/buy/steptwo')}" method="post" enctype="multipart/form-data">
+               <input type="hidden" name="address_id" value=""/>
+               <input type="hidden" name="ifcart" value="{$ifcart}"/>
+               {if isset($is_exchange)}
+                   <input type="hidden" name="is_exchange" value="{$is_exchange}"/>
+                   <input type="hidden" name="logs_order_id" value="{$logs_order_id}"/>
+                   {else /}
+                   <input type="hidden" name="is_exchange" value="0"/>
+               {/if}
+               <table>
+                   <tr class="combg-h">
+                       <th class="w135"></th>
+                       <th class="w230 text-left">宝贝</th>
+                       <th class="w230">备注</th>
+                       <th>单价（ <span>元</span> ）</th>
+                       <th>数量</th>
+                       <th>实付款（ <span>元</span> ）</th>
+                       <th>交易状态</th>
+                   </tr>
+                   {foreach name="result" item="storeId"}
+                   {foreach $storeId as $key => $value}
+                   {if $value.storage_state eq true}
+                   <input type="hidden" name="cart_id[]" value="{$value.cart_id}|{$value.goods_number}"/>
+                   {/if}
+                   <tr class="combg-h">
+                       <td>
+                           <a href="{:url('shop/goods/index')}?gk={$value.goods_id}" class="img"><img src="{$value.goods_image_main}@w133_h121.png" alt="" width="133" height='121' /></a>
+                       </td>
+                       <td class="text-left">
+                           <p class="bt"><a href="{:url('shop/goods/index')}?gk={$value.goods_id}">{$value.goods_name}</a></p>
+                           <p>
+                               {foreach $value.feature as $v}
+                               <span>{$v.feature}:{$v.feature_value}</span>
+                               {/foreach}
+                           </p>
+                       </td>
+                       <td class="mt-bd">
+                           {if $value.storage_state eq true}
+                           <textarea name="remark_{$value.goods_sku}" nctype="remark" rows="2" cols="40" placeholder="输入备注"></textarea>
+                           <input type="text" name="phone_{$value.goods_sku}" nctype="phone" value="" placeholder="输入电话号码">
+                           <label></label>
+                           {/if}
+                       </td>
+                       <td>
+                           <p>{$value.goods_price}</p>
+                       </td>
+                       <td>
+                           <p>{$value.goods_number}</p>
+                       </td>
+                       <td>
+                           <p class="price">{$value.goods_price*$value.goods_number}</p>
+                           <!--<p>（含运费：200）</p>-->
+                       </td>
+                       <td>
+                           <p class="state">
+                               {if $value.storage_state eq true}
+                               待确认
+                               {else /}
+                               库存不足
+                               <input type="hidden" class="none-storage-goods" value="{$value.goods_name}" />
+                               {/if}
+                           </p>
+                       </td>
+                   </tr>
+                   {/foreach}
+                   {/foreach}
+                   <tr class="sub">
+                       <td colspan="7" class="text-right">
+                           <input type="button" class="order" value="提交订单" />
+                       </td>
+                   </tr>
+               </table>
+               </form>
+           </div>
+
+       </ul>
+   </div>
+    <script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+    <!--自定义的工具类-->
+    <script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jquery.validate.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    $(function(){
+        //判定库存是否不足
+        var noneStorageGoods = $(".none-storage-goods").length;
+        if ( noneStorageGoods > 0 ) {
+            var noneStorageGoodsName = $(".none-storage-goods").eq(0).val();
+            layer.confirm('商品【'+noneStorageGoodsName+'】库存不足或已下架,请重新筛选', {
+                btn: ['返回'] //按钮
+            }, function() {
+                window.history.go(-1);
+            });
+            $(".order").attr("disabled", true);
+            $(".order").addClass("not");
+        }
+        $('.order').click(function() {
+            var remark_flag = false;
+            $('textarea[nctype="remark"]').each(function(){
+                var value = $(this).val();
+                console.log(value.length);
+                if(value.length >= 200){
+                    layer.msg('备注字符长度不能超过200');
+                    remark_flag = true;
+                    return false;
+                }
+            });
+            if(remark_flag){
+                return false;
+            }
+            var flag = false;
+            $('input[nctype="phone"]').each(function(){
+                var value = $(this).val();
+                var length = value.length;
+                var mobile = /^1([3-9]{1})([0-9]{1})([0-9]{8})$/;
+                var tel = /^([0-9]{3,4})-([0-9]{7,9})$/;
+                if(!((tel.test(value) || (length==11 && mobile.test(value)) || value == '输入电话号码'))){
+                    layer.msg('请输入手机号码(11位数字)或座机:区号-号码的形式');
+                    flag = true;
+                    return false;
+                }
+            });
+            if(flag){
+                return false;
+            }
+            var address_id = $('input[name="address_id"]').val();
+            if(!address_id){
+                layer.msg('请添加收货地址');
+                return false;
+            }
+            var text = $(this).val();
+            //按钮文案、状态修改
+            $(this).val(text + '中...').prop('disabled', true).addClass('disabled');
+            $('#add_form').submit();
+        });
+        //  加载所有的收获地址
+        $.ajax({
+            type: "post",
+            url: "{:url('shop/address/getAddress')}", // type=1表示查询省份
+            data: {"member_id": "{$member_id}"},
+            dataType: "json",
+            success: function(data) {
+                if(data.data.length > 0){
+                    display();
+                    $.each(data.data, function(i, item) {
+                        if(item['mob_phone']){
+                            item['phone'] = item['mob_phone'];
+                        }else{
+                            item['phone'] = item['tel_phone'];
+                        }
+                        $(".comm-select").append("<option value='" + item['address_id'] + "'>"+item['area_info']+item['address']+"-"+item['true_name']+"-"+item['phone']+"</option>");
+                        if(i == 0){
+                            $('#province').val(item['province_id']);
+                            $('#city').val(item['city_id']);
+                            $('#address_info').html(item['area_info']+item['address']);
+                            $('#true_name').html(item['true_name']);
+                            $('#phone').html(item['phone']);
+                            $('input[name="address_id"]').val(item['address_id']);
+                        }
+                    });
+
+                }
+            }
+        });
+
+        $('.comm-select').change(function(){
+            if($(this).val() <= 0){
+                layer.msg('参数错误');
+            }else{
+                $.ajax({
+                    type: "post",
+                    url: '{:url("shop/address/getaddressone")}',
+                    data: {"address_id": $(this).val()},
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code == 0){
+                            layer.msg(data.msg);
+                        }else{
+                            $('#province').val(data.data['province_id']);
+                            $('#city').val(data.data['city_id']);
+                            $('#address_info').html(data.data['area_info']+data.data['address']);
+                            $('#true_name').html(data.data['true_name']);
+                            if(data.data['mob_phone']){
+                                data.data['phone'] = data.data['mob_phone'];
+                            }else{
+                                data.data['phone'] = data.data['tel_phone'];
+                            }
+                            $('#phone').html(data.data['phone']);
+                            $('input[name="address_id"]').val(data.data['address_id']);
+                        }
+                    }
+                });
+            }
+        })
+        $('.add-rem .add-adds').click(function() {
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['612px', '520px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                scrollbar: false,
+                shadeClose: false, //开启遮罩关闭
+                content:  '{:url("shop/buy/addAddress")}?random=Math.random()'
+            });
+        })
+        $('.add-rem .alter-adds').click(function() {
+            var address_id = $(".comm-select").val();
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['612px', '560px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                scrollbar: false,
+                shadeClose: false, //开启遮罩关闭
+                content: '{:url("shop/buy/editaddress")}?address_id='+address_id+'&random=Math.random()'
+            });
+        })
+        function display(){
+            $('.person').show();
+            $('.adds').show();
+            $('.adds-info').show();
+            $('.alter-adds').show();
+
+        }
+        //查看附件门店 xym
+        $('.get-near-store').click(function(){
+            var newTab=window.open('about:blank');
+            if($('#address_info').text().length>0){
+                //有收货地址
+                var address_id = $(".comm-select").val();
+                $.ajax({
+                    type: "post",
+                    url: '{:url("shop/address/getaddressone")}',
+                    data: {"address_id": address_id},
+                    dataType: "json",
+                    async: false,
+                    success: function(data) {
+                        if(data.code == 0){
+                            layer.msg(data.msg);
+                        }else{
+                            $('#province').val(data.data['province_id']);
+                            $('#city').val(data.data['city_id']);
+
+                        }
+                    }
+                });
+                var province_id=$('#province').val();
+                var city_id=$('#city').val();
+                //ajax获得对应province_id,city_id具体值
+                $.ajax({
+                    type: "get",
+                    url: "{:url('api/address/areaName')}",
+                    data: {
+                        province_id:province_id,
+                        city_id:city_id
+                    },
+                    async: false,
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code == 0){
+                            layer.msg(data.msg);
+                        }else{
+                            var province=data.data['province_name'];
+                            var city=data.data['city_name'];
+                            var store_link=$('#near-store').val()+"&province="+province+"&city="+city;
+                            newTab.location.href=store_link;
+                        }
+                    }
+                })
+            }else{
+                //无收货地址
+                var store_link=$('#near-store').val();
+                newTab.location.href=store_link;
+            }
+
+
+        })
+
+    })
+</script>

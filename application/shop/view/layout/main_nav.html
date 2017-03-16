@@ -1,0 +1,104 @@
+        <ul class="main-nav">
+            <li class="marbox">
+                <!-- 首页判断 -->
+                <dl class="cut-xl {if condition='$is_index_page == false'}common-cut{/if}">
+                    <dt class="fn-name"><span class="btntime">商品分类</span></dt>
+                    <dd class="fn-list {if condition='$is_index_page == false'}none{/if}">
+                    {volist name="firstGoodsCategoryTemp" id="firstCategoryData"}
+                        <ul>
+                            {if condition="$logCategoryId eq $firstCategoryData['category_id']"}
+                                <li><span class="top-fn-y"><a href="{:url($firstCategoryData.controller)}">{$firstCategoryData.name}</a></span></li>
+                            {else/}
+                                <li><span class="top-fn-y"><a href="{:url($firstCategoryData.controller, array('cid'=>$firstCategoryData.category_id))}">{$firstCategoryData.name}</a></span></li>
+                            {/if}
+                            <li>
+                        {volist name="firstCategoryData.sub_goods_category" id="secondCategoryData"}
+                                <dl>
+                                    <dt>
+                                        <a href="{:url($firstCategoryData.controller, array('cid'=>$secondCategoryData.category_id))}">{$secondCategoryData.name}</a>
+                                      <span class="in"></span>
+                                    </dt>
+                                    <dd class="none">
+                                        <div class="fl">
+                                            <div class="top-info">
+                                                <p>
+                            {volist name="secondCategoryData.sub_goods_category" id="thirdCategoryData"}
+                                                    <a href="{:url($firstCategoryData.controller, array('cid'=>$thirdCategoryData.category_id))}">{$thirdCategoryData.name}</a>
+                            {/volist}
+                                                </p>
+                                                <!--属性显示-->
+                                                {foreach $secondCategoryData['type_list'] as $type}
+                                                <p>
+                                                    {$type['attribute_name']}: 
+                                                    {foreach $type['features_value'] as $value}
+                                                    <a href="{:url($firstCategoryData.controller, array('cid'=>$secondCategoryData['category_id'], 'fid'=>$value['fid']))}">{$value['feature_value']}</a>
+                                                    {/foreach}
+                                                </p>
+                                                {/foreach}
+                                            </div>
+                                            <div class="top-ms">
+                                                <p>{$secondCategoryData.name}</p>
+                                                <p>
+                                                {$secondCategoryData.category_description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="fr">
+                                           {volist name="secondCategoryData.goods_category_img" id="ImgData" key="index"}
+                                            <p>
+                                                <a href="{$ImgData.adv_link}">
+                                                    <img src="{$ImgData.adv_img}@w324_h182.png" width="324" height="182" alt="" />
+                                                </a>
+                                            </p>
+                                            {/volist}
+                                        </div>
+                                    </dd>
+                                </dl>
+                        {/volist}
+                            </li>
+                        </ul>
+                    {/volist}
+                    </dd>
+                </dl>
+                <div class="fn-nav">
+                {volist name="navigationRows" id="navigation"}
+                    <a href="{$navigation.url}" {if condition="$navigation.new_open"} target="_blank"{/if}>
+                        {$navigation.title}<span></span>
+                    </a>
+                {/volist}
+                </div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+        {if condition="$is_index_page == true"}
+        <ul class="banner">
+            <li>
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                {volist name="advertiseRows" id="advertise"}
+                        <div class="swiper-slide">
+                            <a href="{$advertise.adv_link}" style="background: url({$advertise.adv_img}) no-repeat top center;"></a>
+                        </div>
+                {/volist}
+                    </div>
+                </div>
+                <div class="pagination"></div>
+            </li>
+        </ul>
+        {/if}
+    </div>
+    <!-- header end -->
+<!--判断当前页地址为当前导航下添加下划线  s-->
+<script>
+    (function(){
+        var $url = window.location.href;
+        var $nurl = '';
+        $('.fn-nav a').each(function(){
+            $nurl = $(this).attr('href');
+            if( $url == $nurl ){
+                $(this).addClass('on');
+            }
+        })
+    })();
+</script>
+<!--判断当前页地址为当前导航下添加下划线  e-->

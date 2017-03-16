@@ -1,0 +1,500 @@
+<style type="text/css">
+.sheet-box {width: 980px;padding: 0}
+.sheet-box .goods-tr-bg td {border: none; }
+.orderlist td,th{ font-size:13px}
+.gnamed{ text-align: left}
+.refund_img img{ max-width: 200px; max-height: 100px;}
+pre.delivery {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #878685;
+    border: none;font-size: 14px;line-height: 24px;
+}
+</style>
+<td colspan="6">
+    <div class="mt-goods-spec">
+        <div class="mt-bt">
+            <p class="cus">订单详情</p>
+            <p class=""><a href="{:url('Seller/Order/lists')}">订单列表</a></p>
+        </div>
+    </div>
+</td>
+
+<div class="sheet-box">
+
+<!--订单状态和订单信息-->
+<table class="table ordertable" style="width: 980px">
+<tbody>
+
+<tr class="goods-tr-bg">
+<th class="w380"><h3>订单信息</h3></th>
+<th class="w600"><h3>订单状态</h3></th>
+</tr>
+
+<tr>
+<!--订单信息-->
+<td class="text-left">
+    <div class="content2">
+        <dl>
+            <dt>收&nbsp;&nbsp;货&nbsp;&nbsp;人：</dt>
+            <dd>{$order_info.extend_order_common.reciver_name}&nbsp; {$order_info.extend_order_common.reciver_info.phone}&nbsp;
+                {$order_info.extend_order_common.reciver_info.address}</dd>
+        </dl>
+        <dl></dl>
+
+        <dl>
+            <dt>订单编号：</dt>
+            <dd>{$order_info.order_sn}&nbsp;&nbsp;
+
+                <div class="angle-down2">
+                <a href="javascript:void(0);">更多&nbsp;<i class="icon-angle-down"></i></a>
+                <div class="more">
+                    <span class="arrow"></span>
+                    <ul>
+                        <li>支付方式：<span>{$order_info.payment_name}</span></li>
+                        <li>付款单号：<span>{$order_info.pay_sn}</span></li>
+                        <li>下单时间：<span>{$order_info.add_time|date='Y-m-d H:i:s',###}</span></li>
+                        {if $order_info.order_state>=20 && $order_info.payment_time>0}
+                        <li>付款时间：<span>{$order_info.payment_time|date='Y-m-d H:i:s',###}</span></li>
+                        {/if}
+                        {if $order_info.order_state>=30 && $order_info.shipping_time>0}
+                        <li>发货时间：<span>{$order_info.shipping_time|date='Y-m-d H:i:s',###}</span></li>
+                        {/if}
+                        {if $order_info.order_state==40 && $order_info.finnshed_time>0}
+                        <li>完成时间：<span>{$order_info.finnshed_time|date='Y-m-d H:i:s',###}</span></li>
+                        {/if}
+                    </ul>
+                </div>
+                </div>
+            </dd>
+        </dl>
+    </div>
+</td>
+
+<!--订单状态-->
+<td>
+<div class="ncsc-order-condition">
+{if !empty($order_info.extend_refund_arr)}
+    {if $order_info.order_state==10 && $order_info.refund_state > 0}
+    <dl class="order_state_tt">
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">订单状态：未支付</span>
+        </dd>
+    </dl>
+    {/if}
+    {if ($order_info.order_state==20 && $order_info.refund_state > 0)}
+    <dl class="order_state_tt">
+        <dd><i class="icon-ok-circle green"></i>
+        <span class="order_state_text">订单状态：
+            {if $order_info.payment_code == 'offline' }
+            订单已提交，等待发货
+            {else}
+            已支付成功
+            {/if}
+        </span>
+        </dd>
+    </dl>
+    {if $order_info.payment_code == 'offline' }
+    <dl>
+        <dd>1. 买家已经选择货到付款方式下单成功。</dd>
+        <dd>2. 订单已提交商家进行备货发货准备。</dd>
+    </dl>
+    {else}
+    <dl>
+        <dd>1. 买家已使用“{$order_info.orderPaymentName}”方式成功对订单进行支付，支付单号 “{$order_info.pay_sn}”。</dd>
+        <dd>2. 订单已提交商家进行备货发货准备。</dd>
+    </dl>
+    {/if}
+    {/if}
+    {if $order_info.order_state==30 && $order_info.refund_state > 0}
+    <dl class="order_state_tt">
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">订单状态：已发货</span>
+        </dd>
+    </dl>
+
+    <dl>
+        <dd>1. 商品已发出，运单号码：{$order_info.shipping_code}</dd>
+        <dd>2. 如果买家没有及时进行收货，系统将于<time>{$order_info.shipping_time+30*86400|date='Y-m-d H:i:s',###}</time>
+            自动完成“确认收货”，完成交易。</dd>
+    </dl>
+    {/if}
+    {if $order_info.order_state==40}
+    <dl class="order_state_tt">
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">订单状态：已经收货</span>
+        </dd>
+    </dl>
+    <dl>
+        <dd>交易已完成。</dd>
+    </dl>
+    {/if}
+    {if $order_info.order_state==0}
+    <dl>
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">订单状态：交易关闭</span>
+        </dd>
+    </dl>
+    {/if}
+
+{else}
+<!---没有退货申请的--->
+    {if $order_info.order_state==10 && $order_info.refund_state == 0}
+    <dl class="order_state_tt">
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">订单状态：未支付</span>
+        </dd>
+    </dl>
+    {/if}
+    {if $order_info.order_state==20 && $order_info.refund_state == 0}
+    <dl class="order_state_tt">
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">订单状态：
+                {if $order_info.payment_code == 'offline' }
+                订单已提交，等待发货
+                {else}
+                已支付成功
+                {/if}
+            </span>
+        </dd>
+    </dl>
+    {if $order_info.payment_code == 'offline' }
+        <dl>
+            <dd>1. 买家已经选择货到付款方式下单成功。</dd>
+            <dd>2. 订单已提交商家进行备货发货准备。</dd>
+        </dl>
+        {else}
+        <dl>
+            <dd>1. 买家已使用“{$order_info.orderPaymentName}”方式成功对订单进行支付，支付单号 “{$order_info.pay_sn}”。</dd>
+            <dd>2. 订单已提交商家进行备货发货准备。</dd>
+        </dl>
+        {/if}
+        {/if}
+    {if $order_info.order_state==30 && $order_info.refund_state == 0}
+        <dl class="order_state_tt">
+            <dd><i class="icon-ok-circle green"></i>
+                <span class="order_state_text">订单状态：已发货</span>
+            </dd>
+        </dl>
+
+        <dl>
+            <dd>1. 商品已发出，运单号码：{$order_info.shipping_code}</dd>
+            <dd>2. 如果买家没有及时进行收货，系统将于<time>{$order_info.shipping_time+30*86400|date='Y-m-d H:i:s',###}</time>
+                自动完成“确认收货”，完成交易。</dd>
+        </dl>
+    {/if}
+    {if $order_info.order_state==40}
+        <dl class="order_state_tt">
+            <dd><i class="icon-ok-circle green"></i>
+                <span class="order_state_text">订单状态：已经收货</span>
+            </dd>
+        </dl>
+        <dl>
+            <dd>交易已完成。</dd>
+        </dl>
+    {/if}
+    {if $order_info.order_state==0}
+    <dl>
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">订单状态：交易关闭</span>
+        </dd>
+    </dl>
+{/if}
+{/if}
+<!------退款的详情------>
+{if count($order_info.extend_refund_arr) > 0}
+{if $order_info.refund_state > 0}
+    <dl class="order_state_tt">
+        <dd><i class="icon-ok-circle green"></i>
+            <span class="order_state_text">售后状态：
+                {switch name=$order_info.extend_refund_arr.refund_state}
+                    {case value="1"}{if $order_info.extend_refund_arr.seller_state == 3}售后申请被拒绝{elseif $order_info.refund_state == 3}售后已取消{else}售后处理中{/if}{/case}
+                    {case value="2"}退款处理中{/case}
+                    {case value="3"}售后已完成{/case}
+                    {case value="4"}退款失败{/case}
+                    {default /}售后处理中
+               {/switch}
+            </span>
+        </dd>
+    </dl>
+    <dl>
+        <dd>&nbsp;</dd>
+        <dd style="word-break: break-all">退款原因：{$order_info.extend_refund_arr.reason_info}</dd>
+        {if count($order_info.extend_refund_arr.buyer_img)>0}
+        <dd class="refund_img">退款图片：
+            {volist name="$order_info.extend_refund_arr.buyer_img" key="key" id="value"}
+            <a href="{$value}" target="_blank"><img src="{$value}@w80.png"></a>
+            {/volist}
+        </dd>
+        {/if}
+        {if count($order_info.extend_refund_arr.seller_img) >0 && $order_info.extend_refund_arr.seller_state == 3}
+        <dd style="word-break: break-all">拒绝原因：{$order_info.extend_refund_arr.seller_message}</dd>
+        <dd class="seller_img">拒绝图片：
+            {volist name="$order_info.extend_refund_arr.seller_img" key="key" id="value"}
+            <a href="{$value}" target="_blank"><img src="{$value}@w80.png"></a>
+            {/volist}
+        </dd>
+        {/if}
+    </dl>
+{/if}
+{/if}
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+
+<!--订单流程图-->
+{if count($order_info.extend_refund_arr) > 0}
+{if $order_info.order_state!=0 && ($order_info.refund_state==3 || $order_info.refund_state==1 || $order_info.extend_refund_arr.seller_state==3)}
+<table class="table ordertable" style="width: 980px;">
+<tbody>
+<div id="order-step" class="ncsc-order-step">
+    <dl class="step-first {if $order_info.order_state != 0}current{/if}">
+        <dt>提交订单</dt>
+        <dd class="bg"></dd>
+        <dd class="date" title="下单时间">{$order_info.add_time|date='Y-m-d H:i:s',###}</dd>
+    </dl>
+
+    {if $order_info.payment_code!='offline'}
+    <dl class="{if $order_info.order_state >= 20}current{/if}">
+        <dt class="bg">支付订单</dt>
+        <dd class="bg"> </dd>
+        <dd class="date" title="付款时间">{if condition="$order_info.payment_time > 0"}{$order_info.payment_time|date='Y-m-d H:i:s',###}{/if}</dd>
+    </dl>
+    {/if}
+
+    <dl class="{if $order_info.shipping_time > 0}current{/if}">
+        <dt>商家发货</dt>
+        <dd class="bg"> </dd>
+        <dd class="date" title="发货时间">
+            {if $order_info.shipping_time >0}
+            {$order_info.shipping_time|date='Y-m-d H:i:s',###}
+            {/if}
+            </dd>
+    </dl>
+    <dl class="{if $order_info.finnshed_time >0}current{/if}">
+        <dt>确认收货</dt>
+        <dd class="bg"> </dd>
+        <dd class="date" title="完成时间">
+            {if $order_info.finnshed_time >0}
+            {$order_info.finnshed_time|date='Y-m-d H:i:s',###}
+            {/if}
+        </dd>
+    </dl>
+
+</div>
+</tbody>
+</table>
+{/if}
+{else if $order_info.order_state!=0 && $order_info.refund_state == 0}
+    <table class="table ordertable" style="width: 980px;">
+        <tbody>
+        <div id="order-step" class="ncsc-order-step">
+            <dl class="step-first {if $order_info.order_state != 0}current{/if}">
+                <dt>提交订单</dt>
+                <dd class="bg"></dd>
+                <dd class="date" title="下单时间">{$order_info.add_time|date='Y-m-d H:i:s',###}</dd>
+            </dl>
+
+            {if $order_info.payment_code!='offline'}
+            <dl class="{if $order_info.order_state >= 20}current{/if}">
+                <dt class="bg">支付订单</dt>
+                <dd class="bg"> </dd>
+                <dd class="date" title="付款时间">{if $order_info.payment_time > 0}{$order_info.payment_time|date='Y-m-d H:i:s',###}{/if}</dd>
+            </dl>
+            {/if}
+
+            <dl class="{if $order_info.shipping_time > 0}current{/if}">
+                <dt>商家发货</dt>
+                <dd class="bg"> </dd>
+                <dd class="date" title="发货时间">
+                    {if $order_info.shipping_time >0}
+                    {$order_info.shipping_time|date='Y-m-d H:i:s',###}
+                    {/if}
+                </dd>
+            </dl>
+            <dl class="{if $order_info.finnshed_time >0}current{/if}">
+                <dt>确认收货</dt>
+                <dd class="bg"> </dd>
+                <dd class="date" title="完成时间">
+                    {if $order_info.finnshed_time >0}
+                    {$order_info.finnshed_time|date='Y-m-d H:i:s',###}
+                    {/if}
+                </dd>
+            </dl>
+        </div>
+        </tbody>
+    </table>
+{/if}
+{if count($order_info.extend_refund_arr) > 0}
+{if $order_info.refund_state ==2 && $order_info.extend_refund_arr.seller_state ==2}
+<table class="table ordertable" style="width: 980px;">
+<tbody>
+<div id="order-step" class="ncsc-order-step">
+    <dl class="step-first {if $order_info.extend_refund_arr.refund_state >= 1}current{/if}">
+        <dt>退款处理中</dt>
+        <dd class="bg"></dd>
+        <dd class="date" title="退款时间">{$order_info.extend_refund_arr.add_time|date='Y-m-d H:i:s',###}</dd>
+    </dl>
+
+    <dl class="{if $order_info.extend_refund_arr.refund_state >= 2}current{/if}">
+        <dt>退款申请成功</dt>
+        <dd class="bg"> </dd>
+        <dd class="date" title="退款完成时间">
+            {if $order_info.extend_refund_arr.seller_time >0}
+            {$order_info.extend_refund_arr.seller_time|date='Y-m-d H:i:s',###}
+            {/if}
+        </dd>
+    </dl>
+
+    <dl class="{if $order_info.extend_refund_arr.refund_state >= 3}current{/if}">
+        <dt>
+            {switch name=$order_info.extend_refund_arr.refund_state}
+            {case value="3"}退款已完成{/case}
+            {case value="4"}退款失败{/case}
+            {default /}退款已完成
+            {/switch}
+        </dt>
+        <dd class="bg"> </dd>
+    </dl>
+</div>
+</tbody>
+</table>
+{/if}
+{/if}
+
+
+<!--商品列表-->
+<table class="table orderlist table-form-default" style="width: 980px">
+<tbody>
+<tr class="goods-tr-bg">
+<th class="w60">图片</th>
+<th class="w400">商品</th>
+<th class="w100">单价(元)</th>
+<th class="w100">数量</th>
+<th class="w100">总价</th>
+<th class="w200">交易操作</th>
+</tr>
+
+{if $order_info.order_state==30 && $order_info.shipping_code!=''}
+<tr>
+<td colspan="6" class="noborder">
+    <div class="order-deliver" style="float: right">
+        <div class="angle-down2">
+            <a href="javascript:void(0);">收货信息&nbsp;<i class="icon-angle-down"></i></a>
+            <div class="more">
+                <span class="arrow"></span>
+                <ul>
+                    <li>收&nbsp;货&nbsp;人：<span>{$order_info.extend_order_common.reciver_name}</span></li>
+                    <li>联系电话：<span>{$order_info.extend_order_common.reciver_info.phone}</span></li>
+                    <li>收货地址：<span>{$order_info.extend_order_common.reciver_info.address}</span></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</td>
+
+
+</tr>
+{/if}
+
+{foreach $order_info.extend_order_goods as $goods_info}
+<tr class="goods-tr-bg">
+<td class="goodsalign">
+    <div class="pic-thumb">
+        <a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}"><img class="bt-images" src="{$goods_info.goods_image}@w100_h70.png" alt=""></a>
+    </div>
+</td>
+<td>
+<div class="gnamed">
+<a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}">{$goods_info.goods_name}</a><br><br>
+
+{if $goods_info.sku_name!=''}
+{volist name="$goods_info.sku_name" key="key" id="value"}
+    {$key} : {$value}<br>
+{/volist}
+{/if}
+</div>
+</td>
+<td>￥{$goods_info.goods_price}</td>
+<td>{$goods_info.goods_num}</td>
+<td><em class="sum">￥{$goods_info.goods_pay_price}</em></td>
+<td class="order_option">
+{if $goods_info.remark!=''}
+<div class="angle-down2">
+    <a href="javascript:void(0);">商品备注&nbsp;<i class="icon-angle-down"></i></a>
+    <div class="more">
+        <span class="arrow"></span>
+        <ul>
+            <li style="word-break: break-all">备注：{$goods_info.bz_remark}</li>
+            <li>经销商电话：{$goods_info.phone_remark}</li>
+        </ul>
+    </div>
+</div>
+{/if}
+</td>
+</tr>
+{/foreach}
+</tbody>
+
+
+<tfoot>
+<tr  class="goods-tr-bg">
+<td colspan="5" style="text-align: right;">
+ （免运费）<b>订单金额：</b><em class="sum">￥{$order_info.order_amount}</em>
+  {if count($order_info.extend_refund_arr) > 0}
+  {if $order_info.refund_state > 0}
+      <br/><b>申请退款金额：</b><em class="sum">￥{$order_info.extend_refund_arr.refund_amount}</em>
+      <br/><b>实际退款金额：</b><em class="sum">￥{$order_info.extend_refund_arr.seller_amount}</em>
+  {/if}
+  {/if}
+</td>
+<td>&nbsp;</td>
+</tr>
+</tfoot>
+</table>
+</div>
+
+<div class="sheet-box">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3 style="text-align: left;">物流信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    {if !empty($order_info.delivery)}
+                    <pre class="delivery">{$order_info.delivery}</pre>
+                    {else}
+                    物流信息为空
+                    {/if}
+                </td>
+            </tr>
+        </table>
+</div>
+
+
+<link rel="stylesheet" href="{$Think.CSS_PATH}goods.detail.css" media="screen" title="no title" charset="utf-8">
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.angle-down2').each(function(){
+            $(this).mouseover(function(){
+                $(this).find('.more').show();
+            });
+
+        });
+
+        $('.angle-down2').each(function(){
+            $(this).mouseout(function(){
+                $(this).find('.more').hide();
+            });
+        });
+
+
+    })
+</script>

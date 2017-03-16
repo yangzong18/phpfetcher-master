@@ -1,0 +1,151 @@
+<script type="text/javascript" src="{$Think.JS_PATH}jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="{$Think.JS_PATH}commonality.js"></script>
+<script type="text/javascript" src="{$Think.JS_PATH}jquery.pikachoose.min.js"></script>
+<div class="container">
+    <ul class="list-box content-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('shop/logs/index')}">原木整装</a> > 整装商品详情</h3>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item content-ready-item marbox">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <li class="mar-head-box">
+            <!-- 代码 开始 -->
+            <div class="pikachoose">
+                <ul id="pikame" class="jcarousel-skin-pika">
+                    <!--<li>-->
+                        <!--<a href="#" target="_blank"><img src="{$goods_info.cover}" alt="" /></a>-->
+                    <!--</li>-->
+                    {foreach $attachementList as $value}
+                    <li>
+                        <a href="#" target="_blank"><img src="{$value.attachment_url}" width="1145" height="450" alt="" /></a>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+            <script language="javascript">
+                $(document).ready(function() {
+                    $("#pikame").PikaChoose({
+                        carouselVertical: false,
+                        carousel: true,
+                        showCaption: false
+                        // showTooltips: true
+                    });
+                });
+            </script>
+        </li>
+        <li class="mt-zu-info">
+            <ul>
+                <li>
+                    <p class="bt">设计主题：{$goods_info.name}</p>
+                    <p>￥<span>{$goods_info.prize}</span> 万元</p>
+                </li>
+                <li>
+                    <p class="bt">内容:</p>
+                    <div>
+                        {if $contain != '' && $goodsIdArr} {foreach $contain as $val}
+                        <p><a href="{:url('/shop/goods/index')}?gk={$val.goods_id}"><span>{$goodsIdArr[$val.goods_id]}</span> * {$val.number}</a></p>
+                        {/foreach} {else/} 包含商品为空 {/if}
+                    </div>
+                </li>
+                <li>
+                    <p>面积：{$goods_info.acreage} m<sup>2</sup></p>
+                    <p>耗时：{$goods_info.taking}</p>
+                    <div class="box">
+                        <div>
+                            {if $fav == 1}
+                            <a href="javascript:void(0)" class="collect" style="border-color: rgb(227, 105, 106); color: rgb(227, 105, 106); background-image: url({$Think.IMG_PATH}ico-x-1.png);" dataId="{$goods_info.id}">已收藏</a>                            {else/}
+                            <a href="javascript:void(0)" class="collect" dataId="{$goods_info.id}">点击收藏</a> {/if}
+                        </div>
+                        <div class="mt-zx">
+                            <a href="javascript:" class="zx">在线咨询</a>
+                            <ol class="none">
+                                <li><a class="qq-kf" href="javascript:openQQ('{$setting.qq}')">QQ咨询</a></li>
+                                <li><a href="javascript:;" class="show-phone">电话咨询</a></li>
+                            </ol>
+                        </div>
+                        <div>
+                            <a href="{:url('shop/logsOrder/index', array('gk'=>$goods_info['id']))}">装修意向</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <h3><span class="combg-b">设计说明</span></h3>
+                </li>
+                <li>
+                    {$goods_info.goods_description|htmlspecialchars_decode}
+                </li>
+            </ul>
+
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+
+        //点击显示电话号码
+        $(".show-phone").click(function() {
+            layer.open({
+                title: [
+                    '联系电话'
+                ],
+                anim: 'up',
+                content: '{$service.tel|default="17727982353"}',
+                btn: ['确认']
+            });
+        });
+
+        //收藏以及取消整装商品
+        $('.collect').click(function() {
+            //判断是否登录
+            var login = parseInt('{$isLogin}');
+            if (login == 0) {
+                layer.msg('请先登录');
+                window.location.href = '{:url("shop/login/login")}';
+            }
+            var $_this = $(this);
+            var dataId = $(this).attr('dataId');
+            if ($(this).text() == '点击收藏') {
+                $.getJSON('{:url("api/Favorites/addFav")}?data=' + dataId, function(result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $_this.css({
+                            'border-color': '#e3696a',
+                            'color': '#e3696a',
+                            'background-image': "url('{$Think.IMG_PATH}ico-x-1.png')"
+                        })
+                        $_this.text('已收藏')
+                    }
+                })
+            } else if ($(this).text() == '已收藏') {
+                $.getJSON('{:url("api/Favorites/delFav")}?data=' + dataId, function(result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $_this.css({
+                            'border-color': '#afaead',
+                            'color': '#afaead',
+                            'background-image': "url('{$Think.IMG_PATH}ico-x-2.png')"
+                        })
+                        $_this.text('点击收藏')
+                    }
+                });
+            }
+        });
+    })
+</script>

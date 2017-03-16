@@ -1,0 +1,43 @@
+<!-- footer start -->
+    <div class="footer">
+        <ul class="foot">
+            <li class="marbox">
+                <p class="ico"><img src="{$Think.IMG_PATH}/foot-ico.png" alt="" /></p>
+                <div>
+                {volist name="friendlyLink" id="link" key="index"}
+                    <a href="{$link.url}">{$link.name}</a> {if condition="$index != $friendly_link_num"} | {/if}
+                {/volist}
+                </div>
+                <p class="about_us">2005-2017 木筑网 版权所有，并保留所有权利。ICP备案证书号：<a href="http://www.miitbeian.gov.cn">粤ICP备1611030号</a></p>
+            </li>
+        </ul>
+    </div>
+<!-- footer end -->
+
+</body>
+<script type="text/javascript">
+    $(function(){
+        var isLogin = parseInt('{$isLogin}');
+        var temp = localStorage.getItem('cart') ? localStorage.getItem('cart') : '';
+        if(isLogin == 1 && temp !=''){
+            localStorage.removeItem("cart");
+        }
+    });
+    $('td p').each(function(){
+        var s=$.trim($(this).text());
+        if(s=='颜色 : 无' || s=='颜色:无' || s=='颜色：无'){
+            $(this).text('')
+        }
+    });
+
+    $('li p').each(function(){
+        var s=$.trim($(this).text());
+        if(s=='颜色 : 无' || s=='颜色:无' || s=='颜色：无'){
+            $(this).text('')
+        }
+    });
+
+
+</script>
+
+</html>

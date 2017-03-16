@@ -1,0 +1,182 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<div class="sheet-box">
+    <form class="js-ajax-form" action="addPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>设计师基本信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td class="w150">
+                    <div>
+                        <h3>姓名*</h3>
+                    </div>
+                </td>
+                <td class="w250">
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="name">
+                        </div>
+                    </div>
+                </td>
+                <td rowspan="3" class="w150">
+                    <div>
+                        <h3>上传照片*</h3>
+                    </div>
+                </td>
+                <td rowspan="3">
+                    <div class="uploadimg">
+                    </div>
+                    <div class="clear"></div>
+                    <div class="w380">
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        <span>请上传gif、jpg、png类型的且小于2M的图片，图片建议215*194</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>性别</h3>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <select name="sex" class="form-control" style="width: 170px;">
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+            <td>
+                <h3>级别</h3>
+            </td>
+                {if $levelList != '' }
+            <td >
+                <div class="col-xs-11">
+                    <div class="one-text">
+                        <select name="levelId" id="levelId" class="form-control" style="width: 170px;">
+                           {foreach $levelList as $key => $val}
+                            <option value="{$key}" year="{$val.year}">{$val.name}</option>
+                            {/foreach}
+                        </select>
+                        <span>如果级别还未设置，请马上设置</span>
+                    </div>
+                </div>
+            </td>
+                {else/}
+                <td>级别还未设置，请马上设置</td>
+                {/if}
+        </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>设计年限</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="year">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <h3>擅长风格</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-9">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="style">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>手机号码*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="phone" >
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <h3>所属公司名称</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-9">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="company" >
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>设计理念</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <textarea name="idea" rows="4" class="form-control" ></textarea>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button class="btn btn-warning max-bg js-ajax-submit">添加</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $("input[name='year']").val("{$selectYear}");
+
+        $("#levelId").change(function () {
+            var year = $(this).find("option:selected").attr('year');
+            $("input[name='year']").val(year);
+        });
+
+        $('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 1,//上传数量
+            inputName: 'img_url',//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        })
+    });
+</script>

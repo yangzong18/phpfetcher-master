@@ -1,0 +1,236 @@
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>选择店铺经营的商品分类，以读取平台绑定的商品分类-规格类型，如分类：“服装”；规格：“颜色”、“尺码”等；当商品分类具有“颜色”规格时，可选择色块加以标识。</p>
+            <p><i class="icon-circle"></i>添加所属规格下的规格值，已有规格值可以删除，新增未保存的规格值可以移除；<font color="red">新增的规格值必须填写</font>，否则该行数据不会被更新或者保存。</p>
+            <p><i class="icon-circle"></i>可通过排序0-255改变规格值显示顺序；在发布商品时勾选已绑定的商品规格，还可对规格值进行“别名”修改操作，但不会影响规格值默认名称的设定。</p>
+        </li>
+    </ul>
+</div>
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="editPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>商品规格信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品分类</h3>
+                    </div>
+                </td>
+                <td class="show-category">
+                    
+                </td>
+            </tr>
+        </table>
+        <div class="mt-goods-spec">
+            <div class="mt-bt">
+                
+            </div>
+            <ul>
+                
+            </ul>
+        </div>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="{$Think.JS_PATH}category.js"></script>
+<script type="text/javascript">
+var currentCategoryId   = '';
+var currentCategoryName = '';
+$(function(){
+    category.url = "{:url('/seller/Goods/getCategory')}";
+    category.children(0);
+    //最后一个分类选择的事件
+    category.func = function( categoryId, categoryName ) {
+        currentCategoryId   = categoryId;
+        currentCategoryName = currentCategoryName;
+        //若有传第三个参数，则做为显示的标记
+        var target = arguments.length > 2 ? arguments[2] : 0;
+        //分类规格请求
+        $.post("{:url('seller/goods_category/specifications')}", {
+            category_id : categoryId
+        }, function( response ){
+            $(".mt-goods-spec").find(".mt-bt").empty();
+            $(".mt-goods-spec ul").empty();
+            if ( response.data.length > 0 ) {
+                //头部拼接
+                var html = '';
+                var cus  = '';
+                var none = '';
+                var inner= '';
+                var value= null;
+                for (var i = 0; i < response.data.length; i++) {
+                    cus = i == target ? ' class="cus" ' : '';
+                    none= i == target ? '' : ' none ';
+                    html += '<p '+cus+'>编辑'+response.data[i].attribute_name+'规格</p>';
+                    //内部拼接
+                    inner += '<li class="in '+none+' value-body">\
+                                <div class="table-form-default">\
+                                    <div class="mt-ys-fn">\
+                                        <div class="mt-sort">\
+                                          <p>规格名称: '+response.data[i].attribute_name+'</p>\
+                                          <p>所属分类: '+categoryName+'</p>\
+                                        </div>\
+                                        <div class="add-item">\
+                                            <ul>\
+                                                <li class="text-right">\
+                                                    <a href="javascript:;" class="btn btn-info add-specifications-value"><i class="icon-plus"></i> 添加规格值</a>\
+                                                </li>\
+                                            </ul>\
+                                        </div>\
+                                    </div>\
+                                    <table class="table">\
+                                        <tr>\
+                                            <th class="w100">排序</th>\
+                                            <th class="w380">规格值名称</th>\
+                                            <th></th>\
+                                            <th class="w150">操作</th>\
+                                        </tr>\
+                                        <tbody class="show-value">';
+                    //循环遍历规格
+                    for (var j = 0; j < response.data[i].features_value.length; j++) {
+                        value = response.data[i].features_value[j];
+                        inner += '<tr class="goods-tr-t0 chk-one main-next edit-value">\
+                                        <td>\
+                                            <div class="one-text sort">\
+                                              <input type="text" class="form-control h30 w50 value-sort" value="'+value.sort+'" >\
+                                            </div>\
+                                        </td>\
+                                        <td class="text-left">\
+                                            <div class="one-text">\
+                                                <input type="text" class="form-control h30 value-value" value="'+value.feature_value+'" >\
+                                            </div>\
+                                        </td>\
+                                        <td></td>\
+                                        <td class="table-handle">\
+                                            <span>\
+                                                <input type="hidden" value="'+value.id+'"  class="value-id">\
+                                                <a href="javascript:;" key-id="'+value.id+'" class="delete-value-db"><i class="icon-pencil"></i>删除</a>\
+                                            </span>\
+                                        </td>\
+                                  </tr>';
+                    }
+                    inner   += '<tbody>\
+                                <tr class="b0">\
+                                    <td colspan="4" class="b0">\
+                                        <div class="text-center">\
+                                            <button type="button" target-id="'+i+'" key-id='+response.data[i].feature_id+' category-id="'+categoryId+'" class="btn btn-success max-bg save-specifications">提交保存规格值</button>\
+                                        </div>\
+                                    </td>\
+                                </tr>\
+                            </table>\
+                        </div>\
+                    </li>';
+                }
+                $(".mt-goods-spec").find(".mt-bt").append( html );
+                $(".mt-goods-spec ul").append( inner );
+            }
+        })
+    }
+
+
+    //绑定规格值添加
+    $(document).on("click", '.add-specifications-value', function () {
+        var html = '<tr class="goods-tr-t0 chk-one main-next add-value">\
+                <td>\
+                    <div class="one-text sort">\
+                      <input type="text" class="form-control h30 w50 value-sort" >\
+                    </div>\
+                </td>\
+                <td class="text-left">\
+                    <div class="one-text">\
+                        <input type="text" class="form-control h30 value-value">\
+                    </div>\
+                </td>\
+                <td></td>\
+                <td class="table-handle">\
+                    <span>\
+                        <a href="javascript:;" class="delete-value"><i class="icon-pencil"></i>删除</a>\
+                    </span>\
+                </td>\
+          </tr>';
+        $(this).parents('.value-body').find('.show-value').append( html );
+    });
+
+    //删除规格值, 后添加的
+    $(document).on("click", '.delete-value', function () {
+        $(this).parent().parent().parent().remove();
+    });
+
+    //删除规格值, 删除数据库
+    $(document).on("click", '.delete-value-db', function () {
+        var id = $(this).attr('key-id');
+        var ob = $(this);
+        //重数据库里面删除
+        $.post("{:url('/seller/specifications/delete')}", {
+            id : id
+        }, function( response ){
+            //删除成功
+            if ( response.code == 1 ) {
+                ob.parent().parent().parent().remove();
+            }
+        });
+    });
+
+
+    //保存需要的规格值
+    $(document).on("click", '.save-specifications', function () {
+        var editValue = new Array();
+        var addValue  = new Array();
+        var sort = 0;
+        var value = '';
+        //拼接需要编辑的值
+        $(this).parents('.table').find('.edit-value').each(function(){
+            value = $(this).find('.value-value').val();
+            if ( trim( value ) == '' ) {
+                return false;
+            }
+            sort = parseInt( $(this).find('.value-sort').val() );
+            sort = !isNaN( sort ) ? sort : 0;
+            editValue.push( $(this).find('.value-id').val()+','+sort+','+value );
+        });
+        //拼接需要添加的值
+        $(this).parents('.table').find('.add-value').each(function(){
+            value = $(this).find('.value-value').val();
+            if ( trim( value ) == '' ) {
+                return false;
+            }
+            sort = parseInt( $(this).find('.value-sort').val() );
+            sort = !isNaN( sort ) ? sort : 0;
+            addValue.push(sort+','+value);
+        });
+        var featureId  = $(this).attr('key-id');
+        var categoryId = $(this).attr('category-id');
+        var targetId   = $(this).attr('target-id');
+        //进行提交
+        $.post("{:url('/seller/specifications/addPost')}", {
+            feature_id : featureId,
+            category_id: categoryId,
+            edit_value : editValue,
+            add_value  : addValue
+        }, function(response){
+            //提示消息
+            layer.msg(response.msg);
+            if ( response.code == 1 ) {
+                //更新当前信息
+                category.func( currentCategoryId, currentCategoryName, targetId );
+            }
+        })
+    });
+    
+})
+</script>
+
+
+

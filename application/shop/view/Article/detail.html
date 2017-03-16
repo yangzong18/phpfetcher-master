@@ -1,0 +1,49 @@
+
+<!-- content start -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content details-alliance">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="details-alliance-head h-content-container font-color-pink">
+            {if condition="isset($cateParent)"}
+            <a href="javascript:;" class="font-color-pink">{$cateParent}</a>&nbsp;&gt;&nbsp;
+            {/if}
+            {if condition="isset($cate)"}
+            <a href="javascript:;" class="font-color-pink">{$cate}</a>
+            {/if}
+        </div>
+        <div class="details-alliance-body h-content-container">
+            <div class="details-alliance-body-title font-color-gold">
+                {$article.title}
+            </div>
+            <!--<div class="details-alliance-body-img">-->
+                <!--<img src="" />-->
+            <!--</div>-->
+            <div class="details-alliance-body-text font-color-gray">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$article.content}
+            </div>
+            <div class="details-alliance-body-flt"></div>
+            <div class="details-alliance-body-fgt"></div>
+        </div>
+    </div>
+    {if condition="isset($province)"}
+    <input type="hidden" value="{$province}" id="province">
+    {/if}
+    {if condition="isset($city)"}
+    <input type="hidden" value="{$city}" id="city">
+    {/if}
+</div>
+<script>
+    $(function(){
+        var province=$('#province').val();
+        var city=$('#city').val();
+        var province_city=province+city;
+        if( $("td").text().indexOf(province_city)>=0){
+            $("td").filter(":contains('"+$('#province').val()+$('#city').val()+"')").css("color", "#fcd88e");
+        }else{
+            $("td").filter(":contains('"+$('#province').val()+"')").css("color", "#fcd88e");
+        }
+    })
+</script>
+<!-- content end -->

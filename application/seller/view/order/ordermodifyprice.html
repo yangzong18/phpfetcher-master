@@ -1,0 +1,81 @@
+{__NOLAYOUT__}
+{include file="layout/header" /}
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<div class="re-layui order-mode-price">
+    <form class="js-ajax-form" action="{:url('seller/Order/orderModifyPrice')}" method="post" onkeydown="if(event.keyCode==13)return false;">
+        <input type="hidden" name="orderId" value="{$order_info.order_id}">
+        <input type="hidden"  name="type" value="1">
+        <table class="table"><tbody>
+        <tr>
+            <td class="td-l-na">订单编号：</td>
+            <td>{$order_info.order_sn}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">状态：</td>
+            <td>{$order_info.state_desc}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">实付款：</td>
+            <input type="hidden" name="order_amount_before" id="order_amount_before" value="{$order_info.order_amount}">
+            <td>{$order_info.order_amount}</td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">修改后实付款：</td>
+            <td><input type="text" name="order_amount" id="order_amount" class="form-control h30 mb5" onblur="check_amount()"></td>
+        </tr>
+
+        <tr>
+            <td class="td-l-na">折扣：</td>
+            <td>
+                <input type="text" name="discount" id="discount"  class="form-control h30 mb5" onblur="check_discount()">
+            </td>
+        </tr>
+
+        <tr class="b0">
+            <td colspan="4" class="b0">
+                <div class="text-center mt10">
+                    <button type="submit" class="btn btn-warning max-bg js-ajax-submit" id="judge">确定</button>
+                    <button class="btn max-bg return">取消</button>
+                </div>
+            </td>
+        </tr>
+
+        </tbody></table></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        //取消按钮操作
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+            return false;
+        });
+    })
+
+    //得到折扣
+    function check_amount(){
+        var order_amount_before = $('#order_amount_before').val();
+        var order_amount = $('#order_amount').val();
+        if(order_amount>=0.01 && order_amount_before>=0.01){
+            var discount = order_amount/order_amount_before;
+            $('#discount').val(discount);
+        }
+
+    }
+
+    //得到优惠价格
+    function check_discount(){
+        var discount= $('#discount').val();
+        var order_amount_before = $('#order_amount_before').val();
+        if(discount>0 && discount<1  && order_amount_before>=0.01){
+            var order_amount = (order_amount_before*discount).toFixed(2);
+            $('#order_amount').val(order_amount);
+        }
+    }
+
+</script>

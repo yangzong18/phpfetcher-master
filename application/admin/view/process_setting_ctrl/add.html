@@ -1,0 +1,135 @@
+
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>添加流程子模块的详细信息</p>
+        </li>
+    </ul>
+</div>
+<div class="sheet-box">
+    <form class="js-ajax-form" action="addPost" method="post">
+        <table class="table">
+            <tbody>
+
+            <tr class="goods-tr-bg">
+                <th colspan="4"><h3>添加流程子模块信息</h3></th>
+            </tr>
+            <tr>
+                <td width="150px"><div><h3>*流程子模块标题</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="title" class="form-control h30 mb5">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>流程子模块显示图*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="uploadimg">
+
+                        </div>
+                        <div class="btn-up-zbox">
+                            <div class="clear"></div>
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>流程分类*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <select name="category_id" class="form-control">
+                                <option value="0" selected>请选择分类</option>
+                                {foreach $category as $k=>$v}
+                                <option value="{$v.cate_id}">{$v.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>跳转地址*</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="address" class="form-control h30 mb5">
+                            <span>请填带http://头部的绝对地址</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>流程子模块排序</h3></div></td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="sort" class="form-control h30 mb5">
+                            <span>请填写自然数。流程子模块列表将会根据排序由小到大排列显示，默认为0。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td><div><h3>流程子模块说明*</h3></div></td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <textarea name="content" rows="4" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">添加</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+
+                </td>
+            </tr>
+
+            </tbody></table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function() {
+        $('.btn-one-upload').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 1,//上传数量
+            inputName: 'img_url',//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        })
+    });
+</script>
+

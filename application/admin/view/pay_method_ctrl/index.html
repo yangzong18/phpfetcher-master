@@ -1,0 +1,58 @@
+<style type="text/css">
+.mt-goods-spec{ width: 100%; margin-top:10px;padding-right: 20px;}
+.table-form-default {  margin-top: 0px; }
+.mt-goods-spec .mt-bt p.cus {
+    border: 1px solid #D6ECEE;}
+</style>
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>可以通过修改排序的数字编号来调整顺序</p>
+        </li>
+    </ul>
+</div>
+
+<div class="mt-goods-spec">
+    <div class="mt-bt">
+        <p class="cus">PC端支付方式</p>
+        <!--<a href="{:url('admin/pay_mobile_ctrl/index')}"><p class="">移动端支付方式</p></a>-->
+    </div>
+</div>
+
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w380">支付方式</th>
+            <th>状态</th>
+            <th class="w150">操作</th>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+        </tr>
+
+        {volist name="searchData" id="data"}
+        <tr class="goods-tr-t0 chk-one child-next-x none" style="display: table-row;">
+
+            <td>
+                {$data.payment_name}
+            </td>
+            <td>
+                {eq name="$data.payment_state" value="1"}启用中{else/}关闭中{/eq}
+            </td>
+            <td class="table-handle">
+                <span>
+                    <a href="edit?payment_id={$data.payment_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+            </td>
+        </tr>
+        {/volist}
+
+    </table>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

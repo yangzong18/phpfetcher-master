@@ -1,0 +1,50 @@
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="addPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>分类信息</h3>
+                </th>
+            </tr>
+
+            <tr>
+                <td><div><h3>分类名称*</h3></div></td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="name">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><div><h3>排序</h3></div></td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="sort">
+                            <span>请填写自然数，分类列表将会根据排序进行由小到大排列显示，默认为0。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button class="btn btn-warning max-bg js-ajax-submit">添加</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+
+

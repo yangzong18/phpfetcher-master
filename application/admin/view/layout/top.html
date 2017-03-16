@@ -1,0 +1,59 @@
+<!-- 顶部导航 start -->
+<header>
+    <div class="top-nav">
+        <ul>
+            <li class="fl logo">
+                <a href="#"><img src="{$Think.IMG_PATH}logo.png" alt="" /></a>
+            </li>
+            <li class="fl item-nav">
+                <ul class="">
+                    {foreach  $topMenuList as $key => $menu}
+                   {if condition="$menu['status'] eq 1"}
+                   <li><a href="{$menu.app.'/'.$menu.controller.'/'.$menu.action|url='',false}" {if condition="$menu['current'] eq 1" } class="cus" {/if}>{$menu.name}</a></li>
+                   {/if}
+                    {/foreach}
+                </ul>
+            </li>
+            <!--<li class="fl search-bar">-->
+                <!--<form class="" action="" method="post">-->
+                    <!--<input type="text" name="name" value="" placeholder="商品搜索" class="search-input-text">-->
+                    <!--<input type="submit" name="name" value="" class="search-input-submit">-->
+                <!--</form>-->
+            <!--</li>-->
+            <li class="fr user-nav">
+                <ul>
+                    <li class="user-admin">
+                            <img src="{$Think.IMG_PATH}admin-img.png" alt="" />
+                            <span>{$seller.member_name}</span>
+                    </li>
+                    <li class="user-sz">
+                        <a href="{:url('seller/index/index')}" class="ico-home" data-toggle="tooltip" data-animation="fadeInUp" data-placement="bottom" title="首页"></a>
+                        <a href="javascript:;" onclick="edit_password('{$seller.member_id}')" class="ico-wrench" data-toggle="tooltip" data-animation="fadeInUp" data-placement="bottom" title="修改密码"></a>
+                        <a href="{:url('seller/login/logout')}" class="ico-exit" data-toggle="tooltip" data-animation="fadeInUp" data-placement="bottom" title="退出"></a>
+                    </li>
+                </ul>
+
+            </li>
+        </ul>
+    </div>
+</header>
+<!-- 顶部导航 end -->
+<script>
+    //退款审核
+    function edit_password(id){
+        var role = '{$seller.role.0}';
+        if(role == 1){
+            layer.msg('超级管理员不能进行修改');
+            return false;
+        }
+        layer.open({
+            type: 2,
+            title: '修改密码',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['440px', '300px'],
+            content: ["{:url('seller/login/editpassword')}/id/"+id,'auto'] //iframe的url
+        });
+    }
+</script>

@@ -1,0 +1,140 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}role.css" type="text/css">
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>当管理员进行权限编辑时，隐藏的权限必须选择所对应的列表权限。</p>
+        </li>
+    </ul>
+</div>
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="form-horizontal js-ajax-form" action="editPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>角色权限信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>角色名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="roleName" value="{$data.name}">
+                            <span>请填写角色的名称。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>设置权限*</h3>
+                    </div>
+                </td>
+                <td class="chk-one col-xs-11">
+                    <div class="zTreeDemoBackground left">
+                        <ul id="treeDemo" class="ztree"></ul>
+                    </div>
+                    <input type="hidden" name="roleValues" value=""/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>角色描述</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <textarea name="remark" rows="4" class="form-control">{$data.remark}</textarea>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>启用状态</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <input type="radio" name="status" value="1" {eq name="data.status" value="1"}checked="checked"{/eq}>启用
+                        <input type="radio" name="status" value="2" {eq name="data.status" value="2"}checked="checked"{/eq}>停用
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <input type="hidden" name="roleId" value="{$data.role_id}" />
+                        <button class="btn btn-warning max-bg js-ajax-submit">编辑</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript" src="{$Think.JS_PATH}jquery.ztree.core.js"></script>
+<script type="text/javascript" src="{$Think.JS_PATH}jquery.ztree.excheck.js"></script>
+<script>
+    var setting = {
+        view: {
+            selectedMulti: true,
+            showIcon: false
+        },
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            beforeCheck: beforeCheck,
+            onCheck: onCheck
+        }
+
+    };
+    var zNodes ={$roleList};
+    console.log(zNodes);
+    function beforeCheck(treeId, treeNode) {
+        if(treeNode.doCheck === false){
+            layer.msg('首页不能取消');
+        }
+        return (treeNode.doCheck !== false);
+    }
+    function onCheck(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                checknodes = zTree.getCheckedNodes(true),
+                arr = new Array();
+        for (var i=0, l=checknodes.length; i<l; i++) {
+            if($.inArray(checknodes[i].id, arr) == '-1'){
+                arr.push(checknodes[i].id);
+            }
+        }
+        $('input[name="roleValues"]').val(arr);
+    }
+    function createTree() {
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    }
+    $(document).ready(function(){
+        createTree();
+        onCheck();
+    });
+</script>

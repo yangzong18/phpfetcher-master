@@ -1,0 +1,88 @@
+<div class="container list-stylist">
+    <ul class="list-box">
+        <li class="goods-sort mt-fina-raise">
+            <div class="marbox1">
+                <div class="fl-l">
+                    <ul class="marbox">
+                        <li class="mt-xb">
+                            <div>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </li>
+                        <li class="">
+                            <h3><span>设计师分类</span></h3>
+                        </li>
+                        <li class="mt-add mt-xfn">
+                            <h3>设计师级别</h3>
+                            <div class="add">
+                                <p><a href="index" {if !isset($level_id)}class="cus"{/if}>全部</a></p>
+                                {foreach $levelList as $val}
+                                {if $val.is_delete == 0}
+                                <p><a href="index?level={$val.id}" {if isset($level_id) && $val.id == $level_id}class="cus"{/if}>{$val.name}</a></p>
+                                {/if}
+                                {/foreach}
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="stylist combg-h2">
+                        <li>
+                            {foreach $designerList as $val}
+                            <div class="mt-sty-box">
+                                <a href="detail?designer_id={$val.designer_id}" class="mt-link"><img class="lazy" data-original="{$val.designer_avatar}@w215_h194.png" alt="" /></a>
+                                <div>
+                                    <a href="detail?designer_id={$val.designer_id}">{$val.designer_name}</a>
+                                    <span>{$levelList[$val.level_id]['name']}</span>
+                                    <span class="fr">经验:<i>{$val.designer_year}</i>年</span>
+                                </div>
+                                <div>
+                                    <a href="{:url('shop/logsOrder/index', array('dk'=>$val.designer_id))}">预约TA</a>
+                                    <a href="detail?designer_id={$val.designer_id}" class="fr">查看详情>></a>
+                                </div>
+                            </div>
+                            {/foreach}
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            {$page}
+                        </li>
+                    </ul>
+                </div>
+                <div class="fr-r">
+                    <ul class="stylist-right combg-h2">
+                        <li>
+                            <div class="r-box">
+                                <h3><span>本月设计之星</span></h3>
+                                {foreach $teamDesigner as $val}
+                                <div>
+                                    <a href="detail?designer_id={$val.designer_id}" class="mt-link"><img class="lazy" data-original="{$val.designer_avatar}@w180_h140.png" alt="" /></a>
+                                    <p><a href="detail?designer_id={$val.designer_id}">{$val.designer_name}</a> {$levelList[$val.level_id]['name']}</p>
+                                </div>
+                                {/foreach}
+                                <p class="clear"></p>
+                            </div>
+                            <div class="r-box lc">
+                                <h3><span>最新案例</span></h3>
+                                {foreach $newCases as $val}
+                                <div>
+                                    <a href="{:url('shop/designer_production/detail',['id'=>$val.production_id])}" class="mt-link"><img class="lazy" data-original="{$val.imgs}@w180_h140.png" alt="" /></a>
+                                    <p><a href="{:url('shop/designer_production/detail',['id'=>$val.production_id])}">{if condition="mb_strlen($val.production_name,'utf-8') > 5"}{$val.production_name|mb_substr=0,5,'utf-8'}...{else /}{$val.production_name}{/if}</a> 面积：{$val.building_area} m<sup>2</sup></p>
+                                </div>
+                                {/foreach}
+                                <p class="clear"></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+
+            </div>
+        </li>
+    </ul>
+</div>
+<script language="javascript">
+    var sobj  = { placeholder: "/static/shop/images/loading.jpg",effect: "fadeIn",threshold : 300,failure_limit : 30}
+    //图片加载
+    $("img.lazy").lazyload(sobj);
+
+</script>

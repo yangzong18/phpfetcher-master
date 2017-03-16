@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+
+<!-- 申请修改 begin -->
+    <div class="modify-layer">
+        <div class="modify-layer-head">
+            <div class="modify-layer-head-lt"></div>
+            <div class="modify-layer-head-content">申请修改</div>
+            <div class="modify-layer-head-gt"></div>
+        </div>
+        <form class="js-ajax-form modify-layer-form"  action="modify">
+            <input type="hidden"  name="orderId" value="{$orderId}">
+            <input type="hidden" id="type" name="type" value="1">
+            <textarea name="modifyInfo"></textarea>
+
+            <button class="js-ajax-submit modify-layer-form-input">确认</button>
+        </form>
+    </div>
+<!-- 申请修改 end -->
+

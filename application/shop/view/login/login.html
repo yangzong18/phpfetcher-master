@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <link rel="stylesheet" href="{$Think.CSS_PATH}base.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}style.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}colorbox.css" media="screen" title="no title" charset="utf-8">
+    <script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}idangerous.swiper.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}placeholder.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jquery.validation.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}ajaxForm.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jQuery.md5.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+    <title>木筑网-登录</title>
+    <!--[if lt IE 9]>
+    <script src="{$Think.JS_PATH}IE9.js"></script>
+    <script src="{$Think.JS_PATH}html5shiv.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        $(function() {
+            var browser = {
+                versions: function() {
+                    var u = navigator.userAgent,
+                        app = navigator.appVersion;
+                    var ios = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+                    var android = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+                    if (ios) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+                    }
+                    if (android) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+
+                    }
+                }(),
+            }
+
+        })
+    </script>
+
+</head>
+
+<body>
+
+    <!-- content start  -->
+    <div class="container">
+        <div class="login-logo">
+            <div class=" marbox">
+                <p>
+                    <a href="/"><img src="{$Think.IMG_PATH}logo.png" alt="" /></a>
+                </p>
+                <p class="info">
+                    <a href="/"><img src="{$Think.IMG_PATH}logo-info.png" alt="" /></a>
+                </p>
+            </div>
+        </div>
+        <div class="login-main">
+            <ul class="marbox">
+                <li class="login-left-img">
+                    <img src="{$Think.IMG_PATH}login-img.png" alt="" />
+                </li>
+                <li class="form-box">
+                    <form action="loginDo" method="post" id="loginForm">
+                        <input type="hidden" name="localCart" id="localCart">
+                        <div class="user-item">
+                            <p class="fl">用户登录</p>
+                            <p class="fr"><a href="{$helpUrl['url']}" {if condition="$helpUrl.new_open eq 1" } target="_blank" {/if}>新手帮助</a></p>
+                            <p class="clear"></p>
+                        </div>
+                        <div class="form-item">
+                            <p class="user"><input type="text" name="account" value="" placeholder="用户名" autocomplete="off" /></p>
+                            <p class="pwd"><input type="password" name="password" value="" placeholder="登录密码" autocomplete="off" /></p>
+                            <div style="float:left">
+                                <p class="captcha" style="width: 287px;"><input style="padding-left: 50px;" type="text" name="captcha" value="" placeholder="验证码" autocomplete="off" /></p>
+                            </div>
+                            <div style="float:left"><img style="height: 37px" id="captcha_img" onclick="this.src='{:captcha_src()}?d='+Math.random();" alt="点击更换" title="点击更换" src="{:captcha_src()}" class="m"></div>
+                            <p class="sub"><input type="button" name="name" value="登 录" id="subBtn"></p>
+                        </div>
+
+
+                    </form>
+                    <div class="db-info">
+                        <a href="forgetPassword" title="" class="fl">忘记密码</a>
+                        <a href="register" title="" class="fr">免费注册</a>
+
+                    </div>
+                </li>
+                <li class="clear"></li>
+            </ul>
+
+        </div>
+    </div>
+    <!-- content end  -->
+    {include file="layout/footer" /}
+    <script type="text/javascript">
+        $(function() {
+            $("#loginForm").validate({
+                rules: {
+                    account: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    password: {
+                        required: true
+                    },
+                    captcha: {
+                        required: true
+                    }
+                },
+                messages: {
+                    account: {
+                        required: '用户名不能为空',
+                        maxlength: '用户名长度不能超过20个字符'
+                    },
+                    password: {
+                        required: '密码不能为空'
+                    },
+                    captcha: {
+                        required: '验证码不能为空'
+                    }
+                },
+                errorClass: "error",
+                success: 'valid',
+                unhighlight: function(element, errorClass, validClass) { //验证通过
+                    $(element).tooltip('destroy').removeClass(errorClass);
+                },
+                errorPlacement: function(label, element) {
+                    //$(element).tooltip('destroy'); /*必需*/
+                    $(element).attr('title', $(label).text()).tooltip('show');
+                }
+            });
+
+
+            function Verification() {
+
+                var temp = localStorage.getItem('cart') ? localStorage.getItem('cart') : '';
+                $('#localCart').val(temp);
+                if ($("#loginForm").valid()) {
+                    $.post('{:url("shop/login/loginDo")}', {
+                        account: $("input[name='account']").val(),
+                        password: $.md5($("input[name='password']").val()),
+                        captcha: $("input[name='captcha']").val(),
+                        localCart: $('#localCart').val()
+                    }, function(response) {
+                        if (response.code != 1) {
+                            $('#captcha_img').trigger("click");
+                            layer.msg(response.msg);
+                        } else {
+                            window.location.href = response.url;
+                        }
+                    })
+                    //$('#loginForm').submit();
+                }
+
+            }
+
+            $('#subBtn').click(Verification);
+            $(window).keydown(function(event) {
+                if (event.keyCode == 13) {
+                    Verification();
+                }
+            });
+        });
+    </script>

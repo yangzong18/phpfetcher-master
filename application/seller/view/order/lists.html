@@ -1,0 +1,276 @@
+<div class="col-form">
+    <form class="form-inline" role="form" action="{:url('seller/order/lists')}" style="float:left;">
+        <div class="form-group">
+            <select name="orderState" class="form-control">
+                {foreach $orderState as $k => $v}
+                <option {if $searchOrderState==$k}selected{/if} value="{$k}">{$v}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="form-group">
+            <select name="searchType" class="form-control">
+                {foreach $search as $key => $val}
+                <option {if $searchType==$key}selected{/if} value="{$key}">{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" name="searchValue" value="{$searchValue}">
+            
+          <span>商品名称</span>
+          <div class="form-group">
+              <input type="text" class="form-control" name="goods_name" value="{$param.goods_name|default=''}">
+          </div>
+            <button class="btn" type="submit">搜索</button>
+            <button type="button" id="outorder" class="btn btn-info">导出订单</button>
+        </div>
+
+    </form>
+    <div class="clear"></div>
+</div>
+       <div class="table-form-default">
+           {if !empty($list) && count($list)}
+           <table class="table mt20">
+               <tr>
+                   <th></th>
+                   <th class="w150">商品</th>
+                   <th class="w150">单价</th>
+                   <th class="w150">数量</th>
+                   <th class="w150">实付款</th>
+                   <th class="w150">交易状态</th>
+                   <th class="w150">运单号</th>
+                   <th class="w150">交易操作</th>
+               </tr>
+
+
+               <tr class="">
+                   <td colspan="6">
+                       <!-- 占位一行 -->
+                   </td>
+               </tr>
+              {volist name="list" id="val"}
+               <tbody>
+               <tr class="goods-tr-bg">
+
+                   <td colspan="8">
+                       <span>订单ID：{$val.order_id}</span>
+                       <span>下单时间：{$val.add_time|date='Y-m-d H:i:s',###}</span>
+                       <span>订单编号：{$val.order_sn}</span>
+                   </td>
+               </tr>
+               {foreach $val.extend_order_goods as $k=> $goods_info}
+               <tr class="goods-tr-t0">
+                   <td>
+                       <a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}" target='_blank'><img class="bt-images" src="{$goods_info.goods_image}@w100_h70.png" alt=""></a>
+                   </td>
+                   <td class="text-left">
+                       <dl class="goods-name">
+                           <dt><a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}" target='_blank'>{$goods_info.goods_name}</a></dt>
+                           <dd>
+                               {volist name="$goods_info.sku_name" key="key" id="value"}
+                                    {$key} : {$value}<br>
+                               {/volist}
+                           </dd>
+                       </dl>
+                   </td>
+                   <td>{$goods_info.goods_price}</td>
+                   <td>{$goods_info.goods_num}</td>
+                   {if ($val.goods_count > 1 && $k == 0) || ($val.goods_count == 1)}
+                   <td rowspan="{$val.goods_count}" {if ($val.goods_count > 1)} style="border-left:1px solid #ddd"{/if} >
+                       <dl class="goods-name">
+                           <dt>{$val.order_amount}
+                               {if $val.order_amount < $val.goods_real_amount}
+                               <span style="color: red;">(优惠了{$val.order_yhj}元)</span>
+                               {/if}</dt>
+                           <dd>
+                               {if($val.shipping_fee==0)}
+                               （免运费）
+                               {else/}
+                               运费：{$val.shipping_fee}
+                               {/if}
+                           </dd>
+                       </dl>
+                   </td>
+                   <td rowspan="{$val.goods_count}">
+                       <p>
+                           {if $val.refund_state == 0}
+                           {$val.state_desc}
+                           {elseif $val.refund_state == 1}
+                           <span class="color_red">售后处理中</span>
+                           {elseif $val.refund_state == 2}
+                               {if $val.lock_state == 1}
+                               <span class="color_red">售后已完成</span>
+                               {else}
+                               <span class="color_red">售后申请被拒绝</span>
+                               {/if}
+                           {/if}
+                       </p>
+                       <p><a href="{:url('Seller/Order/orderDetail')}?order_id={$val.order_id}">{if($val.if_lock || $val.refund_state == 2)}售后详情{else}订单详情{/if}</a></p>
+                   </td>
+                   <td rowspan="{$val.goods_count}">{$val.shipping_code}</td>
+                   <!-- 交易操作 -->
+                   <td rowspan="{$val.goods_count}"  class="table-handle">
+                       {if($val.if_modify_price)}
+                       <button type="button" class="btn btn-warning mb5" onclick="modify_price('{$val.order_id}')">修改价格</button>
+                       {/if}
+                       {if($val.if_cancel)}
+                       <button type="button" class="btn btn-warning mb5" onclick="order_cancel('{$val.order_sn}')">取消订单</button>
+                       {/if}
+                       {if($val.if_send)}
+                       <button type="button" class="btn btn-warning mb5" onclick="order_send('{$val.order_id}')">立即发货</button>
+                       {/if}
+                       {if($val.edit_deliver)}
+                       <button type="button" class="btn btn-warning mb5" onclick="edit_deliver('{$val.order_id}',1)">更新物流</button>
+                       {/if}
+
+                       {if($val.refundAfter)}
+                       <button type="button" class="btn btn-warning mb5" style="width: 78px" onclick="order_refund_verify('{$val.order_id}')">审核</button>
+                       {/if}
+                   </td>
+                   {/if}
+               </tr>
+               {/foreach}
+               </tbody>
+               {/volist}
+               </table>
+           {else}
+           <table class="table mt20">
+               <tbody>
+               <tr class="goods-tr-bg">
+                   <td colspan="8">
+                       <span>没有相关的订单</span>
+                   </td>
+               </tr>
+
+           </table>
+           {/if}
+           {$page}
+           </div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<link rel="stylesheet" href="{$Think.JS_PATH}artDialog/skins/default.css" media="screen" title="no title" charset="utf-8">
+<script type="text/javascript">
+
+    $('#outorder').click(function(){
+        window.location='outOrder';
+    });
+
+    //取消订单操作
+    function order_cancel(orderId){
+        layer.open({
+            type: 2,
+            title: '取消订单',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['380px', '290px'],
+            content: ["orderCancel?orderId="+orderId,'no'], //iframe的url
+            success:function(layero,index){
+
+            },
+            end: function () {
+            }
+        });
+    }
+
+    //修改价格操作
+    function modify_price(orderId){
+        layer.open({
+            type: 2,
+            title: '修改价格',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['400px', '280px'],
+            content: ["orderModifyPrice?orderId="+orderId,'no'], //iframe的url
+            end: function () {
+
+            }
+        });
+    }
+
+    //立即发货操作
+    function order_send(orderId){
+        layer.open({
+            type: 2,
+            title: '立即发货',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['600px', '420px'],
+            content: ["orderSend?orderId="+orderId,'no'], //iframe的url
+            success:function(layero,index){
+            },
+            end:function(){
+            }
+        });
+    }
+
+    //删除订单操作
+    function order_delete(orderId){
+        layer.open({
+            type: 2,
+            title: '删除订单',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['260px', '180px'],
+            content: ["orderDelete?orderId="+orderId,'no'], //iframe的url
+            success:function(layero,index){
+            },
+            end:function(){
+            }
+        });
+    }
+
+    //退款操作
+    function order_refund(orderId){
+        layer.open({
+            type: 2,
+            title: '退款',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['300px', '50%'],
+            content: ["orderRefund?orderId="+orderId,'no'], //iframe的url
+            success:function(layero,index){
+            },
+            end:function(){
+            }
+        });
+    }
+
+    //退款审核
+    function order_refund_verify(orderId){
+        layer.open({
+            type: 2,
+            title: '退款审核',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['440px', '525px'],
+            content: ["orderRefundVerify?orderId="+orderId,'auto'], //iframe的url
+            success:function(layero,index){
+                if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){
+                    $(".layui-dbd").css("height","525px");
+                }
+            },
+            end:function(){
+            }
+        });
+    }
+
+    //2017-2-28  yp 增加手动输入物流信息的输入框
+    function edit_deliver(orderId,s){
+        layer.open({
+            type: 2,
+            title: '编辑物流',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['600px', '520px'],
+            content: ["{:url('seller/delivery/editDeliver')}/orderId/"+orderId+"/s/"+s,'no'], //iframe的url
+        });
+    }
+</script>

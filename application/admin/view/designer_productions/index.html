@@ -1,0 +1,106 @@
+<div class="col-form">
+    <form class="form-inline" role="form" action="index" style="float:left;">
+        <div class="form-group">
+            <select name="searchType" class="form-control">
+                {foreach $search as $key => $val}
+                <option value="{$key}" {if $searchType == $key}selected="selected"{/if}>{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="input-group">
+            <input type="text" class="form-control" name="searchValue" value="{$searchValue}">
+            <span class="input-group-btn">
+              <button class="btn btn-default search" type="button">搜索</button>
+            </span>
+        </div>
+    </form>
+    <ul>
+        <li class="text-right" style="margin-right: 20px;">
+            <a href="add" class="btn btn-info">添加作品</a>
+            <a href="javascript:void(0);" class="btn btn-info" id="editBtn">编辑</a>
+            <a href="javascript:void(0);" class="btn btn-info" id="delBtn">删除</a>
+        </li>
+    </ul>
+</div>
+<div class="photo-container mt20 mb30">
+    <div class="row table-form-default mb30">
+        {foreach $productions as $production}
+        <div class="col-xsd-2">
+            <div class="thumbnail">
+                <img src="{$production.imgs}@w170_h170.png" alt="..." style="width: 170px;height: 170px;">
+                <div class="caption">
+                    <p>名称：{if condition="mb_strlen($production.production_name,'utf-8') > 7"}{$production.production_name|mb_substr=0,7,'utf-8'}...{else /}{$production.production_name}{/if}</p>
+                    <p>风格：{$style[$production.style]|default=''}</p>
+                    <p>设计师：{$designerList[$production.designer_id]['name']}</p>
+                    <p>上传时间：{$production.upload_time}</p>
+                </div>
+                <div class="chk-one-photo chk-one">
+                    <input type="checkbox" id="{$production.production_id}" class="chk_1" />
+                    <label for="{$production.production_id}" class="lab-t"></label>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+    {$productions->render();}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        //清除选中缓存
+        $('.chk_1').each(function (index, domEle) {
+            if ($(this).is(':checked')) {
+                $(this).prop('checked', false);
+            }
+        });
+        //编辑按钮
+        $('#editBtn').click(function (event) {
+            var id = '';
+            $('.chk_1').each(function (index, domEle) {
+                if ($(this).is(':checked')) {
+                    id = $(this).attr('id');
+                    return false;
+                }
+            });
+            if (id != '') {
+                location.href = 'edit?id='+id;
+            }else{
+                layer.msg('请选择要编辑的产品');
+            }
+        });
+
+        //删除按钮
+        $('#delBtn').click(function (event) {
+            var obj = $('.thumbnail').find('input[type="checkbox"]:checked');
+            if( obj.size() == 0 ){
+                layer.msg('请选择删除商品');
+                return false;
+            }
+            var id_str = '';
+            obj.each(function (index, domEle) {
+                id_str += $(this).attr('id')+',';
+            });
+            id_str = id_str.substr(0, (id_str.length - 1));
+            //询问框
+            layer.open({
+                content: '您确定要删除吗？'
+                ,btn: ['确定', '不要']
+                ,yes: function(index){
+                    drop_item(id_str);
+                }
+            });
+        });
+
+        //删除作品
+        function drop_item(id_str) {
+            $.getJSON('deleteChecked?id=' + id_str, function (result) {
+                layer.msg(result.msg);
+                if (result.code == 1) {
+                    location.reload();
+                }
+            });
+        }
+    })
+</script>

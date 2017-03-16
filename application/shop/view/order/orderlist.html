@@ -1,0 +1,248 @@
+    <!-- content start -->
+    <div class="container">
+        <ul class="list-box content-box mt-fina-raise mt-odr-list">
+            <li class="goods-sort">
+                <ul class="marbox">
+                    <li class="mt-xb">
+                        <div>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </li>
+                    <li class="mt-position">
+                        <h3><a href="{:url('/shop/user/index')}">个人中心</a> > <a href="{:url('shop/order/orderList')}">我的订单</a></h3>
+                    </li>
+                    <li class="mt-fn-bt">
+                        <p><a href="{:url('shop/order/orderList')}" class="cus">商品订单</a> </p>
+                        <p><a href="{:url('shop/logs_order/lists')}">整装订单</a></p>
+                        <p><a href="#">分期订单</a></p>
+                        <p><a href="{:url('shop/crowdfunding_order/lists')}">众筹订单</a></p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="list-goods-item shopp-item marbox mt-odr-list">
+            <li class="mt-hb">
+                <span></span>
+                <span></span>
+            </li>
+            <li class="shop-seach">
+                <div>
+                    <form class="cart_search" onsubmit="return valiSearch('cart_search');" action="{:url('shop/order/orderList')}" method="get">
+                        <input type="text" id="cart_search" name="goods_name" class="text goods_name_1" value="{if !empty($goods_name)}{$goods_name}{/if}" autocomplete="off" placeholder="">
+                        <ul class="cache-seach">
+                        </ul>
+                        {if !empty($style)}
+                        <input type="hidden" name="style" value="{$style}">
+                        {/if}
+
+                        <input type="submit" value="" class="sub">
+                    </form>
+                </div>
+            </li>
+            <li class="mt-list-box">
+                <div class="mt-odr-bt">
+                    <p><a href="{:url('shop/order/orderList')}?style=all" {if $style =='all'}class="combg-b"{/if}>所有订单</a></p>
+                    <p><a href="{:url('shop/order/orderList')}?style=new" {if $style =='new'}class="combg-b"{/if}>待付款</a>{if($array.new > 0)}<span>{$array.new}</span>{/if}</p>
+                    <p><a href="{:url('shop/order/orderList')}?style=pay" {if $style =='pay'}class="combg-b"{/if}>待发货</a>{if($array.pay > 0)}<span>{$array.pay}</span>{/if}</p>
+                    <p><a href="{:url('shop/order/orderList')}?style=send" {if $style =='send'}class="combg-b"{/if}>待收货</a>{if($array.send > 0)}<span>{$array.send}</span>{/if}</p>
+                    <p><a href="{:url('shop/order/orderList')}?style=delivery" {if $style =='delivery'}class="combg-b"{/if}>已收货</a>{if($array.delivery > 0)}<span>{$array.delivery}</span>{/if}</p>
+                    <p><a href="{:url('shop/order/orderList')}?style=refund" {if $style =='refund'}class="combg-b"{/if}>退款/售后</a>{if($array.refund > 0)}<span>{$array.refund}</span>{/if}</p>
+                </div>
+            </li>
+            {if count($list) > 0 && is_array($list)}
+            {volist name="list" id="val"}
+            <li class="order-goods order-goods-table">
+                <div class="og-box">
+                    <table class="combg-h">
+                        <tr>
+                            <th class="w135"></th>
+                            <th class="w230">宝贝</th>
+                            <th>单价（ <span>元</span> ）</th>
+                            <th>数量</th>
+                            <!--<th>商品操作</th>-->
+                            <th>实付款（ <span>元</span> ）</th>
+                            <th>交易状态</th>
+                            <th class="w230">交易操作</th>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="order-goods-table-check">
+                                <div>
+                                    <form>
+                                        <!--<input type="checkbox" />-->
+                                    </form>
+                                    <sapn>{$val.add_time|date='Y-m-d H:i:s',###}</sapn>
+                                </div>
+                                <div>
+                                    订单号：<span>{$val.order_sn}</span>
+                                </div>
+                                <div>
+                                    <a class="qq-kf" href="javascript:openQQ('{$setting.qq}')">QQ售中客服</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {foreach $val.extend_order_goods as $k=> $goods_info}
+                        <tr>
+                            <td>
+                                <a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}" class="img"><img class="lazy" data-original="{$goods_info.goods_image}@w133_h121.png" alt=""/></a>
+                            </td>
+                            <td class="text-left">
+                                <p class="bt"><a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}">{$goods_info.goods_name}</a></p>
+                                <p>
+                                    <span>
+                                        {volist name="$goods_info.sku_name" key="key" id="value"}
+                                            {$key} : {$value}<br>
+                                        {/volist}
+                                    </span>
+                                </p>
+                            </td>
+                            <td>
+                                <p>{$goods_info.goods_price}</p>
+                            </td>
+                            <td>
+                                <p>{$goods_info.goods_num}</p>
+                            </td>
+                            {if ($val.goods_count > 1 && $k == 0) || ($val.goods_count == 1)}
+                            <!--<td rowspan="{$val.goods_count}">-->
+                                <!--<p>{$val.state_desc}</p>-->
+                            <!--</td>-->
+                            <td rowspan="{$val.goods_count}" {if $val.goods_count > 1} style="border-left:1px solid #5d4611"{/if}>
+                                <p class="price">{$val.order_amount}</p>
+                                <p>{if($val.shipping_fee==0)}
+                                    （免运费）
+                                    {else/}
+                                    （含运费：{$val.shipping_fee})
+                                    {/if}
+                                </p>
+                            </td>
+                            <td rowspan="{$val.goods_count}" style="width: 138px;">
+
+                                <p class="state">
+                                    {if $val.refund_state == 0 || $val.refund_state == 3}
+                                    {$val.state_desc}
+                                    {elseif $val.refund_state == 1}
+                                    售后处理中
+                                    {elseif $val.refund_state == 2}
+                                        {if $val.lock_state == 1}
+                                        售后已完成
+                                        {else}
+                                        售后申请被拒绝
+                                        {/if}
+                                    {/if}
+                                </p>
+
+                                {if $val.refund_state == 0 || $val.refund_state == 3}
+                                <p><a href="{:url('shop/order/orderdetail')}?order_id={$val.order_id}" class="a-info">订单详情</a></p>
+                                {else if $val.refund_state == 2 || $val.refund_state == 1}
+                                <p><a href="{:url('shop/order/orderAfter')}?order_id={$val.order_id}" class="a-info">售后详情</a></p>
+                                {/if}
+                            </td>
+                            <td rowspan="{$val.goods_count}">
+                                {if $val.order_type == 1}
+                                    {if ($val.if_payment)}
+                                    <p class="mb10"><a href="{:url('/shop/buy/pay')}?pay_sn={$val.pay_sn}" class="pay">付款</a></p>
+                                    {/if}
+                                    {if ($val.if_receive)}
+                                    <p class="mb10"><a href="javascript:;" class="pay" onclick="order_receive('{$val.order_id}')">确认收货</a></p>
+                                    {/if}
+                                    <!--{if($val.if_deliver)}-->
+                                    <!--<p class="mb10"><a href="javascript:;" class="pay">查看物流</a>-->
+                                    <!--{/if}-->
+                                    {if($val.if_cancel)}
+                                    <p class="mb10"><a href="javascript:;" class="pay" onclick="order_cancel('{$val.order_id}')">取消订单</a></p>
+                                    {/if}
+                                    {if($val.if_refund)}
+                                        {if $val.order_state >= 30}
+                                            <p class="mb10"><a href="{:url('/shop/order/orderRefund')}?order_id={$val.order_id}" class="pay">申请退货</a></p>
+                                        {else}
+                                            <p class="mb10"><a href="{:url('/shop/order/orderRefund')}?order_id={$val.order_id}" class="pay">申请退款</a></p>
+                                        {/if}
+                                    {/if}
+                                {else/}
+                                    {if ($val.if_receive)}
+                                    <p class="mb10"><a href="javascript:;" class="pay" onclick="order_receive('{$val.order_id}')">确认收货</a></p>
+                                    {/if}
+                                    <!--{if($val.if_deliver)}-->
+                                    <!--<p class="mb10"><a href="javascript:;" class="pay">查看物流</a>-->
+                                        <!--{/if}-->
+                                {/if}
+                            </td>
+                            {/if}
+                        </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </li>
+            {/volist}
+            {else}
+            <li class="order-goods order-goods-table">
+                <div class="og-box" style="height: 200px;text-align: center;font-size: 20px;">
+                    <p>您还没有此类相关的订单</p>
+                </div>
+            </li>
+            {/if}
+            <li class="order-goods-table-pages" {if strlen($page) == 0} style="margin-top:50px;" {/if}>
+                <div>
+                    <div class="clear"></div>
+                    {$page}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- content end -->
+    <script type="text/javascript">
+
+        //确认收货
+        function order_receive(orderId)
+        {
+            layer.open({
+                type: 2,
+                title: false,
+                shadeClose: true,
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                shade: 0.8,
+                area: ['450px', '255px'],
+                content: ['{:url("shop/order/orderReceive")}?orderId='+orderId+'&rand='+Math.random(),'no']
+            });
+        }
+
+        //取消订单操作
+        function order_cancel(orderId){
+            layer.open({
+                type: 2,
+                title: false,
+                shadeClose: true,
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                shade: 0.8,
+                area: ['450px', '220px'],
+                content: ['{:url("shop/order/ordercancel")}?orderId='+orderId,'no'] //iframe的url
+            });
+        }
+        //删除订单操作
+        function order_delete(orderId){
+            layer.open({
+                type: 2,
+                title: false,
+                shadeClose: true,
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                shade: 0.8,
+                area: ['450px', '220px'],
+                content: ['{:url("shop/order/orderdelete")}?orderId='+orderId,'no'] //iframe的url
+            });
+        }
+    </script>
+    <script language="javascript">
+        var sobj  = { placeholder: "/static/shop/images/loading.jpg",effect: "fadeIn"}
+        //图片加载
+        $("img.lazy").lazyload(sobj);
+
+    </script>

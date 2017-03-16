@@ -1,0 +1,203 @@
+<script src="{$Think.JS_PATH}/jquery.lazyload.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}/jquery.colorbox-min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}/swf/swfobject_modified.js"></script>
+<!-- content start -->
+<div class="container">
+    <ul class="list-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="">
+                    <h3><span>产品分类</span></h3>
+                </li>
+                <li class="mt-add">
+                    <h3>您已选择</h3>
+                    <div class="add">
+                        {if condition="isset($topSelect)"}
+                            {foreach $topSelect as $k=>$v}
+                                {$v}
+                            {/foreach}
+                        {/if}
+
+                        {if condition="isset($topSelectSon)"}
+                            {foreach $topSelectSon as $k=>$v}
+                                {$v}
+                            {/foreach}
+                        {/if}
+
+
+                        {if condition="isset($select)"}
+                            {foreach $select as $k=>$v}
+                                {$v}
+                            {/foreach}
+                        {/if}
+
+
+
+                        <!--<p>-->
+                            <!--<span>风格 | 宫廷法式</span>-->
+                            <!--<span class="close"></span>-->
+                        <!--</p>-->
+                        <!--<p>-->
+                            <!--<span>风格 | 宫廷法式</span>-->
+                            <!--<span class="close"></span>-->
+                        <!--</p>-->
+                        <a href="/shop/Logs/index" class="clear-main">清除选择</a>
+                    </div>
+
+                </li>
+                {if condition="!empty($topCategory)"}
+                <li class="mt-add mt-xfn">
+                    <h3>分类</h3>
+                    <div class="add">
+                        {foreach $topCategory as $k=>$v}
+                            {$v}
+                        {/foreach}
+
+                    </div>
+                    <div class="mt-more">
+                        <!--<p>显示更多分类</p>-->
+                    </div>
+                </li>
+                {/if}
+                {if condition="!empty($sonCategory)"}
+                <li class="mt-add mt-xfn">
+                    <h3>组装</h3>
+                    <div class="add">
+                        {foreach $sonCategory as $k=>$v}
+                            {$v}
+                        {/foreach}
+                    </div>
+                </li>
+                {/if}
+
+                {if condition="isset($feature)"}
+                {foreach $feature as $k=>$v}
+                <li class="mt-add mt-xfn">
+                    <h3>{$k}</h3>
+                    <div class="add">
+                        {if condition="isset($feature[$k])"}
+                            {foreach $feature[$k] as $key=>$val}
+                                {$val}
+                            {/foreach}
+                        {/if}
+                    </div>
+                </li>
+                {/foreach}
+                {/if}
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item marbox">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        {if condition="isset($list) && !empty($list)"}
+        <li class="goods-ym">
+            {foreach $list as $K=>$v}
+            <div class="fl">
+                <a href="{:url('shop/logs/detail')}?id={$v.id}" class="mt-zu-box"><img data-original="{$v.cover}@w561_h337.png" class="mt-box lazy" width="561" height="337" alt="" /></a>
+                <ul>
+                    <li>
+                        <p class="fl"><a href="{:url('shop/logs/detail')}?id={$v.id}" class="bt">{if condition="mb_strlen($v.name,'utf-8') > 30"}{$v.name|mb_substr=0,30,'utf-8'}...{else /}{$v.name}{/if}</a></p>
+                        {if $v.fav == 1}
+                        <p class="fr collect" dataId = "{$v.id}" style="border-color: rgb(227, 105, 106); color: rgb(227, 105, 106); width: 50px; background-image: url({$Think.IMG_PATH}ico-x-1.png);">已收藏</p>
+                        {else/}
+                        <p class="fr collect" dataId = "{$v.id}">点击收藏</p>
+                        {/if}
+                    </li>
+                    <li>
+                        <p class="fl">面积：{$v.acreage}㎡</p>
+                        <p class="fr">价格：￥ <span class="hs">{$v.prize}</span> 万元 </p>
+                        <!--<p class="fr">价格：￥ <span class="hs">88</span> 万元 (可省<span class="hs">13</span>万元)</p>-->
+                    </li>
+                    <li>
+                        <p class="fl">已有<span class="hss">{$v.appointment_number}</span>人购买</p>
+                        <p class="fr"><a href="{:url('shop/logs/detail')}?id={$v.id}" class="btn-info">查看详情</a></p>
+                    </li>
+                </ul>
+            </div>
+
+            {/foreach}
+        </li>
+            {else /}
+        <li class="mt-content goods-tc">
+            <div class="mt-content goods-tc">
+                <div class="og-box">
+                    <div class="ncc-receipt-info">
+                        <div class="ncc-receipt-info-title">
+                            <h1 style="color: #c98c8c">抱歉，没有搜索到{if condition='isset($name)'}与"{$name}"{/if}相关的商品</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </li>
+            {/if}
+
+        <li>
+            <div class="clear"></div>
+            <div class="pagelist"  style="margin-top:100px;">
+                {$page}
+                <!--<ul>-->
+                    <!--<li><a href="#"> 上一页 </a></li>-->
+                    <!--<li><a href="#" class="cus"> 1 </a></li>-->
+                    <!--<li><a href="#"> 2 </a></li>-->
+                    <!--<li><a href="#"> 3 </a></li>-->
+                    <!--<li><a href="#"> 4 </a></li>-->
+                    <!--<li><a href="#"> 下一页 </a></li>-->
+                <!--</ul>-->
+            </div>
+        </li>
+    </ul>
+</div>
+<!-- content end -->
+
+<script type="text/javascript">
+    $(function() {
+        $("img.lazy").lazyload({
+            placeholder: "{$Think.IMG_PATH}loading.jpg",
+            effect: "fadeIn"
+        })
+
+        //收藏以及取消整装商品
+        $('.collect').click(function() {
+            //判断是否登录
+            var login   = parseInt('{$isLogin}');
+            if( login == 0 ) {
+                layer.msg('请先登录');
+                window.location.href = '{:url("shop/login/login")}';
+            }
+            var $_this = $(this);
+            var dataId = $(this).attr('dataId');
+            if($(this).text() == '点击收藏'){
+                $.getJSON('{:url("api/Favorites/addFav")}?data=' + dataId, function (result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $_this.css({
+                            'border-color':'#e3696a',
+                            'color':'#e3696a',
+                            'width':'50px',
+                            'background': "url({$Think.IMG_PATH}ico-x-1.png) no-repeat 3px 2px"
+                        })
+                        $_this.text('已收藏')
+                    }
+                })
+            }else{
+                $.getJSON('{:url("api/Favorites/delFav")}?data=' + dataId, function (result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $_this.removeAttr('style');
+                        $_this.text('点击收藏')
+                    }
+                });
+            }
+        });
+    })
+</script>

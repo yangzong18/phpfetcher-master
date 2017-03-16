@@ -1,0 +1,116 @@
+
+<div class="col-form">
+    <form class="form-inline" role="form">
+        <span>标题</span>
+        <div class="input-group">
+            <input type="text" name="title" class="form-control text-ra" value="{$search.title}">
+        </div>
+
+        <span>文章分类</span>
+        <div class="form-group">
+            <select name="article_category_id" class="form-control">
+                <option value="">请选择...</option>
+                {volist name="cacheData" id="data"}
+                    {if condition="($search.article_category_id == $data.id)" }
+                <option value="{$data.id}" selected="selected">{$data.name}</option>
+                    {else /}
+                <option value="{$data.id}">{$data.name}</option>
+                    {/if}
+                {/volist}
+            </select>
+        </div>
+
+        <span>显示</span>
+        <div class="input-group">
+            <select name="show" class="form-control">
+                <option value="">请选择...</option>
+                <option value="1" {if condition="($search.show == 1)" } selected="selected" {/if}>是</option>
+                <option value="0" {if condition="($search.show == 0)" } selected="selected" {/if}>否</option>
+            </select>
+            <span class="input-group-btn">
+                <button class="btn btn-default search" type="button">搜索</button>
+            </span>
+        </div>
+    </form>
+</div>
+
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>可以通过修改排序的数字编号来调整顺序</p>
+            <p><i class="icon-circle"></i>区别于系统文章，可在文章列表页点击查看</p>
+            <p><i class="icon-circle"></i>在配置文章地址的时候，请填写{$Think.HTTP_SITE_HOST}/shop/article/detail?id=ID(ID为列表中的ID)</p>
+        </li>
+    </ul>
+</div>
+
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10">
+                <!-- 商品图片占位 -->
+            </th>
+            <th class="">排序</th>
+            <th class="w100">ID</th>
+            <th class="">标题</th>
+            <th class="w150">文章分类</th>
+            <th class="w150">显示</th>
+            <th class="w150">添加时间</th>
+            <th class="w150">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="6">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+
+        {volist name="tblRows" id="data"}
+        <tr class="goods-tr-t0 chk-one">
+            <td>
+                <input type="checkbox" id="checkbox_a_{$data.id}" class="chk_1 data_check" value="{$data.id}"/>
+                <label for="checkbox_a_{$data.id}" class="lab-t"></label>
+            </td>
+            <td>
+                <div class="one-text sort">
+                    <input type="text" class="form-control h30 w50" key-id="{$data.id}" value="{$data.sort}">
+                </div>
+            </td>
+            <td>{$data.id}</td>
+            <td>{$data.title}</td>
+            <td>{$data.article_category_name}</td>
+            <td>{$data.show}</td>
+            <td>{$data.time}</td>
+            <td class="table-handle">
+                <span>
+                    <a href="edit?id={$data.id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a class="js-ajax-delete" href="delete?id={$data.id}"><i class="icon-trash"></i>删除</a>
+                </span>
+            </td>
+        </tr>
+        {/volist}
+
+        <tr>
+            <td>
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="5">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default delete">删除</button>
+                </div>
+            </td>
+        </tr>
+        {$tblRows->render();}
+    </table>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

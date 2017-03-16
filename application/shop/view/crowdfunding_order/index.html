@@ -1,0 +1,313 @@
+<div class="container">
+    <ul class="list-box content-box order-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('shop/crowdfunding/index')}">众筹商品</a>  > <a href="javascript:;">订单生成</a></h3>
+                </li>
+                <li class="order-lc">
+                    <div class="cus">
+                        <p>订单生成</p>
+                        <span></span>
+                    </div>
+                    <div class="">
+                        <p>用户付款</p>
+                        <span></span>
+                    </div>
+                    <div class="">
+                        <p>商家发货</p>
+                        <span></span>
+                    </div>
+                    <div class="">
+                        <p>确认收货</p>
+                    </div>
+
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="cnt-box-item order-adds marbox">
+        <li class="bt">
+            <h3>收货地址</h3>
+        </li>
+        <li>
+            <div class="mt-number">
+                <div class="person" style="display: none">
+                    <p>选择收货地址</p>
+                </div>
+                <div class="detail">
+                    <ul>
+                        <li class="adds" style="display: none">
+                            <select class="comm-select" name="" >
+                            </select>
+                        </li>
+                        <li class="adds-info" style="display: none">
+                            <p class="go-into">详细地址 <span id="address_info"></span></p>
+                            <div>
+                                <p>收货人 <span id="true_name"></span></p>
+                                <p>联系电话 <span id="phone"></span></p>
+                            </div>
+                        </li>
+                        <li class="add-rem">
+                            <p><a  class="add-adds" href="javascript:">添加地址</a></p>
+                            <p><a  class="alter-adds" href="javascript:" style="display: none">修改地址</a></p>
+                            <input type="hidden" id="province" value="">
+                            <input type="hidden" id="city" value="">
+                            {if condition="$servicePoint"}
+                            <input type="hidden" value="{$servicePoint.url}" id="near-store">
+                            {/if}
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="mt-link-shop">
+                    <a href="javascript:" class="get-near-store">查看附近门店>></a>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+    <ul class="cnt-box-item order-goods marbox">
+        <div class="og-box">
+            <form id="add_form" action="{:url('shop/crowdfunding_order/add')}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="address_id" value=""/>
+
+                <table>
+                    <tr>
+                        <th class="w135"></th>
+                        <th class="w230 text-left">宝贝</th>
+                        <th class="w230">时间</th>
+                        <th class="w100">众筹进度</th>
+                        <th>单价（ <span>元</span> ）</th>
+                        <th>数量</th>
+                        <th>实付款（ <span>元</span> ）</th>
+                        <th>交易状态</th>
+                    </tr>
+                    <input type="hidden" name="goods_id" value="{$result.goods_id}|{$result.goods_number}"/>
+                    <tr>
+                        <td>
+                            <a href="{:url('shop/crowdfunding/detail')}?goodsId={$result.goods_id}" class="img"><img src="{$result.image_main}@w133_h121.png" alt="" width="133" height='121' /></a>
+                        </td>
+                        <td class="text-left">
+                            <p class="bt"><a href="{:url('shop/crowdfunding/detail')}?goodsId={$result.goods_id}">{$result.goods_name}</a></p>
+                            <p>
+
+                                <span>{if condition="isset($result.type)"}{$result.type}{/if}{if condition="isset($result.specification)"}{$result.specification}{/if}</span>
+
+                            </p>
+                        </td>
+                        <td class="mt-bd">
+                            <p><span>{$result.start_at|date="Y-m-d H:i",###}-{$result.end_at|date="Y-m-d H:i",###}</span></p>
+                        </td>
+                        <td>
+                            <p>
+                                <span>{$result.progress}%</span>
+                            </p>
+                        </td>
+                        <td>
+                            <p>{$result.one_price}</p>
+                        </td>
+                        <td>
+                            <p>{$result.goods_number}</p>
+                        </td>
+                        <td>
+                            <p class="price">{$result.pay_total_price}</p>
+                            <p>（含运费：{$result.freight}）</p>
+                        </td>
+                        <td>
+                            <p class="state">待确认</p>
+                        </td>
+                    </tr>
+
+                    <tr class="sub">
+                        <td colspan="7" class="text-right">
+                            <input type="button" class="submit" value="提交订单" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+    </ul>
+</div>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jquery.validate.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.submit').click(function() {
+            $('textarea[nctype="remark"]').each(function(){
+                var value = $(this).val();
+                if(value.length >= 200){
+                    layer.msg('备注字符长度不能超过200');
+                    return false;
+                }
+            });
+            $('input[nctype="phone"]').each(function(){
+                var value = $(this).val();
+                var length = value.length;
+                var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+                var tel = /^(\d{3,4}-?)?\d{7,9}$/g;
+                if(!((tel.test(value) || (length==11 && mobile.test(value)) || value == '输入电话号码'))){
+                    layer.msg('请输入正确的电话话码false');
+                    return false;
+                }
+            });
+            var text = $(this).val();
+            //按钮文案、状态修改
+            $(this).val(text + '中...').prop('disabled', true).addClass('disabled');
+            $('#add_form').submit();
+        });
+        //  加载所有的收获地址
+        $.ajax({
+            type: "post",
+            url: "{:url('shop/address/getAddress')}", // type=1表示查询省份
+            data: {"member_id": "{$member_id}"},
+            dataType: "json",
+            success: function(data) {
+                if(data.data.length > 0){
+                    display();
+                    $.each(data.data, function(i, item) {
+                        if(item['mob_phone']){
+                            item['phone'] = item['mob_phone'];
+                        }else{
+                            item['phone'] = item['tel_phone'];
+                        }
+                        $(".comm-select").append("<option value='" + item['address_id'] + "'>"+item['area_info']+item['address']+"-"+item['true_name']+"-"+item['phone']+"</option>");
+                        if(i == 0){
+                            $('#province').val(item['province_id']);
+                            $('#city').val(item['city_id']);
+                            $('#address_info').html(item['area_info']+item['address']);
+                            $('#true_name').html(item['true_name']);
+                            $('#phone').html(item['phone']);
+                            $('input[name="address_id"]').val(item['address_id']);
+                        }
+                    });
+                }
+            }
+        });
+
+        $('.comm-select').change(function(){
+            if($(this).val() <= 0){
+                layer.msg('参数错误');
+            }else{
+                $.ajax({
+                    type: "post",
+                    url: '{:url("shop/address/getaddressone")}',
+                    data: {"address_id": $(this).val()},
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code == 0){
+                            layer.msg(data.msg);
+                        }else{
+                            $('#province').val(data.data['province_id']);
+                            $('#city').val(data.data['city_id']);
+                            $('#address_info').html(data.data['area_info']+data.data['address']);
+                            $('#true_name').html(data.data['true_name']);
+                            if(data.data['mob_phone']){
+                                data.data['phone'] = data.data['mob_phone'];
+                            }else{
+                                data.data['phone'] = data.data['tel_phone'];
+                            }
+                            $('#phone').html(data.data['phone']);
+                            $('input[name="address_id"]').val(data.data['address_id']);
+                        }
+                    }
+                });
+            }
+        })
+        $('.add-rem .add-adds').click(function() {
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['612px', '520px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                content:  '{:url("shop/buy/addAddress")}?random=Math.random()'
+            });
+        })
+        $('.add-rem .alter-adds').click(function() {
+            var address_id = $(".comm-select").val();
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['612px', '580px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                content: '{:url("shop/buy/editaddress")}?address_id='+address_id+'&random=Math.random()'
+            });
+        })
+        function display(){
+            $('.person').show();
+            $('.adds').show();
+            $('.adds-info').show();
+            $('.alter-adds').show();
+        }
+        //查看附件门店 xym
+        $('.get-near-store').click(function(){
+            var newTab=window.open('about:blank');
+            if($('#address_info').text().length>0){
+                //有收货地址
+                var address_id = $(".comm-select").val();
+                $.ajax({
+                    type: "post",
+                    url: '{:url("shop/address/getaddressone")}',
+                    data: {"address_id": address_id},
+                    dataType: "json",
+                    async: false,
+                    success: function(data) {
+                        if(data.code == 0){
+                            layer.msg(data.msg);
+                        }else{
+                            $('#province').val(data.data['province_id']);
+                            $('#city').val(data.data['city_id']);
+
+                        }
+                    }
+                });
+                var province_id=$('#province').val();
+                var city_id=$('#city').val();
+                //ajax获得对应province_id,city_id具体值
+                $.ajax({
+                    type: "get",
+                    url: "{:url('api/address/areaName')}",
+                    data: {
+                        province_id:province_id,
+                        city_id:city_id
+                    },
+                    async: false,
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.code == 0){
+                            layer.msg(data.msg);
+                        }else{
+                            var province=data.data['province_name'];
+                            var city=data.data['city_name'];
+                            var store_link=$('#near-store').val()+"&province="+province+"&city="+city;
+                            newTab.location.href=store_link;
+                        }
+                    }
+                })
+            }else{
+                //无收货地址
+                var store_link=$('#near-store').val();
+                newTab.location.href=store_link;
+            }
+
+
+
+        })
+    })
+</script>

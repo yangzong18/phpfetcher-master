@@ -1,0 +1,43 @@
+<!-- 表单组 -->
+<div>
+    <form class="js-ajax-form" action="{:url('api/Cart/loginDo')}" method="post">
+        <form class="" action="loginDo" method="post" id="loginForm">
+            <input type="hidden" name="localCart" id="localCart">
+            <div class="user-item">
+                <p class="fl">用户登录</p>
+                <p class="clear"></p>
+            </div>
+            <div class="form-item">
+                <p class="user"><input type="text" id="account" value="" placeholder="用户名"></p>
+                <p class="pwd"><input type="password" id="password" value="" placeholder="登录密码"></p>
+                <p class="sub"><input type="button" name="name" value="登 录" id="subBtn"></p>
+            </div>
+        </form>
+    </form>
+</div>
+
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jQuery.md5.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        //点击登录按钮
+        $("#subBtn").click(function(){
+            $.post('{:url("shop/Carts/loginDo")}', {
+                account : $("#account").val(),
+                password: $("#password").val(),
+                localCart: localStorage.getItem('cart') ? localStorage.getItem('cart') : ''
+            }, function( response ){
+                if ( response.code == 1 ) {
+                    layer.msg('登录成功');
+                    parent.$('#isReload').val(1);
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(response.msg)
+                }
+            })
+        });
+    })
+
+</script>

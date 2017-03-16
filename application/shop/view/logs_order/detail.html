@@ -1,0 +1,510 @@
+<!-- content start -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="order-details h-content-container">
+            <div class="order-details-head font-color-pink">
+                <a href="{:url('shop/logs_order/lists')}" class="font-color-pink">我的订单</a>
+                &gt;
+                <a href="javascript:void(0)" class="font-color-pink">整装预约详情</a>
+            </div>
+            <div class="order-details-body order-details-body-six">
+                <div>
+                    <p>提交意向</p>
+                    <span></span>
+                </div>
+                <div class="measure ">
+                    <p>免费量房</p>
+                    <span></span>
+                </div>
+                <div class="pay">
+                    <p>支付诚意金</p>
+                    <span></span>
+                </div>
+                <div class="design">
+                    <p>查看效果图</p>
+                    <span></span>
+                </div>
+                <div class="offline">
+                    <p>预约线下</p>
+                    <span></span>
+                </div>
+                <div class="accept">
+                    <p>确认验收</p>
+                </div>
+            </div>
+            <div class="order-details-footer font-color-pink">
+                {$user.member_name}，您好！{$speedMessage[$orderInfo.speed_status][0]}
+            </div>
+        </div>
+        <div class="order-info h-content-container">
+            <div class="order-info-head font-color-gray">
+                <span class="font-color-pink">预约信息：</span>{$speedMessage[$orderInfo.speed_status][1]}
+            </div>
+            <div class="order-info-table order-info-table-order">
+                <input type="hidden" id="orderStatus" value="{$orderInfo.order_status}">
+                <input type="hidden" id="speedStatus" value="{$orderInfo.speed_status}">
+                <input type="hidden" id="orderId" value="{$orderInfo.id}">
+                <input type="hidden" id="style" value="{$logsInfo.category_id}">
+                <table>
+                    <tr class="font-color-white">
+                        <td>订单号</td>
+                        <td>生成日期</td>
+                        <td>预约面积</td>
+                        <td>进度</td>
+                        <td>订单状态</td>
+                    </tr>
+                    <tr class="font-color-pink">
+                        <td>{$orderInfo.order_sn}</td>
+                        <td>{$orderInfo.created_at|date='Y-m-d H:i',###}</td>
+                        <td>{$orderInfo.acreage}m<sup>2</sup></td>
+                        <td class="font-color-blue">{$orderInfo.speed_state}
+                            {if $orderInfo.speed_status == 6 and $commonInfo.is_notify == 1}
+                            <br>
+                            <a href="javascript:void(0);" id ="finish_order" class="font-color-white" style="margin: 0;">确认验收</a>
+                            {/if}
+                        </td>
+                        <td>{$orderInfo.order_state}</td>
+                    </tr>
+                </table>
+            </div>
+            <!--假如进度是待设计或之前的情况,或是已经预约线下-->
+            {if ($orderInfo.speed_status < 3) or ($orderInfo.speed_status == 3 and $commonInfo.design_image == null) or($orderInfo.speed_status == 5) or ($orderInfo.speed_status == 6)}
+            {if $orderInfo.speed_status == 5 or $orderInfo.speed_status == 6}
+            <!--假如预约线下了,需要显示设计师效果图   start-->
+            <div class="order-thumbnail h-content-container">
+                <div class="order-thumbnail-head font-color-pink">
+                    设计师效果图
+                </div>
+                <div class="order-thumbnail-carousel">
+                    <div class="order-thumbnail-carousel-lt font-color-gray">&lt;</div>
+                    <div class="order-thumbnail-carousel-gt font-color-gray">&gt;</div>
+                    {if $commonInfo.design_image neq null}
+                    <ul>
+                        {foreach $commonInfo.design_image as $key => $val}
+                        {foreach $val as $k => $vo}
+                        <li>
+                            <a href="{$vo}" target="_blank"><img src="{$vo}" /></a>
+                        </li>
+                        {/foreach}
+                        {/foreach}
+
+                    </ul>
+                    {/if}
+                </div>
+            </div>
+            <!--假如预约线下了,需要显示设计师效果图   end-->
+            {/if}
+            <!--中意设计-->
+            <div class="order-info-bar">
+                <table>
+                    <tr class="font-color-white">
+                        <td rowspan="2" class="combg-b">
+                            中意<br />
+                            设计
+                        </td>
+                        <td class="w200">缩略图</td>
+                        <td>名称</td>
+                        <td>参考价格（<span class="font-color-pink">万元</span>）</td>
+                        <td></td>
+                    </tr>
+                    <tr class="font-color-gold">
+                        <td>
+                            <a href="{:url('shop/logs/detail', array('id'=>$logsInfo['id']))}"><img src="{$logsInfo.cover}@w135_h123.png" /></a>
+                        </td>
+
+                        <td>
+                            <a href="{:url('shop/logs/detail', array('id'=>$logsInfo['id']))}">
+                                {if condition="mb_strlen($logsInfo.name,'utf-8') > 30"}{$logsInfo.name|mb_substr=0,30,'utf-8'}...{else /}{$logsInfo.name}{/if}
+                            </a>
+                        </td>
+                        <td>{$logsInfo.prize}</td>
+                        <td ></td>
+                    </tr>
+                </table>
+            </div>
+            <!--中意设计师-->
+            <div class="order-info-bar">
+                <table>
+                    <tr class="font-color-white">
+                        <td rowspan="2" class="combg-b">
+                            中意<br />
+                            设计师
+                        </td>
+                        <td class="w200">缩略图</td>
+                        <td>姓名</td>
+                        <td>级别</td>
+                        <td>工作年限</td>
+                    </tr>
+                    <tr class="font-color-gold">
+                        <td class="w200">
+                            <a href="{:url('shop/designers/detail', array('designer_id'=>$designer.designer_id))}"><img src="{$designer['designer_avatar']}@w135_h123.png" /></a>
+                        </td>
+                        <td>
+                            <a href="{:url('shop/designers/detail', array('designer_id'=>$designer.designer_id))}">
+                            {$designer.designer_name}
+                            </a>
+                        </td>
+                        <td>{$designer.level_name}</td>
+                        <td>{$designer.designer_year}年</td>
+
+                    </tr>
+                </table>
+            </div>
+            <!--预约说明-->
+            {if $orderInfo.message != ''}
+            <div class="order-caption h-content-container">
+                <div class="order-caption-head font-color-pink">
+                    预约说明
+                </div>
+                <div class="order-caption-body font-color-gray" style="height:auto;">
+                    {$orderInfo.message}
+                </div>
+            </div>
+            {/if}
+
+            <!--量房数据-->
+            {if $orderInfo.speed_status gt 1}
+            <div class="order-caption h-content-container">
+                <div class="order-caption-head font-color-pink">
+                    量房数据
+                </div>
+                <div class="order-thumbnail-carousel">
+                    <div class="order-thumbnail-carousel-lt font-color-gray">&lt;</div>
+                    <div class="order-thumbnail-carousel-gt font-color-gray">&gt;</div>
+                    <ul>
+                        {foreach $commonInfo.measure_image as $vo}
+                        <li>
+                            <a href="{$vo}" target="_blank"><img src="{$vo}@w378_h227.png" /></a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                <div class="order-finished-body font-color-gray">
+                    {$commonInfo.measure_info.measure_data}
+                </div>
+            </div>
+            {/if}
+
+            <!--户型图-->
+            {if !empty($houseImage) }
+            <div class="order-thumbnail h-content-container">
+                <div class="order-thumbnail-head font-color-pink">
+                    户型图
+                </div>
+                <div class="order-thumbnail-carousel">
+                    <div class="order-thumbnail-carousel-lt font-color-gray">&lt;</div>
+                    <div class="order-thumbnail-carousel-gt font-color-gray">&gt;</div>
+                    <ul>
+                        {foreach $houseImage as $vo}
+                        <li>
+                            <a href="{$vo}" target="_blank"><img src="{$vo}@w378_h227.png" /></a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </div>
+            {/if}
+            {if $orderInfo.order_status == 2 and $orderInfo.speed_status == 2}
+            <a href="{:url('shop/logs_order/pay', array('orderId'=>$orderInfo['id'],'paySn'=>$orderInfo['pay_sn']))}" class="order-thumbnail-pay font-color-white">
+                支付诚意金
+            </a>
+            {/if}
+
+            <!--取消原因-->
+            {if $orderInfo.order_status eq 5 and $orderInfo.speed_status neq 9}
+            <div class="order-caption h-content-container">
+                <div class="order-caption-head font-color-pink">
+                    取消原因
+                </div>
+                <div class="order-caption-body font-color-gray" style="word-break: break-all">
+                    {if $orderInfo.cancel_reason != ''}
+                    {$orderInfo.cancel_reason}
+                    {else/}暂无{/if}
+                </div>
+            </div>
+            {/if}
+
+            <!--线下预约-->
+            {if $orderInfo.is_offline == 1}
+            <div class="order-caption h-content-container">
+                <div class="order-caption-head font-color-pink">
+                    预约线下
+                </div>
+                <div class="order-caption-body font-color-gray" style="word-break: break-all">
+                    设计师：{$designer.designer_name}<br>
+                    时间：{$commonInfo.offline_info.offlineTime}<br>
+                    地址：{$commonInfo.offline_info.address}
+                </div>
+            </div>
+            {/if}
+
+            <!--签订合同-->
+            {if $orderInfo.speed_status > 5 and $commonInfo.contract_info != ''}
+            <div class="order-caption h-content-container">
+                <div class="order-caption-head font-color-pink">
+                    签订合同
+                </div>
+                <div class="order-caption-body font-color-gray" style="word-break: break-all">
+                    时间：{$commonInfo.contract_info.contractTime}<br>
+                    合同编号：{$commonInfo.contract_info.contractNumber}
+                    {if $commonInfo.contract_info.contractDesc != ''}
+                    <br>备注说明：{$commonInfo.contract_info.contractDesc}{/if}
+                </div>
+            </div>
+            {/if}
+
+            <!--进度展示-->
+            {if $orderInfo.speed_status == 6 and !empty($speedList)}
+            <div class="order-process h-content-container">
+                <div class="order-thumbnail-head font-color-pink">
+                    装修进度展示
+                </div>
+                {foreach $speedList as $val}
+                <div class="order-process-title font-color-white combg-b">
+                    {$val.time|date='Y-m-d',###}
+                </div>
+                <div class="order-process-list font-color-gray" style="word-break: break-all;height: auto;">
+                    备注说明：{$val.speedDesc}
+                </div>
+                <div class="order-process-list">
+                    <ul>
+                        {foreach $val.speed_img as $vo}
+                        <li>
+                            <a href="{$vo}" target="_blank"><img src="{$vo}@w378_h227.png"  /> </a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                {/foreach}
+            </div>
+            {/if}
+
+            <!--通知验收-->
+            {if $orderInfo.is_verify == 1}
+            <div class="order-caption h-content-container">
+                <div class="order-caption-head font-color-pink">
+                    通知验收
+                </div>
+                <div class="order-caption-body font-color-gray" style="word-break: break-all">
+                    时间：{$commonInfo.accept_info.finishTime}<br>
+                    备注说明：{$commonInfo.accept_info.finishDesc}
+                </div>
+            </div>
+            {/if}
+            {/if}
+
+            <!--假如进度是待签合同，或是设计师重新设计效果图-->
+            {if ($orderInfo.speed_status == 4) or ($orderInfo.speed_status == 3 and $commonInfo.design_image != null) or ($orderInfo.speed_status == 8)/}
+            <!--假如有提交修改申请，展示修改意见-->
+            {if $commonInfo.is_modify ==1 }
+            <div class="order-info-suggestion-head combg-b font-color-white">
+                {$commonInfo.modify_info.time|date="Y-m-d H:i",###} &nbsp;{$commonInfo.modify_info.member_name}，建议
+            </div>
+            <div class="order-info-suggestion-body font-color-white" style="word-break: break-all;width: auto">
+                {$commonInfo.modify_info.modifyInfo}
+            </div>
+            {/if}
+            {if $commonInfo.design_image neq null}
+            <div class="order-info-review">
+                {foreach $commonInfo.design_image as $key => $val}
+                <div class="order-info-review-title combg-h">
+                    <div class="h-content-logo-lt"></div>
+                    <div class="h-content-logo-rt"></div>
+                    <div class="font-color-white">
+                        {$houseStyle[$key]}
+                    </div>
+                </div>
+                {foreach $val as $k => $v}
+                {if $k==0}
+                <div class="order-info-review-img">
+                    <a href="{$v}" target="_blank"><img  data-type="designer_img" src="{$v}"/> </a>
+                </div>
+                {else}
+                <div class="order-info-review-img order-new-shop-b">
+                    <a href="{$v}" target="_blank"><img  data-type="designer_img" src="{$v}"/> </a>
+                </div>
+
+                {/if}
+                {/foreach}
+                <div class="clear"></div>
+                {/foreach}
+                <div class="clear"></div>
+            </div>
+            {/if}
+            <div class="order-layout">
+                {if $orderInfo.speed_status == 4 and $orderInfo.unsatisfy_info == ''}
+                <a href="javascript:void(0);" id="confirmDesign">确定效果图,预约线下</a>
+                <input type="hidden" id="designer_id" value="{$designer.designer_id}">
+                <input type="hidden" id="production_name" value="{$orderInfo.building_name}">
+                <input type="hidden" id="order_sn" value="{$orderInfo.order_sn}">
+                <input type="hidden" id="house_type" value="{$orderInfo.house_type}">
+                <input type="hidden" id="building_area" value="{$orderInfo.acreage}">
+                {/if}
+                <!--假如是用户第一次上传设计图-->
+                {if ($orderInfo.speed_status == 4 and $commonInfo.is_modify == 0)}
+                <a href="javascript:void(0);" class="order-modify-btn">申请修改</a>
+                {/if}
+                <!--重新上传设计图，用户还不满意，跳转到兑换商品-->
+                {if ($orderInfo.speed_status == 4 and $commonInfo.is_modify == 1 and $orderInfo.unsatisfy_info == '')}
+                <a href="javascript:void(0);" class="order-unsatisfy-btn">不满意</a>
+                {/if}
+                {if ($orderInfo.speed_status == 8 )}
+                <a href="{:url('shop/logsOrder/exchangeGoods')}?id={$orderInfo.id}" class="order-exchange-btn">发起兑换商品</a>
+                {/if}
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+<!-- content end -->
+<!-- 申请修改 begin -->
+<div class="modify-layer none" id="modify-block">
+    <div class="modify-layer-head">
+        <div class="modify-layer-head-lt"></div>
+        <div class="modify-layer-head-content">申请修改</div>
+        <div class="modify-layer-head-gt"></div>
+    </div>
+    <form class="js-ajax-form modify-layer-form"  action="{:url('modify')}">
+        <input type="hidden"  name="orderId" value="{$orderInfo.id}">
+        <textarea placeholder="请输入修改意见（不超过100个字）" name="modifyInfo"></textarea>
+
+        <button class="js-ajax-submit modify-layer-form-input">确认</button>
+    </form>
+</div>
+<!-- 申请修改 end -->
+<!-- 重新设计不满意 begin -->
+<div class="modify-layer none" id="unsatisfy-block">
+    <div class="modify-layer-head">
+        <div class="modify-layer-head-lt"></div>
+        <div class="modify-layer-head-content">不满意</div>
+        <div class="modify-layer-head-gt"></div>
+    </div>
+    <form class="js-ajax-form modify-layer-form modify-layer-form-first"  action="{:url('unSatisfyDesign')}">
+        <input type="hidden"  name="orderId" value="{$orderInfo.id}">
+        <p class="font-color-blue" >你可以直接联系我们：4000-8888888-88</p>
+        <p class="font-color-blue">或</p>
+        <p class="font-color-blue">留下你的联系方式，我们主动联系你</p>
+        <p class="font-color-blue">你的联系方式：
+        <input type="text" name="phone">
+        </p>
+        <button class="js-ajax-submit modify-layer-form-input">提交</button>
+    </form>
+</div>
+<!-- 重新设计不满意 end -->
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        //进度条展示
+        switch( parseInt($('#speedStatus').val()) ){
+            case 1:
+                $('.measure').addClass('cus');
+                break;
+            case 2:
+                $('.pay').addClass('cus');
+                break;
+            case 3:
+            case 4:
+                $('.design').addClass('cus');
+                break;
+            case 5:
+                $('.offline').addClass('cus');
+                break;
+            case 6:
+                $('.accept').addClass('cus');
+                break;
+        }
+
+        //提交修改意见
+        var orderId = $('#orderId').val();
+        $(".order-modify-btn").click(function() {
+            layer.open({
+                type: 1,
+                title: false,
+                area: ['520px', '320px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                content: $("#modify-block"),
+                success:function(layero,index){
+                },
+                end:function(){
+                    location.reload();
+                }
+            });
+        });
+
+        //用户不满意
+        $(".order-unsatisfy-btn").click(function() {
+            layer.open({
+                type: 1,
+                title: false,
+                area: ['520px', '320px'],
+                skin: 'mt-layui-layer', //样式类名
+                closeBtn: 1,
+                anim: 2,
+                shadeClose: false, //开启遮罩关闭
+                content: $("#unsatisfy-block"),
+                success:function(layero,index){
+                },
+                end:function(){
+                    location.reload();
+                }
+            });
+        })
+
+        //确认设计，预约下单
+        $("#confirmDesign").click(function(){
+            var img_str = '';
+            $("img[data-type='designer_img']").each(function(){
+                img_str += $(this).attr("src")+ ',';
+            });
+            img_str = img_str.substr(0, (img_str.length - 1));
+            $.ajax({
+                url:"{:url('shop/logs_order/confirmDesign')}",
+                async :false,
+                type:'post',
+                dataType:'json',
+                data:{
+                    orderId:$('#orderId').val(),
+                    designer_id: $('#designer_id').val(),
+                    production_name: $('#production_name').val(),
+                    order_sn: $('#order_sn').val(),
+                    house_type: $('#house_type').val(),
+                    building_area: $('#building_area').val(),
+                    style: $('#style').val(),
+                    imgs: img_str
+                },
+                success:function(data){
+                    layer.msg(data.msg);
+                    if (data.code == 1) {
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+        //确认验收
+        $("#finish_order").click(function(){
+            //询问框
+            layer.open({
+                content: '确认验收交易即可完成，是否确认验收？'
+                ,btn: ['确定', '不要']
+                ,yes: function(index){
+                    $.getJSON('{:url("shop/logs_order/finishOrder")}?id={$orderInfo.id}', function (result) {
+                        layer.msg(result.msg);
+                        if( result.code == 1 ){
+                            location.reload();
+                        }
+                    });
+
+                }
+            });
+        });
+    })
+</script>

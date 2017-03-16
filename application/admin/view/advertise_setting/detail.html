@@ -1,0 +1,63 @@
+
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>查看广告位的详细信息</p>
+        </li>
+    </ul>
+</div>
+<div class="sheet-box">
+    <table class="table">
+        <tbody>
+        <tr class="goods-tr-bg">
+            <th colspan="2"><h3>广告位信息</h3></th>
+        </tr>
+
+        <tr>
+            <td width="150px"><div><h3>广告标题</h3></div></td>
+            <td>{$info.adv_name}</td>
+        </tr>
+
+        <tr>
+            <td><div><h3>广告链接</h3></div></td>
+            <td><a href="{$info.adv_link}">{$info.adv_link}</a></td>
+        </tr>
+
+        <tr>
+            <td><div><h3>广告显示图</h3></div></td>
+            <td><img src="{$info.adv_img}@w100_h100.png" width="100px" height="100px"></td>
+        </tr>
+
+        <tr>
+            <td><div><h3>广告分类</h3></div></td>
+            <td>{$info.category_name}</td>
+        </tr>
+
+        {if $info.adv_type == 2}
+        <tr>
+            <td><div><h3>商品分类</h3></div></td>
+            <td>{$info.goods_category}</td>
+        </tr>
+        {/if}
+
+        <tr>
+            <td><div><h3>广告排序</h3></div></td>
+            <td>{$info.adv_sort}</td>
+        </tr>
+
+        <tr class="b0">
+            <td colspan="4" class="b0">
+                <div class="text-center">
+                    <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                </div>
+            </td>
+        </tr>
+
+        </tbody></table>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

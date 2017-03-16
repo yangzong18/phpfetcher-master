@@ -1,0 +1,56 @@
+<div class="add-item">
+    <ul>
+        <li class="text-right">
+            <a href="add" class="btn btn-info"><i class="icon-plus"></i> 添加级别</a>
+        </li>
+    </ul>
+</div>
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10"></th>
+            <th class="w150">序号</th>
+            <th class="w150">级别称呼</th>
+            <th class="w150">年限</th>
+            <th class="w150">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $designerLevel as $level}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                <input type="checkbox" id="checkbox_a2_{$level.level_id}" value="{$level.level_id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$level.level_id}" class="lab-t"></label>
+            </td>
+            <td>{$level.level_id}</td>
+            <td>{$level.level_name}</td>
+            <td>{$level.level_year}</td>
+            <td class="table-handle">
+                <span>
+                    <a href="edit?id={$level.level_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="4">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$designerLevel->render();}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

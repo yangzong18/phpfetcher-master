@@ -1,0 +1,146 @@
+<div class="col-form">
+    <form class="form-inline" role="form" act="{:url('seller/CrowdOrder/index')}">
+        <span>订单状态</span>
+        <div class="form-group">
+            <select class="form-control" style="min-width:1px;" name="order_state">
+                {foreach $orderStatus as $key => $status}
+                <option {if $param.order_state==$key}selected{/if} value="{$key}">{$status}</option>
+                {/foreach}
+            </select>
+        </div>
+        <span>商品名称</span>
+        <div class="form-group">
+            <input type="text" class="form-control" name="goods_name" value="{$param.goods_name|default=''}">
+        </div>
+        <span>订单编号</span>
+        <div class="form-group">
+            <input type="text" class="form-control" name="order_sn" value="{$param.order_sn|default=''}">
+        </div>
+        <!--<span>起始时间</span>-->
+        <!--<div class="input-group">-->
+            <!--<input type="text" name="start" value="{$param.start|default=''}" class="skinblue form-control text-ra workinput wicon pr30 w120" style="min-width:1px;" placeholder="起始时间">-->
+        <!--</div>-->
+        <!--<span>结束时间</span>-->
+        <!--<div class="input-group">-->
+            <!--<input type="text" name="end" value="{$param.end|default=''}" class="skinblue form-control text-ra workinput wicon pr30 w120" style="min-width:1px;"  placeholder="结束时间">-->
+        <!--</div>-->
+        <div class="form-group">
+            <button class="btn" type="submit">搜索</button>
+            <button type="button" id="outorder" class="btn btn-info">导出订单</button>
+        </div>
+    </form>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr>
+            <th class="w50"></th>
+            <th class="w200"></th>
+            <th class="w150 text-center">下单日期</th>
+            <th class="w100">订单编号</th>
+            <th class="w250">众筹时间</th>
+            <th class="w150">众筹状态</th>
+            <th class="w150">价格</th>
+            <th class="w150">数量</th>
+            <th class="w150">实付款</th>
+            <th class="w250">交易状态</th>
+            <th class="w250">运单号</th>
+            <th class="w200">交易操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="10">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $datas as $vo} 
+        <tr class="goods-tr-t0">
+            <td>
+                <a href="{:url('shop/crowdfunding/detail', array('goodsId'=>$vo['goods']['goods_id']))}" target="_blank" class="bt-images"><img class="w50" src="{$vo['goods']['goods_image']}@w50_h38.png" alt=""></a>
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/crowdfunding/detail', array('goodsId'=>$vo['goods']['goods_id']))}"  target="_blank">{$vo['goods']['goods_name']}</a></dt>
+                </dl>
+            </td>
+            <td>{$vo['add_time']|date="Y-m-d H:i:s",###}</td>
+            <td>{$vo.order_sn}</td>
+            <td>{$vo['goods']['start_at']|date="Y-m-d H:i:s",###}至{$vo['goods']['end_at']|date="Y-m-d H:i:s",###}</td>
+            <td>{$vo.goods_state_name}</td>
+            <td>{$vo['goods']['goods_price']}</td>
+            <td>{$vo['goods']['goods_num']}</td>
+            <td>{$vo.order_amount}</td>
+            <td>
+                {$vo.order_state_name}<br/>
+                <a href="{:url('seller/CrowdOrder/detail', array('id'=>$vo['order_id']))}">订单详情</a>
+            </td>
+            <td>
+            {if condition="$vo.rebund eq 1 and $vo['shipping_code']!='' "}
+                {$vo['shipping_code']}
+            {else/}
+                暂无单号
+            {/if}
+            </td>
+            <td class="table-handle">
+                {if condition="($vo['order_state'] eq 20) and ( ($vo['goods']['state'] eq 3) or ($vo['goods']['state'] eq 4) )"}
+                <span>
+                    <button class="btn btn-warning mb5 delivery-now" order-id="{$vo.order_id}" type="button">立即发货</button>
+                </span>
+                {/if}
+                {if $vo.order_state == 30 && !empty($vo.shipping_code)}
+                <span>
+                    <button class="btn btn-warning mb5" onclick="edit_deliver('{$vo.order_id}',2)"type="button">更新物流</button>
+                </span>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+    </table>
+    {$page}
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(function(){
+
+    $('#outorder').click(function(){
+        window.location='outOrder';
+    });
+
+    //立即发货点击
+    $(".delivery-now").click(function(){
+        layer.open({
+            type: 2,
+            title: '运单设置',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.5,
+            skin: 'layui-dbd',
+            area: ['450px', '420px'],
+            //content: '{:url("seller/CrowdOrder/delivery")}?order_id='+$(this).attr('order-id'), //iframe的url
+            content: ['{:url("seller/CrowdOrder/delivery")}?order_id='+$(this).attr('order-id'),'no'], //iframe的url
+            success:function(layero,index){
+            },
+            end:function(){
+                parent.location.reload();
+            }
+        });
+    });
+})
+//2017-3-1  yp 增加手动输入物流信息的输入框
+function edit_deliver(orderId,s){
+    layer.open({
+        type: 2,
+        title: '编辑物流',
+        shadeClose: false, //开启遮罩关闭
+        shade: 0.5,
+        skin: 'layui-dbd',
+        area: ['600px', '520px'],
+        content: ["{:url('seller/delivery/editDeliver')}/orderId/"+orderId+"/s/"+s,'no'], //iframe的url
+    });
+}
+</script>
+
+
+
+

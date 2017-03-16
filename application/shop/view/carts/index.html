@@ -1,0 +1,199 @@
+<div class="container">
+    <ul class="list-box content-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="mt-position">
+                    <h3><a href="{:url('shop/livingMuseum/index')}">木筑生活馆</a> > <a href="{:url('shop/carts/index')}">购物车</a></h3>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item shopp-item marbox">
+            <li class="mt-hb">
+                <span></span>
+                <span></span>
+            </li>
+            <li class="shop-seach">
+                <div>
+                <form class="cart_search" onsubmit="return valiSearch('cart_search');" action="{:url('shop/carts/index')}" method="get">
+                    <input type="text" id="cart_search" name="search" class="text goods_name_1" value="{if !empty($search_name)}{$search_name}{/if}" placeholder="" autocomplete="off">
+                    <ul class="cache-seach">
+                    </ul>
+                    <input type="submit" value="" class="sub">
+                </form>
+                    </div>
+            </li>
+            <li>
+                <div class="order-goods shop-table all-ckbox" id="cart_goods_info">
+                    <form id="cart_form" class="" action="{:url('buy/index')}" method="post">
+                        <input type="hidden" value="1" name="ifcart">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="w30"></th>
+                                    <th class="w10"><input type="checkbox" id='all' class="pl15 all"> </th>
+                                    <th class="w135 text-left"><label for="all">全选</label></th>
+                                    <th class="w270 text-left">商品信息</th>
+                                    <th>规格</th>
+                                    <th>单价</th>
+                                    <th>数量</th>
+                                    <th>金额（元）</th>
+                                    <th>操作</th>
+                                    <th class="w30"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {if empty($search_name)}
+                            <tr {if !empty($cartList)} style="display: none;"{/if}>
+                            <td></td>
+                            <td style="height: 100px;" colspan="8" class="btm">购物车为空，请购物！</td>
+                            <td></td>
+                            </tr>
+                            {else}
+                            <tr {if !empty($cartList)} style="display: none;"{/if}>
+                            <td></td>
+                            <td style="height: 100px;" colspan="8" class="btm">您还没有此类宝贝，请购物！</td>
+                            <td></td>
+                            </tr>
+                            {/if}
+
+                            {foreach $cartList as $val}
+                                <tr nc_group="{$val['cart_id']}">
+                                    <td class="b0"></td>
+                                    <td colspan="8" class="btm"></td>
+                                    <td class="b0"></td>
+                                </tr>
+                                <tr nc_group="{$val['cart_id']}">
+                                    <td class="br"></td>
+                                    <td class="text-left combg-h"><input type="checkbox" {eq name="$val['state']" value="0"} disabled {/eq} id="cart_check{$val['cart_id']}" cart_id="{$val['cart_id']}" nc_type="eachGoodsCheckBox" goods_id="{$val['goods_id']}" goods_value="{$val['goods_price']*$val['goods_number']}" value="{$val['cart_id']}|{$val['goods_number']}" name="cart_id[]">&nbsp;</td>
+                                    <td class="combg-h">
+                                        <a href="{:url('shop/goods/index',['gk'=>$val['goods_id']])}" class="img"><img src="{$val['goods_image_main']}@w133_h121.png" alt="" width="133" height='121' /></a>
+                                    </td>
+                                    <td class="text-left mt-bd combg-h">
+                                        <p class="bt"><a href="{:url('shop/goods/index',['gk'=>$val['goods_id']])}">{$val['goods_name']}</a></p>
+                                    </td>
+                                    <td class="combg-h">
+                                        {foreach $val['feature'] as $key=> $value}
+                                        <p>{$value['feature']}:{$value['feature_value']}</p>
+                                        {/foreach}
+                                    </td>
+                                    <td class="combg-h">
+                                        <p>{$val['goods_price']}</p>
+                                    </td>
+                                    <td class="mt-num combg-h">
+                                        <p class="min" cart_id="{$val['cart_id']}">-</p>
+                                        <p class="snum"><input type="text" id="input_item{$val['cart_id']}" class="quantity_box" cart_id="{$val['cart_id']}" value="{$val['goods_number']}"></p>
+                                        <p class="add" cart_id="{$val['cart_id']}">+</p>
+                                    </td>
+                                    <td class="combg-h">
+                                        <p class="price" id="subtotal{$val['cart_id']}">{:ncPriceFormat($val['goods_price']*$val['goods_number'])}</p>
+                                    </td>
+                                    <td class="combg-h">
+                                        <p>
+                                            <a class="makePoint" cartId="{$val['cart_id']}" goods_id="{$val['goods_id']}" href="#">移入我的收藏</a>
+                                        </p>
+                                        <p>
+                                            <a class="cartDel" cartId="{$val['cart_id']}" href="#">删除</a>
+                                        </p>
+                                    </td>
+                                    <td class="bl"></td>
+                                </tr>
+                            {/foreach}
+                                <tr>
+                                    <td class="b0"></td>
+                                    <td colspan="8" class="btm"></td>
+                                    <td class="b0"></td>
+                                </tr>
+                            </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="w30"></td>
+                                        <td class="w10"><input type="checkbox" id='all2' class="all" class="pl15"> </td>
+                                        <td class="w135 text-left mt-info" colspan="2">
+                                            <label for="all2">全选</label>
+                                            <span class="pl50"><a href="#" id="all_delete">删除</a></span>
+                                            <span class="pl50"><a href="#" id="all_makePoint">移入我的收藏</a></span>
+                                        </td>
+                                        <td colspan="6" class="settle">
+                                            <p>已选商品 <i class="d-num" id="num_total">0</i> 件 &nbsp;&nbsp;
+                                              合计  ￥<span class="money" id="cartTotal">0.00</span>元
+                                            </p>
+                                            <p class="sub">
+                                                <input type="button" id="next_submit" value="结算">
+                                            </p>
+
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                        </table>
+                    </form>
+                </div>
+            </li>
+
+        </ul>
+</div>
+<script src="{$Think.JS_PATH}cart.js" charset="utf-8"></script>
+<script type="text/javascript">
+    calc_cart_price();
+    $(function(){
+        //单个商品移入我的关注
+        $('.makePoint').click(function(){
+            var cartId = $(this).attr('cartId');
+            var goodsId = $(this).attr('goods_id');
+            make_point_cart_item(cartId, goodsId);
+        });
+
+        //多选移入我的收藏
+        $('#all_makePoint').on('click',function(){
+            var obj = $('#cart_goods_info').find('input[nc_type="eachGoodsCheckBox"]:checked');
+            if (obj.size() == 0) {
+                layer.msg('请选择商品');
+                return false;
+            }else {
+                var id_str = '';
+                var goods_str = '';
+                obj.each(function() {
+                    id_str += $(this).attr('cart_id') + ',';
+                    goods_str += $(this).attr('goods_id') + ',';
+                });
+                id_str = id_str.substr(0, (id_str.length - 1));
+                goods_str = goods_str.substr(0, (goods_str.length - 1));
+                make_point_cart_item(id_str, goods_str);//移入我的关注
+            }
+        });
+    });
+
+    //将购物车商品移入我的关注，并删除购物车
+    function make_point_cart_item(cart_id, goods_id){
+        $.ajax({
+            url:'{:url("api/favorites/cartAddFav")}',
+            async :false,
+            type:'post',
+            dataType:'json',
+            data:{cart_id:cart_id,goods_id:goods_id},
+            success:function(data){
+                layer.msg(data.msg);
+                if(data.code === 1){
+                    var id_arr = new Array(); //定义一数组
+                    id_arr = cart_id.split(","); //字符分割
+                    for ( var i=0; i< id_arr.length ; i++ ) {
+                        $('tr[nc_group="' + id_arr[i] + '"]').remove();//移除本商品或本套装
+                    }
+                }
+                calc_cart_price();
+                checkNone();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                layer.msg("链接失败请重试或刷新页面");
+            }
+        });
+    }
+
+</script>
+

@@ -1,0 +1,106 @@
+<td colspan="2">
+    <div class="mt-goods-spec">
+        <div class="mt-bt">
+            <p class="cus">订单详情</p>
+            <p class=""><a href="{:url('seller/mobile_logs_order/index')}">订单列表</a></p>
+        </div>
+    </div>
+</td>
+<div class="sheet-box">
+    <table class="table">
+        <tbody>
+        <tr class="goods-tr-bg">
+            <th colspan="4"><h3>免费设计订单详情</h3></th>
+        </tr>
+        <!--订单信息-->
+        <tr>
+            <td><div><h3>订单信息</h3></div></td>
+            <td>
+                <div>订单编号：{$orderInfo.order_sn}</div>
+                <div>创建日期：{$orderInfo.created_at|date='Y-m-d H:i',###}</div>
+                <div>进度：{$orderInfo.order_state}</div>
+            </td>
+        </tr>
+
+        <!--收货人信息-->
+        <tr>
+            <td><div><h3>收货人信息</h3></div></td>
+            <td>
+                <div>预约人：{$orderInfo.user_name}</div>
+                <div>联系电话：{$orderInfo.phone}</div>
+            </td>
+        </tr>
+
+        <!--商品信息-->
+        <tr class="goods-tr-t0">
+            {if $orderInfo.logs_goods_id != 0}
+            <td rowspan="4"><div><h3>商品信息</h3></div></td>
+            {else /}
+            <td rowspan="3"><div><h3>商品信息</h3></div></td>
+            {/if}
+            {if $orderInfo.logs_goods_id != 0}
+            <td>
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/logs/detail', array('id'=>$logsInfo['id']))}"><img src="{$logsInfo.cover}@w100_h70.png" class="w100"/></a></dt>
+                    <dd>
+                        {$logsInfo.name}
+                        {$logsInfo.prize}
+                    </dd>
+                </dl>
+            </td>
+            {/if}
+        </tr>
+        {if $orderInfo.designer_id != 0}
+        <tr class="goods-tr-t0">
+            <td>
+                <dl class="goods-name">
+                    <dt><a href="#"><img src="{$designer['designer_avatar']}@w100_h70" class="w100" /></a></dt>
+                    <dd>
+                        {$designer.designer_name}
+                        {$designer.level_name}
+                        {$designer.designer_year}年
+                    </dd>
+                </dl>
+            </td>
+        </tr>
+        {/if}
+        <tr class="goods-tr-t0">
+            <td>
+                <dl class="goods-name">
+                    <dt><a href="{$orderInfo['image']}"><img src="{$orderInfo['image']}@w100_h70" class="w100" /></a></dt>
+                </dl>
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>
+                {$orderInfo.building_name}
+            </td>
+        </tr>
+        <!--设计-->
+        {if $orderInfo.order_status == 2}
+        <tr class="goods-tr-t0">
+            <td rowspan="3"><div><h3>设计</h3></div></td>
+            <td>
+                时间：{$orderInfo.finish_time|date='Y-m-d H:i',###}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {if $orderInfo.designer_id != 0}设计师：{$designer.designer_name}{/if}
+            </td>
+        </tr>
+        <tr class="goods-tr-t0">
+            <td>
+                {foreach $orderInfo.design_image as $key => $val}
+                <a href="{$val}"><img src="{$val}@w100_h100.png" style="width: 100px;height: 100px;"/></a>
+                {/foreach}
+            </td>
+        </tr>
+        {/if}
+        </tbody></table>
+</div>
+
+
+
+
+
+
+
+
+

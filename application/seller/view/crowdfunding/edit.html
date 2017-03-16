@@ -1,0 +1,697 @@
+<link rel="stylesheet" href="{$Think.JS_PATH}artDialog/skins/default.css" media="screen" title="no title" charset="utf-8">
+<div class="sheet-box">
+    <form class="js-ajax-form" action="{:url('seller/crowdfunding/doEdit')}" method="post">
+        <input type="hidden" value="{$goods.id}" name="id" >
+        <table class="table">
+            <tbody><tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>众筹商品基本信息</h3>
+                </th>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div style="width:90px;">
+                        <h3>商品名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" value="{$goods.name}" name="name" class="form-control h30 mb5">
+                            <span>请输入商品名称(最长不超过64个汉字)</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>项目编号*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="serialNumber" value="{$goods.serial_number}" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请输入项目编号</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品规格</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="specification" value="{$goods.specification}" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请输入商品规格（可不填）</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品类型</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="type" value="{$goods.type}" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请输入商品类型（可不填）</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>众筹总价*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="totalPrice" value="{$goods.total_price}" id="totalPrice" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请输入众筹总价，单位（元）</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>众筹份额*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="quotient" value="{$goods.quotient}" id="quotient" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请输入众筹份额</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>每份价格*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="onePrice" readonly="readonly" value="{$goods.one_price}" id="onePrice" class="form-control h30 mb5" style="width: 88px;">
+                            <span>每份价格，单位（元）</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>最多可购买份额*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="limit" id="limit" value="{$goods.limit}" class="form-control h30 mb5" style="width: 88px;">
+                            <span>最多可购买份额</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>开始时间*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="startTime" value="{$goods.start_at|date='Y-m-d H:i:s',###}" id="skinBlueOne" class="form-control text-ra workinput wicon pr30 w210" placeholder="YYYY年MM月DD日 hh:mm:ss">
+                            <span>开始时间</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>结束时间*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" id="skinBlueTwo" value="{$goods.end_at|date='Y-m-d H:i:s',###}" name="endTime" class="form-control text-ra workinput wicon pr30 w210" placeholder="YYYY年MM月DD日 hh:mm:ss">
+                            <span>结束时间</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>是否自提*</h3>
+                    </div>
+                </td>
+                <td class="item-list-chkbox ">
+                    <ul class="chk-one">
+                        {if condition="$goods.is_self eq 0"}
+                                <li class="">
+                                    <input type="checkbox" checked="true" name="isSelf" value="0" id="list_c_1" class="chk_1  isSelfNo">
+                                    <label for="list_c_1" class="lab-t cus"></label>
+                                    <label for="list_c_1" class="font-min">否</label>
+                                </li>
+                                <li class="">
+                                    <input type="checkbox" name="isSelf" value="1" id="list_c_2" class="chk_1  isSelfYes">
+                                    <label for="list_c_2" class="lab-t"></label>
+                                    <label for="list_c_2" class="font-min">是</label>
+                                </li>
+                            {else \}
+                                <li class="">
+                                    <input type="checkbox"  name="isSelf" value="0" id="list_c_1" class="chk_1  isSelfNo">
+                                    <label for="list_c_1" class="lab-t "></label>
+                                    <label for="list_c_1" class="font-min">否</label>
+                                </li>
+                                <li class="">
+                                    <input type="checkbox" checked="true" name="isSelf" value="1" id="list_c_2" class="chk_1  isSelfYes">
+                                    <label for="list_c_2" class="lab-t cus"></label>
+                                    <label for="list_c_2" class="font-min">是</label>
+                                </li>
+                        {/if}
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>运费</h3>
+                    </div>
+                </td>
+                <td class="item-list-chkbox ">
+                    <ul class="chk-one">
+                        {if condition="$goods.freight eq 0"}
+                            <li class="">
+                                <input type="checkbox" checked="true" name="freight" value="0" id="list_c_3" class="chk_1  freightFree">
+                                <label for="list_c_3" class="lab-t cus"></label>
+                                <label for="list_c_3" class="font-min">免费</label>
+                            </li>
+                            <li class="">
+                                <input type="checkbox" name="freight" value="1" id="list_c_4" class="chk_1  freightNeed">
+                                <label for="list_c_4" class="lab-t"></label>
+                                <label for="list_c_4" class="font-min">运费</label>
+                            </li>
+                            <li>
+                                <input type="text"  class="form-control h30 mb5 freightValue" style="width: 88px; display: none;" value="" name="freight"/>
+                            </li>
+                        {else \}
+                            <li class="">
+                                <input type="checkbox"  name="freight" value="0" id="list_c_3" class="chk_1  freightFree">
+                                <label for="list_c_3" class="lab-t "></label>
+                                <label for="list_c_3" class="font-min">免费</label>
+                            </li>
+                            <li class="">
+                                <input type="checkbox" checked="true" name="freight" value="1" id="list_c_4" class="chk_1  freightNeed">
+                                <label for="list_c_4" class="lab-t cus"></label>
+                                <label for="list_c_4" class="font-min">运费</label>
+                            </li>
+                            <li>
+                                <input type="text"  class="form-control h30 mb5 freightValue" style="width: 88px; display: block;" value="{$goods.freight}" name="freight"/>
+                            </li>
+
+                        {/if}
+                    </ul>
+                </td>
+            </tr>
+
+
+
+            <tr id="mainImage">
+                <td>
+                    <div>
+                        <h3>商品主图*</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+
+
+                    <div class="col-xs-12">
+                        <div class="uploadimgOne">
+                            <div id="WU_FILE_Main_0" class="file-item thumbnail"><div class="up-imgbox"><img style="width: 100px;height: 100px;" src="{$goods.image_main}@w100_h100.png"></div><div><a class="del_pic">删除</a></div><input name="mainImage" value="{$goods.image_main}" class="imgName-up-item" type="hidden">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                            <span class="input-group-btn one-text">
+                            <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload main-cover-upload">
+                                <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                            </a>
+                            </span>
+                        </div>
+                    </div>
+                    <span>图片建议561*337</span>
+                </td>
+
+            </tr>
+
+
+            <tr id="priceImage">
+                <td>
+                    <div>
+                        <h3>价格走势图*</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+
+
+                    <div class="col-xs-12">
+                        <div class="uploadimgPrice">
+                            <div id="WU_FILE_Price_1" class="file-item thumbnail"><div class="up-imgbox"><img style="width: 100px;height: 100px;" src="{$goods.image_price}@w100_h100.png"></div><div><a class="del_pic">删除</a></div><input name="priceImage" value="{$goods.image_price}" class="imgName-up-item" type="hidden">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                            <span class="input-group-btn one-text">
+                            <a href="javascript:void(0)" style="padding: 0 0;" class="btn btn-default btn_addfile btn-price-upload main-cover-upload">
+                                <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                            </a>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+
+
+
+            <tr id="slaveImage">
+                <td>
+                    <div>
+                        <h3>商品副图*</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    <div class="uploadimgTwo">
+                        {if condition="!empty($attachment)"}
+                            {foreach $attachment as $k=>$v}
+                                <div id="WU_FILE_Main_$k" class="file-item thumbnail"><div class="up-imgbox"><img style="width: 100px;height: 100px;" src="{$v.attachment_url}@w100_h100.png"></div><div><a class="del_pic">删除</a></div><input name="slaveImage[]" value="{$v.attachment_url}" class="imgName-up-item" type="hidden">
+                                </div>
+                            {/foreach}
+                        {/if}
+                    </div>
+                    <div class="btn-up-zbox">
+                        <div class="clear"></div>
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" style="padding: 0 0;" class="btn btn-default btn_addfile btn-two-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                    </div>
+                    <span>图片建议561*337</span>
+
+                </td>
+
+            </tr>
+
+
+
+
+            <tr>
+                <td>
+                    <h3>商品说明*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor0" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>商品实拍*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor1" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>商品规格*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor2" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>材质说明*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor3" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>品质保证*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor4" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" id="submit" class="btn btn-warning max-bg js-ajax-submit">提交</button>
+                        <a href="javascript:window.history.go(-1);"><button type="button" class="btn max-bg">返回</button></a>
+                    </div>
+
+                </td>
+            </tr>
+
+            </tbody></table>
+        <textarea name="editorContent" id="ueditor_textarea_editorContent" style="display: none;"></textarea></form>
+</div>
+
+<script>
+    $(function(){
+
+
+        //时间控件
+        $("#skinBlueOne").jeDate({
+//            isinitVal: true,
+            skinCell: "jedateblue",
+            format: 'YYYY-MM-DD hh:mm:ss',
+            minDate: $.nowDate(1)
+        });
+
+        $("#skinBlueTwo").jeDate({
+            // isinitVal: true,
+            skinCell: "jedateblue",
+            format: 'YYYY-MM-DD hh:mm:ss',
+            minDate: $.nowDate(1)
+        });
+
+
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        // var ue = UE.getEditor('editor');
+        var editor = [];
+        editor[0] = '{$goods.description|htmlspecialchars_decode}';
+        editor[1] = '{$goodsExtra.goods_real_shot|htmlspecialchars_decode}';
+        editor[2] = '{$goodsExtra.goods_specifications|htmlspecialchars_decode}';
+        editor[3] = '{$goodsExtra.goods_material_description|htmlspecialchars_decode}';
+        editor[4] = '{$goodsExtra.goods_quality_assurance|htmlspecialchars_decode}';
+        for(var i in editor){
+            var ue = new baidu.editor.ui.Editor({
+                initialContent: editor[i],
+                autoClearinitialContent: false, //focus时自动清空初始化时的内容
+                //initialFrameWeight:100%,
+                initialFrameHeight: 350,
+                textarea: 'editorContent'+i, //设置提交时编辑器内容的名字
+                autoFloatEnabled: false,
+                focus: false,
+                autoHeightEnabled: false,
+                sourceEditor: false,
+                wordCount: false, //关闭字数统计
+                elementPathEnabled: false, //关闭elementPath
+                maximumWords: 10240
+            });
+            ue.render("editor"+i);
+        }
+    });
+
+</script>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<!--<script src="{$Think.JS_PATH}upload/jquery.sortable.js" charset="utf-8"></script>-->
+<script type="text/javascript">
+    $(function() {
+
+        //图片上传
+        $('.btn-one-upload').uploader({
+            server: '/index/index/uploadFile', //上传路径
+            container: '.uploadimgOne', //图片容器
+            num: 1, //上传数量
+            inputName: 'mainImage', //input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        });
+
+        $('.btn-two-upload').uploader({
+            server: '/index/index/uploadFile', //上传路径
+            container: '.uploadimgTwo', //图片容器
+            num: 5, //上传数量
+            inputName: 'slaveImage[]', //input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-two-upload'
+        });
+
+        $('.btn-price-upload').uploader({
+            server: '/index/index/uploadFile', //上传路径
+            container: '.uploadimgPrice', //图片容器
+            num: 1, //上传数量
+            inputName: 'priceImage', //input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-price-upload'
+        });
+
+
+        $("#submit").click(function(){
+            var start = $("#skinBlueOne").val();
+            var end   = $("#skinBlueTwo").val();
+            var now   = getNow();
+
+            if(start == '' || start == 'undefined' || start == null){
+                layer.msg("开始时间不能为空");
+                return false;
+            }
+
+            if(end == '' || end == 'undefined' || end == null){
+                layer.msg("结束时间不能为空");
+                return false;
+            }
+
+            var startStr = start.replace(/-/g,'/');
+            var endStr = end.replace(/-/g,'/');
+
+            var timeStart = new Date(startStr);
+            var timeEnd = new Date(endStr);
+            var timeNow = new Date();
+
+            //将日期转换为时间戳
+            var timeStartStr = timeStart.getTime();
+            var timeEndStr = timeEnd.getTime();
+            var timeNowStr = timeNow.getTime();
+
+            //24小时的时间戳
+            var compareStrOne = 60*60*24*1000;
+            var compareStrSeven = 60*60*24*1000*7;
+          //  if((timeStartStr-timeNowStr) < compareStrOne){
+          //      layer.msg("项目发布时间必须提前24小时");
+          //      return false;
+          //  }
+
+            if((timeStartStr-timeNowStr) > compareStrSeven){
+                layer.msg("项目发布时间不能提前超过7天");
+                return false;
+            }
+
+            if(start > end){
+                layer.msg("结束时间必须大于开始时间");
+                return false;
+            }
+
+        });
+
+
+
+        //计算份额每份价格
+        $("#totalPrice").keyup(function(){
+            var total = $(this).val();   //总价
+//            var reg =  /^[0-9]+.?[0-9]*$/;
+            if(!$.isNumeric(total)){
+                var str = '<a style="color: red;font-size: 12px;"> * 总价只能为数字！</a>';
+                $(this).next().find('a').remove();
+                $(this).next().append(str);
+            }else{
+                $(this).next().find('a').remove();
+            }
+            var nums = $("#quotient").val();  //份额
+            var one = $("#onePrice");//每份
+
+            if(nums>0 && total>0){
+                one.val((total/nums).toFixed(2));
+            }
+        });
+
+        $("#quotient").keyup(function(){
+            var total = $("#totalPrice").val();   //总价
+            var nums = $(this).val();  //份额
+
+            if(!$.isNumeric(nums)){
+                var str = '<a style="color: red;font-size: 12px;"> * 总份额只能为数字！</a>';
+                $(this).next().find('a').remove();
+                $(this).next().append(str);
+            }else{
+                $(this).next().find('a').remove();
+            }
+
+            var one = $("#onePrice");//每份
+
+            if(nums>0 && total>0){
+                one.val((total/nums).toFixed(2));
+            }
+        });
+
+        $("#limit").keyup(function(){
+            var limit = $(this).val();
+            if(!$.isNumeric(limit)){
+                var str = '<a style="color: red;font-size: 12px;"> * 购买份额只能为数字！</a>';
+                $(this).next().find('a').remove();
+                $(this).next().append(str);
+            }else{
+                $(this).next().find('a').remove();
+            }
+        });
+
+        //运费校验
+        $(".freightValue").keyup(function(){
+            var freightValue = $(this).val();
+            if(!$.isNumeric(freightValue)){
+                var str = '<a style="color: red;font-size: 12px; float: right"> * 运费只能为数字！</a>';
+                $(this).next().find('a').remove();
+                $(this).next().append(str);
+            }else{
+                $(this).next().find('a').remove();
+            }
+        });
+
+
+        //是否自提
+        $(".isSelfNo").unbind('click').on('click',function(){
+            $(this).prop('checked','true');
+            $(this).parent().find('.lab-t').addClass('cus');
+            $(".isSelfYes").prop('checked',false);
+            $(".isSelfYes").next().removeClass('cus');
+
+            //如果不是自提 则设置运费
+            $(".freightValue").show();
+            $(".freightNeed").attr('checked','true');
+            $(".freightNeed").parent().find('.lab-t').addClass('cus');
+            $(".freightFree").prop('checked',false);
+            $(".freightFree").next().removeClass('cus');
+
+        });
+
+        $(".isSelfYes").unbind('click').on('click',function(){
+            $(this).prop('checked','true');
+            $(this).parent().find('.lab-t').addClass('cus');
+            $(".isSelfNo").prop('checked',false);
+            $(".isSelfNo").next().removeClass('cus');
+
+            //如果是自提则不设置运费
+            $(".freightFree").prop('checked',true);
+            $(".freightFree").parent().find('.lab-t').addClass('cus');
+            $(".freightNeed").prop('checked',false);
+            $(".freightNeed").next().removeClass('cus');
+            $(".freightValue").val('');
+            $(".freightValue").hide();
+
+        });
+
+
+        //是否设置运费
+        $(".freightFree").unbind('click').on('click',function(){
+            $(this).prop('checked',true);
+            $(this).parent().find('.lab-t').addClass('cus');
+            $(".freightNeed").prop('checked',false);
+            $(".freightNeed").next().removeClass('cus');
+            $(".freightValue").val('');
+            $(".freightValue").hide();
+
+
+
+
+        });
+
+        $(".freightNeed").unbind('click').on('click',function(){
+            $(".freightValue").show();
+            $(this).prop('checked',true);
+            $(this).parent().find('.lab-t').addClass('cus');
+            $(".freightFree").prop('checked',false);
+            $(".freightFree").next().removeClass('cus');
+
+            //如果需要填运费  则不能设置为自提
+            $(".isSelfNo").prop('checked',true);
+            $(".isSelfNo").parent().find('.lab-t').addClass('cus');
+            $(".isSelfYes").prop('checked',false);
+            $(".isSelfYes").next().removeClass('cus');
+        });
+
+
+
+        //获取当前时间
+        function getNow(){
+            /**
+             *
+             * 获取当前时间
+             */
+            function p(s) {
+                return s < 10 ? '0' + s: s;
+            }
+
+            var myDate = new Date();
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            var s=myDate.getSeconds();
+
+            var now=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m)+":"+p(s);
+
+            return now;
+        }
+
+
+
+    })
+</script>
+<!--<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>-->

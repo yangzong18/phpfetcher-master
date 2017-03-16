@@ -1,0 +1,109 @@
+<div class="col-form">
+    <form class="form-inline" role="form" act="{:url('seller/mobile_logs_order/index')}">
+        <div class="form-group">
+            <select name="orderState" class="form-control">
+                {foreach $orderState as $k => $v}
+                <option {if $searchOrderState==$k}selected{/if} value="{$k}">{$v}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="form-group">
+            <select name="searchType" class="form-control">
+                {foreach $search as $key => $val}
+                <option {if $searchType==$key}selected{/if} value="{$key}">{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="searchValue" value="{$searchValue}">
+            <button class="btn" type="submit">搜索</button>
+        </div>
+    </form>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr>
+            <th class="w50"></th>
+            <th class="w150"></th>
+            <th class="w150">下单日期</th>
+            <th class="w150">订单编号</th>
+            <th class="w150">设计师</th>
+            <th class="w150">楼盘名称</th>
+            <th class="w150">户型图</th>
+            <th class="w300">交易操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="10">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $datas as $vo}
+        <tr class="goods-tr-t0">
+            <!--<td  class="chk-one">-->
+                <!--<input type="checkbox" id="checkbox_a2_{$vo.id}" value="{$vo.id}" class="chk_1 data_check" />-->
+                <!--<label for="checkbox_a2_{$vo.id}" class="lab-t"></label>-->
+            <!--</td>-->
+            <td>
+                {if $vo['logs_goods_id'] != 0 }
+                <a href="{:url('shop/logs/detail', array('id'=>$vo['logs_goods_id']))}" target="_blank" class="bt-images"><img class="w50" src="{$vo.goods_cover}@w50_h38.png" alt=""></a>
+                {/if}
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/logs/detail', array('id'=>$vo['logs_goods_id']))}"  target="_blank">{$vo.goods_name}</a></dt>
+                </dl>
+            </td>
+            <td>{$vo.created_at}</td>
+            <td>{$vo.order_sn}</td>
+            <td>{$vo.designer_name}</td>
+            <td>{$vo.building_name}</td>
+            <td><img class="w50" src="{$vo.image}@w50_h38.png" alt=""></td>
+            <td class="table-handle">
+                {switch name="vo.order_status"}
+                {case value="1"}
+                <!--待设计-->
+                <span><a href="javascript:;" onclick="order_design('{$vo.id}')"><i class="icon-gift"></i>通知查看设计</a></span>
+                {/case}
+                {case value="2"}
+                <!--已设计-->
+                <span>已设计</span>
+                {/case}
+                {/switch}
+                <br>
+                <a href="{:url('seller/mobile_logs_order/detail')}?orderId={$vo.id}">订单详情</a>
+            </td>
+        </tr>
+        {/foreach}
+    </table>
+    {$page}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<script type="text/javascript">
+    function order_design(orderId){
+        layer.open({
+            type: 2,
+            title: '设计',
+            shadeClose: false, //开启遮罩关闭
+            shade: 0.7,
+            skin: 'layui-dbd',/*边框阴影*/
+            area: ['600px', '400px'],
+            content: ["orderDesign?orderId="+orderId], //iframe的url
+            success:function(layero,index){
+                if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){
+                    $(".layui-dbd").css("height","440px");
+                }
+            },
+            end:function(){
+                location.reload();
+            }
+        });
+    }
+</script>
+
+
+
+

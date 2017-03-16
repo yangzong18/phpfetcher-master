@@ -1,0 +1,309 @@
+<link rel="stylesheet" href="{$Think.JS_PATH}artDialog/skins/default.css" media="screen" title="no title" charset="utf-8">
+<div class="table-form-default">
+
+    <table class="table">
+        <tbody><tr>
+            <th class="w10">
+                <!-- 按钮占位 -->
+            </th>
+            <th class="w10">
+            </th>
+            <th class="w380">分类名称</th>
+            <th></th>
+            <th class="w150">操作</th>
+        </tr>
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+
+{foreach name="category" item="v" key="k"}
+
+        <tr class="goods-tr-t0 chk-one main-next"  rows="{$k}">
+            <td>
+                <label for="checkbox_a2_{$k}"  thisId="{$v.category_id}" class="lab-t forTopDelete"></label>
+            </td>
+            <td class="getChildCate" ids="{$v.category_id}" >
+                <i class="icon-folder-close-alt in"></i>
+            </td>
+            <td class="text-left">
+                <div class="input-group tree-next">
+                    <input type="text" value="{$v.name}" class="form-control h30" readonly>
+                              <span class="input-group-btn">
+                                <button class="btn btn-default h30 addChild" ids="{$v.category_id}" type="button"><i class=" icon-plus-sign"></i> 新增下级</button>
+                              </span>
+                </div>
+            </td>
+            <td></td>
+            <td class="table-handle">
+                            <span>
+                          <a href="/admin/goods_category/edit?category_id={$v.category_id}"><i class="icon-pencil"></i>编辑</a>
+                        </span>
+            </td>
+        </tr>
+{/foreach}
+
+        <tr>
+            <td>
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all">
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="4">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default forDelete">删除</button>
+                </div>
+            </td>
+        </tr>
+
+        </tbody></table>
+</div>
+
+<script>
+    $(function(){
+
+        //删除分类
+        $(".forDelete").click(function(){
+            layer.open({
+                content: '您确定要删除吗？'
+                , btn: ['确定', '不要']
+                , yes: function (index) {
+                    var ids='';
+                    $('.forTopDelete').each(function(){
+                        if($(this).hasClass('cus')){
+                            ids+=$(this).attr('thisId')+',';
+                        }
+                    });
+                    if(ids==''){
+                        layer.msg('请选择要删除的类别');
+                    }else{
+                        ids =ids.substr(0,ids.length-1);
+                        $.ajax({
+                            url:"{:url('admin/goods_category/delete')}",
+                            data:{category_id:ids},
+                            dataType:'json',
+                            success:function(result){
+                                layer.msg(result.msg);
+                                if(result.code == 1){
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            
+        });
+
+
+
+        //根据category_id获取第一层子分类
+        function getChildCate(){
+            $(".getChildCate").unbind('click').click(function(){
+                var ids = $(this).attr('ids');
+                var rows = $(this).parent().attr('rows');
+                var next = $(this).parent().next().attr('rows');
+                var forThis = $(this);
+
+                //显示图标打开或者关闭
+                var forI = $(this).find('i');
+                if(forI.hasClass('icon-folder-open-alt')){
+                    forI.removeClass('icon-folder-open-alt');
+                    forI.addClass('icon-folder-close-alt');
+                }else{
+                    forI.removeClass('icon-folder-close-alt');
+                    forI.addClass('icon-folder-open-alt');
+                }
+
+
+                //展开或者折叠子分类
+                var childNext = $(".child-next-"+rows);
+                if(childNext){
+                    childNext.each(function(){
+                        if($(this).hasClass('none')){
+                            $(this).removeClass('none');
+                        }else{
+                            $(this).addClass('none');
+                            if($(this).find('.getChildCateNext i').hasClass('icon-folder-open-alt')){
+                                $(this).find('.getChildCateNext i').removeClass('icon-folder-open-alt');
+                                $(this).find('.getChildCateNext i').addClass('icon-folder-close-alt');
+                            }
+                        }
+                    });
+                }
+
+                var childNextX = $(".child-next-x-"+rows+"-0");
+                if(childNextX){
+                    childNextX.each(function(){
+                        if($(this).hasClass('none')){
+//                            $(this).removeClass('none');
+                        }else{
+                            $(this).addClass('none');
+                        }
+                    });
+                }
+
+                if(next != rows+'-0'){
+                    //ajax获取子分类
+                $.ajax({
+                    url:'/admin/goods_category/getChildCate',
+                    data:{ids:ids},
+                    dataType:'json',
+                    success:function(result){
+                        if(result.status){
+                            alert(result.msg);
+                            return false;
+                        }
+                        var res = result.data;
+                        var strings = '';
+                        for(var i in res){
+
+                            var childStr = ' <tr class="goods-tr-t0 chk-one child-next child-next-'+rows+'" rows="'+rows+'-'+i+'">'+
+                                    '<td>'+
+                                    '<input type="checkbox" id="checkbox_a3_'+rows+'-'+i+'" class="chk_1">'+
+                                    '<label for="checkbox_a3_'+rows+'-'+i+'" thisId="'+res[i]['category_id']+'" class="lab-t forTopDelete"></label>'+
+                                    '</td>'+
+                                    '<td class="getChildCateNext" ids="'+res[i]['category_id']+'" >'+
+                                    '<i class="in icon-folder-close-alt " ></i>'+
+                                    '</td>'+
+                                    '<td class="text-left">'+
+                                    '<div class="input-group tree-next">'+
+                                    '<span class="input-group-addon"><img src="/static/seller/images/tree-list1.gif" alt=""></span>'+
+
+                                    '<input type="text" readonly value="'+res[i]['name']+'" class="form-control h30">'+
+                                    '<span class="input-group-btn">'+
+                                    '<button class="btn btn-default h30 addChild" ids="'+res[i]['category_id']+'" type="button"><i class=" icon-plus-sign"></i> 新增下级</button>'+
+                                    '</span>'+
+                                    '</div>'+
+                                    '</td>'+
+                                    '<td></td>'+
+                                    '<td class="table-handle">'+
+                                    '<span>'+
+                                    '<a href="/admin/goods_category/edit?category_id='+res[i]['category_id']+'"><i class="icon-pencil"></i>编辑</a>'+
+                                    '</span>'+
+                                    '<span>'+
+                                    '<a onclick="deleteCategory(this);" href="javascript:;" data-url="/admin/goods_category/delete?category_id=' + res[i]['category_id'] + '"><i class="icon-trash "></i>删除</a>'+
+                                    '</span>'+
+                                    '</td>'+
+                                    '</tr>';
+                            strings += childStr;
+                        }
+
+                        forThis.parent().after(strings);
+                        getChildCateNext();
+                        addChild();
+                    }
+
+                });
+                }
+
+            });
+        }
+
+
+        //根据category_id获取第二层子分类
+        function getChildCateNext(){
+            $(".getChildCateNext").unbind('click').click(function(){
+                var ids = $(this).attr('ids');
+                var rows = $(this).parent().attr('rows');
+                var forThis = $(this);
+                var next = $(this).parent().next().attr('rows')
+
+                //显示图标打开或者关闭
+                var forI = $(this).find('i');
+                if(forI.hasClass('icon-folder-open-alt')){
+                    forI.removeClass('icon-folder-open-alt');
+                    forI.addClass('icon-folder-close-alt');
+                }else{
+                    forI.removeClass('icon-folder-close-alt');
+                    forI.addClass('icon-folder-open-alt');
+                }
+
+                //展开或者折叠子分类
+                var childNext = $(".child-next-x-"+rows);
+                if(childNext){
+                    childNext.each(function(){
+                        if($(this).hasClass('none')){
+                            $(this).removeClass('none');
+                        }else{
+                            $(this).addClass('none');
+                        }
+                    });
+                }
+
+
+                if(next != rows+'-0') {
+                    $.ajax({
+                        url: '/admin/goods_category/getChildCate',
+                        data: {ids: ids},
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.status) {
+                                alert(result.msg);
+                                return false;
+                            }
+                            var res = result.data;
+                            var strings = '';
+                            for (var i in res) {
+
+                                var childStr = '        <tr class="goods-tr-t0 chk-one child-next-x-'+rows+' " rows="' + rows + '-' + i + '">' +
+                                        '<td>' +
+                                        '<input type="checkbox" id="checkbox_a4_'+rows+'-'+i+'" class="chk_1">' +
+                                        '<label for="checkbox_a4_'+rows+'-'+i+'"  thisId='+res[i]['category_id']+' class="lab-t forTopDelete"></label>' +
+                                        '</td>' +
+                                        '<td> </td>' +
+                                        '<td class="text-left">' +
+                                        '<div class="input-group tree-next">' +
+                                        '<span class="input-group-addon pl50"><img src="/static/seller/images/tree-list2.gif" alt=""></span>' +
+                                        '<input readonly type="text" value="' + res[i]['name'] + '" class="form-control h30">' +
+                                        '</div>' +
+                                        '</td>' +
+                                        '<td></td>' +
+                                        '<td class="table-handle">' +
+                                        '<span>' +
+                                        '<a href="/admin/goods_category/edit?category_id=' + res[i]['category_id'] + '"><i class="icon-pencil"></i>编辑</a>' +
+                                        '</span>' +
+                                        '<span>' +
+                                        '<a onclick="deleteCategory(this);"  data-url="/admin/goods_category/delete?category_id=' + res[i]['category_id'] + '"><i class="icon-trash js-ajax-delete"></i>删除</a>' +
+                                        '</span>' +
+                                        '</td>' +
+                                        '</tr>';
+                                strings += childStr;
+                            }
+
+                            forThis.parent().after(strings);
+
+                        }
+                    });
+                }
+            });
+        }
+
+        //添加子分类
+        function addChild(){
+            $(".addChild").click(function(){
+                var ids = $(this).attr('ids');
+                window.location.href='/admin/goods_category/add?ids='+ids;
+            });
+        }
+
+
+        addChild();
+        getChildCate();
+    });
+
+function deleteCategory(ob) {
+    var url = $(ob).attr("data-url");
+    layer.open({
+        content: '您确定要删除吗？'
+        , btn: ['确定', '不要']
+        , yes: function (index) {
+            $.getJSON(url, function (result) {
+                layer.msg(result.msg);
+                if (result.code == 1) {
+                    location.reload();
+                }
+            });
+        }
+    });
+}
+</script>

@@ -1,0 +1,226 @@
+<script src="{$Think.JS_PATH}/jquery.lazyload.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}/jquery.colorbox-min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}/swf/swfobject_modified.js"></script>
+<!-- content start -->
+<div class="container">
+    <ul class="list-box">
+        <li class="goods-sort">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="">
+                    <h3><span>产品分类</span></h3>
+                </li>
+                <li class="mt-add">
+                    <h3>您已选择</h3>
+                    <div class="add">
+
+                        {if condition="isset($topSelect)"}
+                            {foreach $topSelect as $k=>$v}
+                                {$v}
+                            {/foreach}
+                        {/if}
+
+                        {if condition="isset($topSelectSon)"}
+                            {foreach $topSelectSon as $k=>$v}
+                                {$v}
+                            {/foreach}
+                        {/if}
+
+                        {if condition="isset($topSelectThree)"}
+                            {foreach $topSelectThree as $k=>$v}
+                                {$v}
+                            {/foreach}
+                        {/if}
+
+                        {if condition="isset($select)"}
+                            {foreach $select as $k=>$v}
+                                {$v}
+                            {/foreach}
+                        {/if}
+
+                        {if condition="isset($nameUse)"}
+                            {$nameUse}
+                        {/if}
+
+                        <!--<p>-->
+                            <!--<span>风格 | 宫廷法式</span>-->
+                            <!--<span class="close"></span>-->
+                        <!--</p>-->
+                        <!--<p>-->
+                            <!--<span>风格 | 宫廷法式</span>-->
+                            <!--<span class="close"></span>-->
+                        <!--</p>-->
+                        <!--<a href="{:url('shop/livingMuseum/index')}" class="clear-main">清除选择</a>-->
+                        <a href="{:url('shop/living_museum/index')}" class="clear-main">清除选择</a>
+                    </div>
+
+                </li>
+                <li class="mt-add mt-xfn">
+
+                {if condition="!empty($topCategory)"}
+                <li class="mt-add mt-xfn">
+                    <h3>分类</h3>
+                    <div class="add">
+
+                            {foreach $topCategory as $k=>$v}
+                                {$v}
+                            {/foreach}
+
+                    </div>
+                    <div class="mt-more">
+                        <!--<p>显示更多分类</p>-->
+                    </div>
+                </li>
+                {/if}
+                {if condition="!empty($sonCategory)"}
+                <li class="mt-add mt-xfn">
+                    <h3>分类</h3>
+                    <div class="add">
+                        {foreach $sonCategory as $k=>$v}
+                            {$v}
+                        {/foreach}
+                    </div>
+                </li>
+                {/if}
+
+                {if condition="!empty($threeCategory)"}
+                <li class="mt-add mt-xfn">
+                    <h3>组装</h3>
+                    <div class="add">
+                        {foreach $threeCategory as $k=>$v}
+                        {$v}
+                        {/foreach}
+                    </div>
+                </li>
+                {/if}
+
+
+
+                {if condition="isset($feature)"}
+                {foreach $feature as $k=>$v}
+                <li class="mt-add mt-xfn">
+                    <h3>{$k}</h3>
+                    <div class="add">
+                        {if condition="isset($feature[$k])"}
+                            {foreach $feature[$k] as $key=>$val}
+                                {$val}
+                            {/foreach}
+                        {/if}
+                    </div>
+                </li>
+                {/foreach}
+                {/if}
+            </ul>
+
+        </li>
+    </ul>
+    <ul class="list-goods-item marbox">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <li class="mt-ph">
+            <p><a {if condition="!empty($oall)"} class='cus'{/if} href="{$oallUrl}">综合</a></p>
+            <p><a {if condition="!empty($osale)"} class='cus'{/if} href="{$urlLiving}/osale/1">销量</a></p>
+            <p><a {if condition="!empty($oprice)"} class='cus'{/if} href="{$urlLiving}/oprice/1">价格</a></p>
+            <p><a {if condition="!empty($otime)"} class='cus'{/if} href="{$urlLiving}/otime/1">上架时间</a></p>
+
+        </li>
+        <li class="mt-content goods-tc">
+            {if condition="!empty($list)"}
+            {foreach $list as $k=>$v}
+
+            <div class="fl">
+                <p class="box">
+                    {if $v.fav == 1}
+                    <span class="mt-icox cus" dataId="{$v.goods_id}" flag="1">喜欢这款</span>
+                    {else/}
+                    <span class="mt-icox" dataId="{$v.goods_id}" flag="0">喜欢这款</span>
+                    {/if}
+                    <a href="{:url('shop/goods/index')}?gk={$v.goods_id}" class="mt-mz-box">
+                        <img class="lazy" data-original="{$v.goods_image_main}@w265_h175.png" width="265" height="175" alt="" />
+                    </a>
+                </p>
+                <div class="mt-wz">
+                    <p><a href="{:url('shop/goods/index')}?gk={$v.goods_id}">{if condition="mb_strlen($v.goods_name,'utf-8') > 18"}{$v.goods_name|mb_substr=0,15,'utf-8'}...{else /}{$v.goods_name}{/if}</a></p>
+                    <p>
+                        <span>已售：<i>{$v.goods_sale_number}</i>件</span>
+                        <span class="fr">抢购价：<i>￥{$v.goods_price}</i></span>
+                    </p>
+
+                </div>
+            </div>
+            {/foreach}
+            {else /}
+
+            <div class="">
+                <div class="og-box">
+                    <div class="ncc-receipt-info">
+                        <div class="ncc-receipt-info-title">
+                            <h1 style="color: #c98c8c">抱歉，没有搜索到{if condition='isset($name)'}与"{$name}"{/if}相关的商品</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/if}
+        </li>
+        <li>
+            <div class="clear"></div>
+            <div class="pagelist">
+                {$page}
+
+            </div>
+        </li>
+
+    </ul>
+</div>
+<!-- content end -->
+<script>
+    $(function(){
+
+        //图片加载
+        $("img.lazy").lazyload({
+            placeholder: "{$Think.IMG_PATH}loading.jpg",
+            effect: "fadeIn"
+        })
+
+        //收藏以及取消收藏商品
+        $('.goods-tc div p .mt-icox').click(function() {
+            //判断是否登录
+            var login   = parseInt('{$isLogin}');
+            if( login == 0 ) {
+                layer.msg('请先登录');
+                window.location.href = '{:url("shop/login/login")}';
+            }
+            var dataId = $(this).attr('dataId');
+            var $_this = $(this);
+            var flag   = $(this).attr('flag');
+            if( flag == 0 ){
+                $.getJSON('{:url("api/Favorites/addFav")}?data=' + dataId, function (result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $_this.addClass('cus');
+                        $_this.attr('flag',1);
+                    }
+                });
+            }else{
+                $.getJSON('{:url("api/Favorites/delFav")}?data=' + dataId, function (result) {
+                    layer.msg(result.msg);
+                    if (result.code == 1) {
+                        $_this.removeClass('cus');
+                        $_this.attr('flag',0);
+                    }
+                });
+            }
+
+        });
+    });
+
+
+</script>

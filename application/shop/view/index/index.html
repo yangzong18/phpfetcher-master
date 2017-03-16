@@ -1,0 +1,347 @@
+
+<div class="container">
+    <ul class="marbox">
+        {if condition="$packagedProcessSetting"}
+        <li class="mt-cnt1">
+            <h2>整装定制流程</h2>
+            <div>
+                {volist name="packagedProcessSetting" id="settingData"}
+                <p>
+                    <a href="{$settingData.address}" title="{$settingData.content}">
+                        <img src="{$settingData.img_url}@w284_h192.png" style="width: 284px;height: 192px" alt="{$settingData.title}" />
+                    </a>
+                </p>
+                {/volist}
+            </div>
+            <div class="clear"></div>
+        </li>
+        {/if}
+
+        {include file="index/index_include_story" /}
+
+        {if condition="$productiveProcess"}
+        <li class="mt-cnt4 mt-pro-ecss">
+            <h1><span>原木介绍及家具生产过程</span></h1>
+            <div>
+                {volist name="productiveProcess" id="settingData"}
+                <a href="{$settingData.address}">
+                    <p><img src="{$settingData.img_url}" style="width: 146px;height: 145px" alt="{$settingData.content}"></p>
+                    <p>{$settingData.title}</p>
+                </a>
+                {/volist}
+            </div>
+            <div class="clear"></div>
+        </li>
+        {/if}
+
+
+
+        <li class="center-foot">
+            <ul>
+                {if condition="$service"}
+                <li class="bt">
+                    <!-- <span class="s1">售后服务</span><span class="s2">（服务时间：{$service.time})  {$service.tel}</span> -->
+                </li>
+                {/if}
+                <li class="mt-order">
+                    {if condition="$distributeMethod"}
+                    <div class="mt-b mt-c">
+                        <p class="xbt">配送方式</p>
+                        <div>
+                            {volist name="distributeMethod" id="distribute"}
+                            <a href="{$distribute.url}">
+                                <p><img src="{$distribute.image}@w60_h60.png" width="60px" height="60px" alt="" /></p>
+                                <p>{$distribute.name}</p>
+                            </a>
+                            {/volist}
+                        </div>
+                    </div>
+                    {/if}
+                    {if condition="$installMethod"}
+                    <div class="mt-b">
+                        <p class="xbt">安装方式</p>
+                        <div>
+                            {volist name="installMethod" id="install" key="index"}
+                            <a href="#inline_content_{$index}" class="inline inline_{$index}">
+                                <p><img src="{$install.video_cover}@w60_h60.png" width="60px" height="60px" alt="" /></p>
+                                <p>{$install.name}</p>
+                                <div class="none">
+                                    <div id="inline_content_{$index}" style="height:505px;">
+                                        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="500" id="FLVPlayer_{$index}">
+                                            <!-- 视频文件路径 -->
+                                            <param name="movie" value="{$Think.INDEX_SWF_VIDEO_PATH}/FLVPlayer_Progressive.swf" />
+                                            <param name="quality" value="high">
+                                            <param name="wmode" value="opaque">
+                                            <param name="scale" value="noscale">
+                                            <param name="salign" value="lt">
+                                            <!-- 视频文件皮肤路径 -->
+                                            <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName={$Think.INDEX_SWF_VIDEO_PATH}/Corona_Skin_3&amp;streamName={$install.video}&amp;autoPlay=false&amp;autoRewind=false" />
+                                            <param name="swfversion" value="8,0,0,0">
+                                            <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                                            <!-- 必备 -->
+                                            <param name="expressinstall" value="{$Think.INDEX_SWF_VIDEO_PATH}/expressInstall.swf">
+                                            <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                                            <!--[if !IE]>-->
+                                            <object type="application/x-shockwave-flash" data="{$Think.INDEX_SWF_VIDEO_PATH}/FLVPlayer_Progressive.swf" width="100%" height="500">
+                                                <!--<![endif]-->
+                                                <param name="quality" value="high">
+                                                <param name="wmode" value="opaque">
+                                                <param name="scale" value="noscale">
+                                                <param name="salign" value="lt">
+                                                <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName={$Think.INDEX_SWF_VIDEO_PATH}/Corona_Skin_3&amp;streamName={$install.video}&amp;autoPlay=false&amp;autoRewind=false" />
+                                                <param name="swfversion" value="8,0,0,0">
+                                                <param name="expressinstall" value="{$Think.INDEX_SWF_VIDEO_PATH}/expressInstall.swf">
+                                                <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                                                <div>
+                                                    <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                                                    <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                                                </div>
+                                                <!--[if !IE]>-->
+                                            </object>
+                                            <!--<![endif]-->
+                                        </object>
+                                    </div>
+                                </div>
+                            </a>
+                            {/volist}
+                        </div>
+                    </div>
+                    {/if}
+
+                    <div class="mt-a">
+                        <p class="xbt">售后服务</p>
+                        {if condition="$service"}
+                        <p class="xm"><span>服务时间：</span><span>{$service.time}</span></p>
+                        <p class="xm"><span>服务电话：</span><span>{$service.tel}</span></p>
+                        {/if}
+                        {if condition="$setting"}
+                        <p class="xm_qq"><span>客服QQ：</span><span id="qq">{$setting.qq}</span></p>
+                        {/if}
+                    </div>
+
+                    <div class="clear"></div>
+                </li>
+                <li class="mt-info">
+
+                    <div class="info">
+                        <h3><span>新手指南</span></h3>
+                        {if condition="$newbieGuide"}
+                        <div>
+                            {volist name="newbieGuide" id="guide"}
+                            <a href="{$guide.url}">{$guide.name}</a>
+                            {/volist}
+                        </div>
+                        {/if}
+                    </div>
+
+
+                    <div class="info way">
+                        <h3><span>支付方式</span></h3>
+                        {if condition="$payMethod"}
+                        <div>
+                            {volist name="payMethod" id="method"}
+                            <a>{$method}</a>
+                            {/volist}
+                        </div>
+                        {/if}
+                    </div>
+
+
+                    <div class="info guide fr">
+                        <h3>服务网点</h3>
+                        {if condition="$servicePoint"}
+                        <div>
+                            <p><a href="{$servicePoint.url}">{$servicePoint.abstract}，点击查看详情>></a></p>
+                        </div>
+                        {/if}
+                    </div>
+
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </li>
+        <li class="infor-float">
+              <!--  float -->
+                <div class="float-left">
+                    <!--李武修改-->
+                    {foreach name="dw_arr" item="dw_arr" key="k" }
+                  <p><a id="mt-{$dw_arr.index}_zlink" href="#mt-{$dw_arr.index}" class="zxLink">{$dw_arr.name}</a></p>
+                    {/foreach}
+                  <p><a href="javascript:;" class="topLink">返回顶部</a></p>
+                </div>
+                <div class="float-right">
+                  <p><a href="{:url('carts/index')}"><span>购物车</span></a></p>
+                  <p><a href="{:url('order/orderlist')}"><span>我的订单</span></a></p>
+                  <p><a href="{:url('favorite/index')}"><span>我的收藏</span></a></p>
+                  <p><a href="{$alliance.url}"><span>{$alliance.title}</span></a></p>
+                  <p><a href="{$cusService.url}"><span>{$cusService.title}</span></a></p>
+                </div>
+              <!-- float end -->
+            </li>
+    </ul>
+</div>
+<script src="{$Think.INDEX_SWF_VIDEO_PATH}/swfobject_modified.js" charset="utf-8"></script>
+<script>
+    var adcolose_str = "{$adcolose_str}";
+    if(adcolose_str!='')
+    {
+        //广告弹窗成功回调
+        function alertAd() {
+            var starTime = 1000;//开始时间
+            var endTime = 5000;//关闭时间
+            var width = $(".ad-img").width();
+            var height = $(".ad-img").height();
+            $(".cad").HDPopUp("adtest",".ad",width,height,[".close-ad"]);
+            $(".ad-img").show();
+            setTimeout(function () {
+                $(".cad").click();
+                setTimeout(function () {
+                    $(".close-ad").click();
+                },endTime)
+            },starTime)
+        };
+        //广告弹窗加载失败回调
+        function aderror() {
+
+        }
+    }
+    //图片加载
+    $("img.lazy").lazyload({
+        placeholder: "{$Think.IMG_PATH}loading.jpg",
+        effect: "fadeIn"
+    })
+    //灯箱弹出
+    {volist name="installMethod" id="install" key="index"}
+        $('.inline_'+"{$index}").colorbox({
+            inline: true,
+            width: "50%",
+            opacity: '0.7'
+        });
+
+    {/volist}
+
+    $(function(){
+      $("a.zxLink").click(function() {
+            $("html, body").animate({
+              scrollTop: $($(this).attr("href")).offset().top + "px"
+            }, {
+              duration: 500,
+              easing: "swing"
+            });
+            return false;
+          });
+          $("a.tfLink").click(function() {
+            $("html, body").animate({
+              scrollTop: $($(this).attr("href")).offset().top + "px"
+            }, {
+              duration: 500,
+              easing: "swing"
+            });
+            return false;
+          });
+          $("a.ptLink").click(function() {
+            $("html, body").animate({
+              scrollTop: $($(this).attr("href")).offset().top + "px"
+            }, {
+              duration: 500,
+              easing: "swing"
+            });
+            return false;
+          });
+
+
+
+          $("a.topLink").click(function(){
+                $('body,html').animate({scrollTop:0},500);
+                return false;
+            });
+
+
+            // 两侧浮动
+          var intop = $('.mt-cnt1').offset().top;
+          var goodary = [];
+          var goodary_id_arr = [];
+          if($('.mt-zbox').length>=1){
+            $('.mt-zbox').each(function(index, el) {
+              goodary.push($(this).offset().top-50);
+              goodary_id_arr.push($(this).attr('id'));
+            });
+          }
+
+          var goodtop4 = $('.mt-cnt4').offset().top-50;
+          var mt_bnumber=150;//矫正数据
+          var maxt_number = [];
+          var max_off=0;
+          $(window).scroll(function(event)
+          {
+              //李武修改
+            if($(document).scrollTop() >= intop)
+            {
+              $('.infor-float .float-left').slideDown(200)
+              $('.infor-float .float-right').slideDown(200)
+
+                maxt_number = [];
+                for(k=0;k<goodary.length;k++) {
+                    var sh=goodary[k]-mt_bnumber;
+                    if($(document).scrollTop()+mt_bnumber >=sh)  maxt_number.push(sh);
+                }
+
+                max_off=0;
+                for(kt=0;kt<maxt_number.length;kt++) {
+                    if(maxt_number[kt]>max_off) max_off=maxt_number[kt]
+                }
+
+                for(k=0;k<goodary.length;k++)
+                {
+                    var sh=goodary[k]-mt_bnumber;
+                    var zz_id = goodary_id_arr[k]+"_zlink";
+                    if(max_off==sh){
+                        $("#"+zz_id).css('color', '#d6c59c');
+                    }else{
+                        $("#"+zz_id).css('color', '#9d9a9a');
+                    }
+                }
+
+
+              if($(document).scrollTop()+mt_bnumber >= goodtop4){
+                $('.ptLink').css('color', '#9d9a9a');
+              }
+            }else if($('.infor-float .float-left').offset().top <= intop){
+              $('.infor-float .float-left').slideUp(200)
+              $('.infor-float .float-right').slideUp(200)
+            }
+          });
+
+          $('.infor-float .float-right p a').hover(function() {
+            $(this).find('span').show().animate({width:'74px'}, 150)
+          }, function() {
+            $(this).find('span').animate({width:'0px'}, 150).hide(150)
+          });
+    })
+
+</script>
+{volist name="installMethod" id="install" key="index"}
+<script language="javascript">
+    var it = "{$index}";
+    swfobject.registerObject("FLVPlayer_"+it);
+</script>
+{/volist}
+{if $adcolose_str neq ''}
+<div class="cad" style="display: none"></div>
+<div class="ad">
+    <div class="close-ad" style="position: absolute;top: 0;right: 0;font-size: 20px;color: #ffffff;cursor: pointer">&times;</div>
+    <a href="{$bigAdvertise.adv_link}">
+        <img src="{$adcolose_str}" class="ad-img" onload="alertAd()" onerror="aderror()" style="display: none"/>
+    </a>
+
+</div>
+{/if}
+<script>
+    $('.xm_qq').click(function(){
+        var qq_number=$('#qq').text();
+        openQQ(qq_number);
+    })
+    $('.xm_qq ').hover(function(){
+        $(this).css('cursor','pointer');
+    })
+</script>

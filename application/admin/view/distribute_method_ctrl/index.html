@@ -1,0 +1,96 @@
+
+<div class="col-form">
+    <form class="form-inline" role="form">
+        <span>配送方式</span>
+        <div class="input-group">
+            <input type="text" name="name" class="form-control" value="{$name}">
+            <span class="input-group-btn">
+              <button class="btn btn-default search" type="button">搜索</button>
+            </span>
+        </div>
+    </form>
+</div>
+
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>可以对配送方式进行编辑、删除等操作</p>
+        </li>
+    </ul>
+</div>
+
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10">
+                <!-- 按钮占位 -->
+            </th>
+            <th class="w10"></th>
+            <th class="w30">排序</th>
+            <th class="w380">配送方式</th>
+            <th>链接</th>
+            <th class="w150">操作</th>
+        </tr>
+        <tr>
+            <td colspan="6"></td>
+        </tr>
+
+        {volist name="searchData" id="data"}
+        <tr class="goods-tr-t0 chk-one child-next-x none" style="display: table-row;">
+            <td>
+                <input type="checkbox" id="checkbox_a_{$data.id}" class="chk_1 data_check" value="{$data.id}"/>
+                <label for="checkbox_a_{$data.id}" class="lab-t"></label>
+            </td>
+            <td>
+                <!-- <i class="icon-folder-close-alt in"></i> -->
+            </td>
+            <td>
+                <div class="one-text sort">
+                    <input type="text" class="form-control h30 w50" key-id="{$data.id}" value="{$data.sort}" readonly>
+                </div>
+            </td>
+
+            <td class="text-left">
+              <div class="input-group tree-next">
+                <span class="input-group-addon pl50"></span>
+                  <input type="text" class="form-control h30" name="name" readonly value="{$data.name}">
+              </div>
+            </td>
+            <td>
+                <div class="input-group tree-next">
+                <span class="input-group-addon pl50"></span>
+                  <input type="text" class="form-control h30" name="url" readonly value="{$data.url}">
+              </div>
+            </td>
+            <td class="table-handle">
+                <span>
+                    <a href="edit?id={$data.id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a class="js-ajax-delete" href="delete?id={$data.id}"><i class="icon-trash"></i>删除</a>
+                </span>
+            </td>
+        </tr>
+        {/volist}
+
+        <tr>
+            <td>
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="4">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default delete">删除</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

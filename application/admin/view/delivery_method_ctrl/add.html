@@ -1,0 +1,249 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<style>
+    .webuploader-pick{
+        background: #fff;
+        padding: 7px 15px;
+        color: #000;
+    }
+    .webuploader-pick-hover{
+        background: #dcdcdc;
+    }
+</style>
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" action="addPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>新增收货方式</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="name">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>图片*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="input-group">
+                            <input type="text" name="image" readonly class="form-control h30" id="imageUrl" style="width: 308px">
+                            <span class="input-group-btn" style="float: left;">
+                                <a href="javascript:void(0)" id="filePicker" style="padding: 0 0;" class="btn btn-default btn_addfile">
+                                    <span ><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>链接*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="url">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>排序</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="sort">
+                            <span>请填写自然数。规格列表将会根据排序进行由小到大排列显示。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button class="btn btn-warning max-bg js-ajax-submit">添加</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script>
+    // 初始化Web Uploader
+    var uploader = WebUploader.create({
+        // 选完文件后，是否自动上传。
+        auto: true,
+        // 不压缩image
+        resize: false,
+        chunked: true, //是否要分片处理大文件上传
+        chunkSize:5*1024*1024 ,//分片上传，每片2M，默认是5M
+        chunkRetry:2,
+        compress:false,
+        // swf文件路径
+        swf: '{$Think.IMG_PATH}Uploader.swf',
+
+        // 文件接收服务端。
+        server: '/index/index/uploadFile',
+
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: {
+            id : '#filePicker',
+            //innerHTML : '添加文件',
+            //是否开起同时选择多个文件能力。
+            multiple : false
+        },
+
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/png,image/jpg,image/jpeg,image/bmp,image/gif'
+            // mimeTypes: 'image/*'
+        },
+
+
+        // disableGlobalDnd: true,
+        // fileNumLimit: 300,
+        // fileSizeLimit: 200 * 1024 * 1024,
+        // 200 M
+        fileSingleSizeLimit: 5 * 1024 * 1024 // 5 M
+    });
+
+
+    uploader.on('error',function( file ){
+        if(file == 'F_EXCEED_SIZE'){
+            alert('文件大小超出限制');
+        }
+    });
+
+    // 当有文件添加进来的时候
+    uploader.on( 'fileQueued', function( file ) {
+        $('.js-ajax-submit').prop('disabled', true).addClass('disabled');
+        var $li = $(
+                        '<div id="' + file.id  + '" class="file-item thumbnail">' +
+                        '<img>' +
+                        // '<div class="info">' + file.name + '</div>' +
+                        '<div><a class="del_pic">删除</a></div>'+
+                        '</div>'
+                ),
+                $img = $li.find('img');
+
+
+        // $list为容器jQuery实例
+        var $list = $("#fileList");
+        $list.append( $li );
+
+        var thumbnailWidth = 100;
+        var thumbnailHeight = 100;
+
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, thumbnailWidth, thumbnailHeight );
+    });
+
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+                $percent = $li.find('.progress span');
+
+
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<div class="progress"><div class="progress-bar"><span class="sr-only" style="width:25%"></span></div></div>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file,response ) {
+        $("#imageUrl").val(response.filePath);
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+                $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        del_pic();
+        $( '#'+file.id ).find('.progress').remove();
+        $('.js-ajax-submit').prop('disabled', false).removeClass('disabled');
+    });
+
+
+    //删除图片
+    function del_pic(){
+        $('.del_pic').click(function(){
+            var delUrl = $(this).attr('value');
+            var url = '/index/index/delPic';
+            var theOne = $(this);
+            $.ajax({
+                url:url,
+                data:{delUrl:delUrl},
+                type:'POST',
+                success:function(){
+
+                    var file1 = $("#fileList").find('.del_pic');
+                    var str1 = '';
+                    file1.each(function(){
+                        str1 += $(this).attr('value')+',';
+                    });
+                    $("#picOne").val(str1);
+                }
+            });
+            $(this).parent().parent().remove();
+        });
+    }
+
+</script>

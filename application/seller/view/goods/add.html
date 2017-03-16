@@ -1,0 +1,541 @@
+<div class="sheet-box">
+    <!--<form class="" action="/seller/Goods/doAdd" method="post">-->
+        <form class="js-ajax-form" action="/seller/Goods/doAdd" method="post">
+        <input type="hidden" id="picOne" name="pic_one"/>
+        <table class="table">
+            <tbody><tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>商品基本信息</h3>
+                </th>
+            </tr>
+            <tr >
+                <td class="w100">
+                    <div>
+                        <h3>商品分类*</h3>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="form-group" style="float: left;margin-left: 18px;margin-bottom: 1px;">
+                        <select class="form-control  firstSelect">
+                            <option>请选择...</option>
+                            {foreach $category as $k=>$v}
+                            <option value="{$v.category_id}">{$v.name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="form-group" style="float: left;margin-left:10px;margin-bottom: 1px;">
+                        <select class="form-control  secondSelect">
+                            <option>请选择...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="float: left;margin-left: 10px; margin-bottom: 1px;">
+                        <select class="form-control  threeSelect" name="category_id">
+                            <option>请选择...</option>
+
+                        </select>
+                    </div>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_name" class="form-control h30 mb5">
+                            <span>请输入商品名称(最长不超过64个汉字)</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品说明</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_desc" class="form-control h30 mb5">
+                            <span>请输入商品说明(最长不超过500个字符)</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品价格*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_price" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请填写商品基本价格（检索使用）,单位：元</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>市场价*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_market_price" class="form-control h30 mb5" style="width: 88px;">
+                            <span>此价格仅为市场参考售价，请根据该实际情况认真填写。单位：元</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品类型*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <select name="goods_type" class="form-control h35" style="width:128px;">
+                                <option value="1" selected>普通商品</option>
+                                <option value="2">兑换商品</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr >
+                <td>
+                    <div>
+                        <h3>卖家货号*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_serial" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请填写卖家货号</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr id="">
+                <td>
+                    <div>
+                        <h3>商品库存*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_storage"  class="form-control mt-zkc h30 mb5" style="width: 88px;">
+                            <span>请填写商品库存</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr id="storage">
+                <td>
+                    <div>
+                        <h3>库存预警*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text"  name="goods_storage_alarm" class="form-control mt-zyj h30 mb5" style="width: 88px;">
+                            <span>请填写商品库存预警</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+
+            <tr id="mainImage">
+                <td>
+                    <div>
+                        <h3>商品主图*</h3>
+                    </div>
+                </td>
+
+
+                <td colspan="3">
+                    <div class="uploadimg">
+
+                    </div>
+                    <div class="btn-up-zbox">
+                        <div class="clear"></div>
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        <span>图片建议561*337</span>
+                    </div>
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+                <td>
+                    <h3>商品实拍*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor1" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>商品规格*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor2" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>材质说明*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor3" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>品质保证*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor4" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">提交</button>
+                        <a href="javascript:window.history.go(-1);"><button type="button" class="btn max-bg">返回</button></a>
+                    </div>
+
+                </td>
+            </tr>
+
+            </tbody></table>
+        <textarea name="editorContent" id="ueditor_textarea_editorContent" style="display: none;"></textarea></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script>
+    $(function() {
+        function u() {
+            $(".secondSelect").unbind("change").change(function() {
+                var b = $(this).find("option:selected").attr("value");
+                if (0 == b || null == b || "undefined" == b) return $(".threeSelect").html(""), $(".threeSelect").html("<option>\u8bf7\u9009\u62e9...</option>"), !1;
+                $(".typeSelect").remove();
+                $(".typeSelect1").remove();
+                $(".typeSelectOrder").remove();
+                $.ajax({
+                    url: "/seller/Goods/getCategory",
+                    dataType: "json",
+                    data: {
+                        ids: b
+                    },
+                    success: function(c) {
+                        if (0 == c.code) return layer.msg(c.msg), !1;
+                        c = c.data;
+                        var a = "<option>\u8bf7\u9009\u62e9...</option>",
+                                e;
+                        for (e in c) a += '<option value="' + c[e].category_id + '">' + c[e].name + "</option>";
+                        $(".threeSelect").html("");
+                        $(".threeSelect").html(a);
+                        v()
+                    }
+                })
+            })
+        }
+        function v() {
+            $(".threeSelect").unbind("change").on("change", function() {
+                $(".typeSelect").remove();
+                $(".typeSelect1").remove();
+                $(".typeSelectOrder").remove();
+                var b = $(this).find("option:selected").attr("value");
+                $.ajax({
+                    url: "/seller/Goods/getTypes",
+                    dataType: "json",
+                    data: {
+                        ids: b
+                    },
+                    success: function(c) {
+                        if (1 == c.code) {
+                            var a = c.data.feature,
+                                    e = "",
+                                    b = "",
+                                    g = 0,
+                                    k = a.length,
+                                    l = 0,
+                                    p = [],
+                                    d;
+                            for (d in a) l++, b != a[d].feature_id ? (b = a[d].feature_id, p.push(b), 0 != g && (e += '<a href="#" class="btn btn-info add_feature_value"><i class="icon-plus"></i> \u6dfb\u52a0\u89c4\u683c\u503c</a>                        </ul></div></td></tr>'), e += '            <tr class="typeSelect"><td><div><h3>' + a[d].attribute_name + '</h3></div></td><td colspan="3"><div class="item-list-chkbox"><ul  fid="' + b + '" class="chk-one select_feature_for_all select_feature_' + b + '">', e += '<li><input type="checkbox" value="' + a[d].id + '" name="feature[' + b + '][]" id="list_c_' + d + '" thisName="' + a[d].feature_value + '" thisId="' + a[d].id + '" class="chk_1" /><label for="list_c_' + d + '" class="lab-t"></label><label for="list_c_' + d + '" class="font-min">' + a[d].feature_value + "</label></li>", g++) : 0 != g && (e += '<li><input type="checkbox" value="' + a[d].id + '" name="feature[' + b + '][]" thisName="' + a[d].feature_value + '" thisId="' + a[d].id + '" id="list_c_' + d + '" class="chk_1" /><label for="list_c_' + d + '" class="lab-t"></label><label for="list_c_' + d + '" class="font-min">' + a[d].feature_value + "</label></li>");
+                            k == l && 0 < k && (e += '<a href="javascript:;"  class="btn btn-info add_feature_value"><i class="icon-plus"></i> \u6dfb\u52a0\u89c4\u683c\u503c</a>                        </ul></div></td></tr>');
+                            $("#storage").after(e);
+                            c = c.data.feature_basic;
+                            a = "";
+                            if (c) {
+                                var a = a + '            <tr class="typeSelect1 form-inline"><td><div><h3>\u5546\u54c1\u5c5e\u6027*</h3></div></td><td colspan="3">',
+                                        f;
+                                for (f in c) if (c[f] instanceof Array) {
+                                    var a = a + (c[f][0].attribute_name + ':<div class="form-group" style=""><select name="feature_basic[' + c[f][0].feature_id + ']" class="form-control">'),
+                                            h;
+                                    for (h in c[f]) a += '<option value="' + c[f][h].id + '">' + c[f][h].feature_value + "</option>";
+                                    a += "</select></div>"
+                                }
+                                a += "</td></tr>"
+                            }
+                            $("#mainImage").after(a);
+                            m();
+                            t()
+                        }
+                    }
+                })
+            })
+        }
+        function t() {
+            $(".add_feature_value").on("click", function() {
+                $(this).before('<li><input type="text" /><a href="javascript:;" class="btn btn-info add_feature_commit"><i class="icon-plus"></i> \u786e\u8ba4</a><a href="javascript:;" class="btn btn-warning add_feature_cancel"><i class="icon-remove"></i> \u53d6\u6d88</a></li>');
+                $(this).hide();
+                $(".add_feature_commit").on("click", function() {
+                    var b = $(this).parent().parent().attr("fid"),
+                            c = $(this).prev().val(),
+                            a = $(".threeSelect").find("option:selected").attr("value"),
+                            e = $(this);
+                    $.ajax({
+                        url: "/seller/Goods/addFeatureValue",
+                        data: {
+                            value: c,
+                            fid: b,
+                            cate: a
+                        },
+                        success: function(a) {
+                            if (1 == a.code) {
+                                var b = '<li><input type="checkbox" thisname="' + c + '" thisid="' + a.data + '" id="list_c_' + a.data + '" class="chk_1"><label for="list_c_' + a.data + '" class="lab-t"></label><label for="list_c_' + a.data + '" class="font-min">' + c + "</label></li>";
+                                e.parent().before(b);
+                                e.parent().next().show();
+                                e.parent().remove();
+                                layer.msg(a.msg);
+                                m()
+                            } else layer.msg(a.msg)
+                        }
+                    })
+                });
+                $(".add_feature_cancel").on("click", function() {
+                    $(this).parent().next().show();
+                    $(this).parent().remove()
+                })
+            })
+        }
+        function m() {
+            $(".select_feature_for_all input[type='checkbox']").unbind("click").on("click", function() {
+                var b = 0,
+                        c = [];
+                if ($(this).attr("checked")) {
+                    $(this).attr("checked", !1);
+                    var a = $(this).next().next(),
+                            e = "",
+                            e = a.find("input") ? a.find("input").val() : a.html();
+                    a.html("");
+                    a.html(e)
+                } else {
+                    var m = $(this);
+                    $(this).attr("checked", "checked");
+                    a = $(this).next().next();
+                    e = '<input type="text" value="' + a.html() + '"/>';
+                    a.html("");
+                    a.html(e);
+                    a.find("input").on("keyup", function() {
+                        var a = $(this).val();
+                        m.attr("thisname", a)
+                    })
+                }
+                var g = [],
+                        k = [];
+                $(".typeSelect").each(function() {
+                    var a = $(this).find("h3").html(),
+                            c = $(this).find(".select_feature_for_all ").attr("fid");
+                    g.push(c);
+                    k[c] = a
+                });
+                for (var l in g) {
+                    var p = 0,
+                            d = [];
+                    $(".select_feature_" + g[l] + " input").each(function() {
+                        if ($(this).attr("checked")) {
+                            var a = [];
+                            a.id = $(this).attr("thisId");
+                            a.name = $(this).attr("thisName");
+                            d.push(a);
+                            c[l] = d;
+                            p++
+                        }
+                    });
+                    0 < p && b++
+                }
+                a = "";
+                if (b == g.length) {
+                    var a = a + '            <tr class="typeSelectOrder"><td><div><h3>\u5e93\u5b58\u914d\u7f6e*</h3></div></td><td colspan="3"><div class="table-form-default"><table class="table"><tr>',
+                            f;
+                    for (f in k) a += "<th>" + k[f] + "</th>";
+                    var a = a + '<th class="">\u4ef7\u683c</th><th class="">\u5e02\u573a\u4ef7</th><th>\u5e93\u5b58</th><th>\u5e93\u5b58\u9884\u8b66</th><th class="w150">\u5356\u5bb6\u8d27\u53f7</th></tr>',
+                            b = function(a) {
+                                function c(a) {
+                                    a++;
+                                    if (!(a > e - 1)) for (f[a] || (f[a] = 0), b[a] instanceof Array || (b[a] = [b[a]]), f[a] = 0; f[a] < b[a].length; f[a]++) if (c(a), a == e - 1) {
+                                        for (var h = [], g = e - 1; 0 <= g; g--) b[a - g] instanceof Array || (b[a - g] = [b[a - g]]), h.push(b[a - g][f[a - g]]);
+                                        d.push(h)
+                                    }
+                                }
+                                var b = a,
+                                        e = b.length,
+                                        d = [],
+                                        f = {};
+                                c(-1);
+                                return d
+                            }(c),
+                            h;
+                    for (h in b) {
+                        f = b[h];
+                        var a = a + "<tr>",
+                                n;
+                        for (n in f) a += "<td>" + f[n].name + '<input type="hidden" value="' + f[n].id + '" name="feature_ids[' + h + '][]"><input type="hidden" name="featureIdNames[' + h + '][]" value="' + k[g[n]] + '"><input type="hidden" value="' + f[n].name + '" name="featureNames[' + h + '][]"> </td>';
+                        a += '<td><input class="form-control h30 mb5 price" name="salePrice[' + h + ']" style="width: 88px;" type="text" value="" ></td><td><input class="form-control h30 mb5 price-market" name="saleMarketPrice[' + h + ']" style="width: 88px;" type="text" value="" ></td><td><input class="form-control h30 mt-kc mt-fk mb5" name="saleStorage[' + h + ']" style="width: 88px;" type="text"/> </td><td><input class="form-control h30 mt-kc mt-yj mb5" name="saleStorageAlarm[' + h + ']" style="width: 88px;" type="text"/> </td><td><input type="text" class="form-control h30 mb5" name="saleNumber[' + h + ']" style="width: 128px;" /> </td></tr>'
+                    }
+                    $(".typeSelectOrder").remove();
+                    $("#mainImage").before(a);
+                    $(".mt-kc").blur(function() {
+                        0 > $(this).val() && (layer.msg("\u4e0d\u80fd\u586b\u5199\u8d1f\u6570"), $(this).val(0));
+                        goodsTotal(".mt-fk", ".mt-zkc");
+                        $(".mt-zkc").attr("readonly", !0)
+                    });
+                    $(".mt-yj").blur(function() {
+                        0 > $(this).val() && (layer.msg("\u4e0d\u80fd\u586b\u5199\u8d1f\u6570"), $(this).val(0));
+                        goodsTotal(".mt-yj", ".mt-zyj");
+                        $(".mt-zyj").attr("readonly", !0)
+                    });
+                    $(".mt-yj").change(function() {
+                        var a = 0;
+                        $(".mt-yj").each(function() {
+                            parseInt($(this).val()) != $(this).val() && $(this).val(0);
+                            a += parseInt($(this).val())
+                        });
+                        $(".mt-zyj").val(a)
+                    })
+                } else $(".typeSelectOrder").remove()
+            })
+        }
+        m();
+        t();
+        var q = [1, 2, 3, 4],
+                r;
+        for (r in q)(new baidu.editor.ui.Editor({
+            initialContent: "\u8bf7\u5728\u8fd9\u91cc\u8f93\u5165\u6b63\u6587......",
+            autoClearinitialContent: !0,
+            initialFrameHeight: 350,
+            textarea: "editorContent" + q[r],
+            autoFloatEnabled: !1,
+            focus: !1,
+            autoHeightEnabled: !1,
+            sourceEditor: !1,
+            wordCount: !1,
+            elementPathEnabled: !1,
+            maximumWords: 10240
+        })).render("editor" + q[r]);
+        $(".firstSelect").unbind("change").change(function() {
+            var b = $(this).find("option:selected").attr("value");
+            if (0 == b || null == b || "undefined" == b) return $(".secondSelect").html(""), $(".threeSelect").html(""), $(".secondSelect").html("<option>\u8bf7\u9009\u62e9...</option>"), $(".threeSelect").html("<option>\u8bf7\u9009\u62e9...</option>"), !1;
+            $(".typeSelect").remove();
+            $(".typeSelect1").remove();
+            $(".typeSelectOrder").remove();
+            $.ajax({
+                url: "/seller/Goods/getCategory",
+                dataType: "json",
+                data: {
+                    ids: b
+                },
+                success: function(c) {
+                    if (0 == c.code) return layer.msg(c.msg), !1;
+                    c = c.data;
+                    var a = "<option>\u8bf7\u9009\u62e9...</option>",
+                            b;
+                    for (b in c) a += '<option value="' + c[b].category_id + '">' + c[b].name + "</option>";
+                    $(".secondSelect").html("");
+                    $(".threeSelect").html("<option>\u8bf7\u9009\u62e9...</option>");
+                    $(".secondSelect").html(a);
+                    u()
+                }
+            })
+        })
+    });
+</script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<!--<script src="{$Think.JS_PATH}upload/jquery.sortable.js" charset="utf-8"></script>-->
+<script type="text/javascript">
+$(function() {
+    $('.btn-one-upload').uploader({
+        server: '/index/index/uploadFile', //上传路径
+        container: '.uploadimg', //图片容器
+        swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+        num: 1, //上传数量
+        inputName: 'image', //input name值
+        btnDsab:'.js-ajax-submit',
+        imgBtn:'.btn-one-upload'
+    });
+    $(".js-ajax-submit").click(function() {
+        var c = 0;
+        $(".price").each(function() {
+            0 >= $(this).val() && c++
+        });
+        if (0 < c) return layer.msg("\u4ef7\u683c\u4e0d\u80fd\u4e3a0\u6216\u8d1f\u6570"), !1;
+        var d = 0;
+        $(".price-market").each(function() {
+            0 >= $(this).val() && d++
+        });
+        if (0 < d) return layer.msg("\u5e02\u573a\u4ef7 \u4ef7\u683c\u4e0d\u80fd\u4e3a0\u6216\u8d1f\u6570"), !1;
+        var a = $(".mt-zkc").val(),
+                b = $(".mt-zyj").val();
+        if (!(0 <= a && void 0 == String(a).split(".")[1]) || 0 > a) return layer.msg("\u5e93\u5b58\u5e94\u4e3a\u5927\u4e8e\u7b49\u4e8e0\u7684\u6574\u6570"), !1;
+        if (!(0 <= b && void 0 == String(b).split(".")[1]) || 0 > b) return layer.msg("\u5e93\u5b58\u9884\u8b66\u5e94\u4e3a\u5927\u4e8e\u7b49\u4e8e0\u7684\u6574\u6570"), !1;
+        var a = $(".typeSelect input"),
+                e = 0;
+        a && a.each(function() {
+            $(this).attr("checked") && (e += 1)
+        });
+        if (e && !$(".typeSelectOrder").html()) return layer.msg("\u89c4\u683c\u503c\u672a\u9009\u62e9\u5b8c\u5168\uff01"), !1
+    });
+})
+</script>

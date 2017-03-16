@@ -1,0 +1,285 @@
+<!--订单退款申请页面   2016-12-22 -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content order-text">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="order-text-head h-content-container">
+            <div class="order-text-head-title font-color-pink">
+                <div class="h-content-logo-lt"></div>
+                <div>
+                    <a href="{:url('/shop/user/index')}" class="font-color-pink">个人中心</a> &gt;
+                    <a href="{:url('shop/order/orderlist')}" class="font-color-pink">我的订单</a> &gt;
+                    <a href="{:url('shop/order/orderdetail')}/order_id/{$order_info.order_id}" class="font-color-pink">订单详情</a>&gt;
+                    <a href="javascript:;" class="font-color-pink">申请退款</a>
+                </div>
+                <div class="h-content-logo-rt"></div>
+            </div>
+            <div class="apply-refund-details font-color-gray">
+                <ul>
+                    <li><span>订单编号</span><span>{$order_info.order_sn}</span></li>
+                    <li><span>创建日期</span><span>{$order_info.add_time|date='Y-m-d H:i:s',###}</span></li>
+                    <li><span>订单状态</span><span class="font-color-white">{$order_info.state_desc}</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="order-text-head h-content-container">
+            <div class="order-text-head-title font-color-pink">
+                <div>商品信息</div>
+            </div>
+            <!-- 商品信息 -->
+            {foreach $order_info.extend_order_goods as $goods_info}
+            <div class="order-text-head-body font-color-gray">
+                <ul class="order-text-head-body-img">
+                    <li><a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}"><img class="bt-images" src="{$goods_info.goods_image}@w208_h141.png" alt=""></a></li>
+                </ul>
+                <ul>
+                    <li>商品编号： <span>{$goods_info.goods_id}</span></li>
+                    <li><a href="{:url('shop/goods/index')}?gk={$goods_info.goods_id}">{if condition="mb_strlen($goods_info.goods_name,'utf-8') > 18"}{$goods_info.goods_name|mb_substr=0,18,'utf-8'}...{else /}{$goods_info.goods_name}{/if}</a>
+                    </li>
+                    <li>
+                        {if $goods_info.sku_name!=''}
+                        {volist name="$goods_info.sku_name" key="key" id="value"}
+                        {$key} : {$value}
+                        {/volist}
+                        {/if}
+                    </li>
+                    <li class="font-color-gold">￥{$goods_info.goods_price} * {$goods_info.goods_num}</li>
+                    {if $goods_info.bz_remark}
+                    <li style="word-break: break-all;height: auto">备注：<span>{$goods_info.bz_remark}</span></li>
+                    {/if}
+                    {if $goods_info.phone_remark}
+                    <li>经销商电话：<span>{$goods_info.phone_remark}</span></li>
+                    {/if}
+                </ul>
+            </div>
+            {/foreach}
+            <!-- 商品信息END -->
+        </div>
+
+
+        <div class="apply-refund-details  h-content-container font-color-gray">
+            <!--{foreach $order_info.extend_order_goods as $goods_info}-->
+            <!--<ul>-->
+                <!--<li><span>商品清单</span><span>{$goods_info.goods_name}</span></li>-->
+                <!--<li><span>商家名称</span><span>{$order_info.store_name}</span></li>-->
+                <!--<li><span>订单金额</span><span class="font-color-gold">{$goods_info.goods_pay_price}</span></li>-->
+            <!--</ul>-->
+            <!--{/foreach}-->
+            <ul>
+                <li><span>支付状态</span><span class="font-color-gold">{if $order_info.order_state >= 20}已支付{else/}未支付{/if}</span></li>
+                <li><span>支付方式</span><span>{$order_info.payment_name}</span></li>
+                <li><span>实际支付</span><span class="font-color-gold">{$order_info.order_amount}</span></li>
+                <!--<li><span>收款方</span><span>用户支付宝ID</span></li>-->
+                <!--<li><span>付款方</span><span>ID235435234543</span></li>-->
+            </ul>
+        </div>
+        <div class="apply-refund-info h-content-container">
+            <div class="order-text-head-title font-color-pink">
+                <div>退款信息</div>
+            </div>
+            <div class="apply-refund-info-body  font-color-gray">
+                <form id="add_refund" action="{:url('shop/order/orderrefund')}"  method="post">
+                    <input type="hidden" name="type" value="1"/>
+                    <input type="hidden" name="order_id" value="{$order_info.order_id}"/>
+                    <div class="apply-refund-details">
+                        <ul>
+                            <li><span>退款方式</span><span>退回到{$order_info.payment_name}</span></li>
+                            <!--2017/2/13 杨萌 加“*”-->
+                            <li><span><span class="font-color-pink">*</span>退货原因</span>
+                                <select class="comm-select" name="reason_id" style="width: 300px;">
+                                    <option value="1">质量问题</option>
+                                    <option value="2">实际商品与本网站产品描述不符</option>
+                                    <option value="3">运输过程中造成严重损坏</option>
+                                    <option value="0">个人原因（手动输入）</option>
+                                </select>
+                            </li>
+
+                            <!--2017/2/13 杨萌 加“*”-->
+                            <li><span><span class="font-color-pink">*</span>退款金额</span><span><input name="refund_amount" class="h25 pl10" type="text"/> <span class="font-color-pink">(如果收到商品会扣除运费)</span></span>
+                            </li>
+                            <li><span>上传凭证</span><span><a href="javascript:;" class="btn-one-upload-item file btn"><span><i class="icon-circle-arrow-up"></i> 图片上传</span></a><input type="hidden" name="img" class="img" id="img"/></span></li>
+                        </ul>
+                    </div>
+                    <div class="apply-refund-info-body-view">
+                        <div class="order-thumbnail-carousel  none">
+                            <div class="order-thumbnail-carousel-lt font-color-gray">&lt</div>
+                            <div class="order-thumbnail-carousel-gt font-color-gray">&gt</div>
+                            <ul  class="uploadimg">
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="apply-refund-info-submit">
+                        <input type="button" id="cancel"  value="取消" />
+                        {if $order_info.order_state >= 30}
+                        <input type="button" id="ajax_submit" value="申请退货" />
+                        {else}
+                        <input type="button" id="ajax_submit" value="申请退款" />
+                        {/if}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content end -->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}ajaxForm.js" charset="utf-8"></script>
+<script src="{$Think.JS_COMMON_PATH}jquery.validation.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader/webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+<script>
+    $(function(){
+        //上传图片
+        $('.btn-one-upload-item').uploader({
+            server: '{:url("index/index/uploadFile")}',//上传路径
+            container: '.uploadimg',//图片容器
+            num: 5,//上传数量
+            inputName: 'buyer_img[]',//input name值
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            btnDsab:'#ajax_submit',
+            imgBtn:'.btn-one-upload-item'
+        })
+        $('.comm-select').change(function(){
+            if($(this).val() == 0){
+                var html = '';
+                html +='<li class="reason">';
+                html +='<span></span>';
+                html +='<span><textarea rows="3" cols="50" name="reason_info"></textarea></span>';
+                html +='</li>';
+                $(this).after(html);
+            }else{
+                $(this).next('.reason').remove();
+            }
+        })
+        //取消按钮
+        $('#cancel').click(function(){
+            history.back();
+        })
+        // 判断value是否大于两位小数
+        jQuery.validator.addMethod("isFloatGtZero", function(value, element) {
+            var re = /^([1-9][0-9]*|0)(\.\d{1,2})?$/i;
+            return re.test(value) && parseFloat(value) > 0;
+        });
+        // 判断选择的是手写原因吗
+        jQuery.validator.addMethod("checkReason", function(value, element) {
+            var reason_id = $('.comm-select').val();
+            var result = true;
+            if(reason_id == 0){
+                var reason_info = $("textarea[name='reason_info']").val();
+                if(reason_info == ''){
+                    result = false;
+                }
+            }
+            return result;
+        });
+
+        // 判断选择的是手写原因吗
+        jQuery.validator.addMethod("checkAmount", function(value, element) {
+            var order_amount = '{$order_info.order_amount}';
+            return parseFloat(value) <= parseFloat(order_amount);
+        });
+
+
+        $("#add_refund").validate({
+            rules: {
+                reason_id: {
+                    required: true
+                },
+                refund_amount: {
+                    required: true,
+                    isFloatGtZero:true,
+                    checkAmount:true
+
+                },
+                reason_info:{
+                    checkReason:true,
+                    maxlength:200
+                },
+            },
+            messages: {
+                reason_id: {
+                    required: '退款原因不能为空'
+                },
+                refund_amount: {
+                    required: '退款金额不能为空',
+                    checkAmount:'退款金额不能大于支付金额',
+                    isFloatGtZero:'正确填写退款金额'
+                },
+                reason_info:{
+                    checkReason:'退款原因必须手动输入',
+                    maxlength:'退款原因字数不能超过200字'
+                }
+            }
+            ,errorClass: "error"
+            ,success: 'valid'
+            ,unhighlight: function (element, errorClass, validClass) { //验证通过
+                $(element).tooltip('destroy').removeClass(errorClass);
+            },
+            errorPlacement: function (label, element) {
+                if(label.text() == '请上传图片'){
+                    $('.webuploader-pick').parents('span').tooltip('destroy'); /*必需*/
+                    $('.webuploader-pick').parents('span').attr('title',$(label).text()).tooltip('show');
+                }else{
+                    $(element).tooltip('destroy'); /*必需*/
+                    $(element).attr('title', $(label).text()).tooltip('show');
+                }
+            }
+        });
+        $('#ajax_submit').click(function(){
+            var $btn = $(this);
+            if($("#add_refund").valid()){
+                var $form=$("#add_refund");
+                $form.ajaxSubmit({
+                    url: $btn.data('action') ? $btn.data('action') : $form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+                    dataType: 'json',
+                    beforeSubmit: function (arr, $form, options) {
+                        $btn.data("loading",true);
+                        var text = $btn.text();
+                        //按钮文案、状态修改
+                        $btn.text(text + '中...').prop('disabled', true).addClass('disabled');
+                    },
+                    success: function (data, statusText, xhr, $form) {
+                        var text = $btn.text();
+                        //按钮文案、状态修改
+                        $btn.removeClass('disabled').prop('disabled', false).text(text.replace('中...', '')).parent().find('span').remove();
+                        layer.msg(data.msg);
+                        if (data.code == 1) {
+                            window.location.href = data.url;
+                        }
+                    },
+                    error:function(xhr,e,statusText){
+                        layer.msg(statusText);
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>
+<!--[if lt IE 10 ]>
+<script>
+    function hasIEPlugin(name){
+        try {
+            new ActiveXObject(name);
+            return true;
+        } catch (ex){
+            return false;
+        }
+    }
+    //检测Flash
+    var tips = $(
+            "<div style = 'color: red;text-align: center;'>" +
+            "FLASH版本过低，会导致不能上传图片，点击更新（" +
+            "<a href='https://get2.adobe.com/cn/flashplayer/' target='_blank'>链接地址</a>" +
+            "），安装后请刷新当前页面" +
+            "</div>"
+    );
+    if(!hasIEPlugin("ShockwaveFlash.ShockwaveFlash")){
+        $("body").prepend(tips);
+    }
+</script>
+<![endif]-->

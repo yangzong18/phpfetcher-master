@@ -1,0 +1,106 @@
+<div class="prompt-box">
+</div>
+<div class="col-form">
+    <form class="form-inline" id="outform" role="form" method="get" action="{:url('seller/logsOrder/outOrder')}">
+        <span>商品名称</span>
+        <div class="form-group">
+            <input type="text" class="form-control export_name" name="goods_name" value="{$param.goods_name|default=''}">
+        </div>
+        <span>起始时间</span>
+        <div class="input-group">
+            <input type="text" name="start" value="{$param.start|default=''}" class="skinblue export_start form-control text-ra workinput wicon pr30 w80" placeholder="起始时间">
+        </div>
+        <span>结束时间</span>
+        <div class="input-group">
+            <input type="text" name="end" value="{$param.end|default=''}" class="skinblue export_end form-control text-ra workinput wicon pr30 w80" placeholder="结束时间">
+        </div>
+        <div class="form-group">
+            <button class="btn search_button" id="subt" type="button">搜索</button>
+            <button  type="button" id="out" class="btn btn-info export_button">导出</button>
+            <b>【订单数：{$pageTotal}】</b>
+            <span style="float:left;position: absolute ;font-size: 8px;color: red;">*建议一次导出不超过1000条</span>
+        </div>
+    </form>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr>
+            <th class="w50"></th>
+            <th class="w150"></th>
+            <th class="text-left">下单日期</th>
+            <th class="w150">订单编号</th>
+            <th class="w150">设计师</th>
+            <th class="w150">预约面积</th>
+            <th class="w150">进度</th>
+            <th class="w150">交易状态</th>
+            <th class="w150">诚意金状态</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="9">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $datas as $vo}
+        <tr class="goods-tr-t0">
+            <td>
+                <a href="{:url('shop/logs/detail', array('id'=>$vo['logs_goods_id']))}" target="_blank" class="bt-images"><img class="w50" src="{$vo.goods_cover}@w50_h38.png" alt=""></a>
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/logs/detail', array('id'=>$vo['logs_goods_id']))}"  target="_blank">{$vo.goods_name}</a></dt>
+                </dl>
+            </td>
+            <td>{$vo.created_at}</td>
+            <td>{$vo.order_sn}</td>
+            <td>{$vo.designer_name}</td>
+            <td>{$vo.acreage}</td>
+            <td>{$vo.speed_name}</td>
+            <td>{$vo.order_status_name}</td>
+            {if condition="$vo.order_status eq 3 or $vo.order_status eq 4 "}
+            <td>已支付</td>
+            {else/}
+            <td>待支付</td>
+            {/if}
+        </tr>
+        {/foreach}
+        
+    </table>
+    {$page}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}logsOrder.js" charset="utf-8"></script>
+<!--导出-->
+<script>
+    $(".search_button").click(function(){
+        var start = $('.export_start').val();
+        var end = $('.export_end').val();
+        if(start > end){
+            layer.msg('起始时间应该小于结束时间！');
+            return false;
+        }else{
+            $('#outform').submit();
+        }
+    });
+
+
+
+    $('.export_button').click(function(){
+        var name = $('.export_name').val();
+        var start = $('.export_start').val();
+        var end = $('.export_end').val();
+        if(start > end){
+            layer.msg('起始时间应该小于结束时间！');
+            return false;
+        }
+        window.open('exportOrder?goods_name='+name+'&start='+start+'&end='+end,'_blank');
+        window.location.href = "{:url('seller/logs_order/index')}";
+    });
+//    $('#subt').click(function() {
+//        $('#outform').submit();
+//    });
+
+
+</script>

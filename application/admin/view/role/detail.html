@@ -1,0 +1,102 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}role.css" type="text/css">
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="form-horizontal js-ajax-form" action="editPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>角色权限信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>角色名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    {$data.name}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>设置权限*</h3>
+                    </div>
+                </td>
+                <td class="chk-one col-xs-11">
+                    <div class="zTreeDemoBackground left">
+                        <ul id="treeDemo" class="ztree"></ul>
+                    </div>
+                    <input type="hidden" name="roleValues" value=""/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>角色描述</h3>
+                    </div>
+                </td>
+                <td>
+                    {$data.remark}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>启用状态</h3>
+                    </div>
+                </td>
+                <td>
+                    {$data.status_text}
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript" src="{$Think.JS_PATH}jquery.ztree.core.js"></script>
+<script type="text/javascript" src="{$Think.JS_PATH}jquery.ztree.excheck.js"></script>
+<script>
+    var setting = {
+        view: {
+            selectedMulti: true,
+            showIcon: false
+        },
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            beforeCheck: beforeCheck,
+            onCheck: onCheck
+        }
+
+    };
+    var zNodes ={$roleList};
+    function beforeCheck(treeId, treeNode) {
+        return (treeNode.doCheck !== false);
+    }
+    function onCheck(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                checknodes = zTree.getCheckedNodes(true),
+                arr = new Array();
+        for (var i=0, l=checknodes.length; i<l; i++) {
+            if($.inArray(checknodes[i].id, arr) == '-1'){
+                arr.push(checknodes[i].id);
+            }
+        }
+        $('input[name="roleValues"]').val(arr);
+    }
+    function createTree() {
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    }
+    $(document).ready(function(){
+        createTree();
+        onCheck();
+    });
+</script>
+

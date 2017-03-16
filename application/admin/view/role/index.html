@@ -1,0 +1,67 @@
+<div class="col-form">
+    <ul>
+        <li class="text-right" style="margin-right: 20px;">
+            <a href="add" class="btn btn-info"><i class="icon-plus"></i> 添加角色</a>
+        </li>
+    </ul>
+</div>
+
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10"></th>
+            <th class="w150">角色名称</th>
+            <th class="w150">描述</th>
+            <th class="w150">状态</th>
+            <th class="w150">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $roles as $vo}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                {if condition="$vo.role_id neq 1"}
+                <input type="checkbox" id="checkbox_a2_{$vo.role_id}" value="{$vo.role_id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$vo.role_id}" class="lab-t"></label>
+                {/if}
+            </td>
+            <td>{$vo.name}</td>
+            <td>{$vo.remark}</td>
+            <td>{$vo.status_text}</td>
+            <td class="table-handle">
+                {if condition="$vo.role_id eq 1"}
+                <span>超级管理员不可编辑</span>
+                {else /}
+                <span>
+                    <a href="edit?id={$vo.role_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a href="detail?id={$vo.role_id}"><i class="icon-eye-open"></i>查看权限</a>
+                </span>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="3">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$roles->render();}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+

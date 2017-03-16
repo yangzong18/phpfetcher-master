@@ -1,0 +1,71 @@
+<div class="col-form">
+    <ul>
+        <li class="text-right" style="margin-right: 20px;">
+            <a href="add" class="btn btn-info"><i class="icon-plus"></i> 添加帐号</a>
+        </li>
+    </ul>
+</div>
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10"></th>
+            <th class="w150">登录帐号</th>
+            <th class="w150">姓名</th>
+            <th class="w150">部门</th>
+            <th class="w150">联系方式</th>
+            <th class="w150">角色</th>
+            <th class="w150">状态</th>
+            <th class="w150">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $managerList as $manager}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                {neq name="manager.member_id" value="309c2361-26c7-408f-322e-c548b5423e8a"}
+                <input type="checkbox" id="checkbox_a2_{$manager.member_id}" value="{$manager.member_id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$manager.member_id}" class="lab-t"></label>
+                {/neq}
+            </td>
+            <td>{$manager.account}</td>
+            <td>{$manager.member_name}</td>
+            <td>{$manager.department}</td>
+            <td>{$manager.phone}</td>
+            <td>{$roleList[$relationList[$manager.member_id]]['name']}</td>
+            <td>{$manager.status_text}</td>
+            <td class="table-handle">
+                {if condition="$manager.member_id eq '309c2361-26c7-408f-322e-c548b5423e8a'"}
+                <span></span>
+                {else /}
+                <span>
+                    <a href="edit?id={$manager.member_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+                <span>
+                    <a href="detail?id={$manager.member_id}"><i class="icon-eye-open"></i>查看</a>
+                </span>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="5">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$managerList->render();}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

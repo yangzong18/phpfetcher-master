@@ -1,0 +1,235 @@
+
+        <div class="top-main">
+            <ul>
+                <li class="fl store-logo">
+                    <div>
+                        <a href="{:url('shop/index/index')}"><img src="{$Think.IMG_PATH}dp-logo.png" alt="" /></a>
+                        <span>用户名：{$user_info.account}</span>
+                    </div>
+                    <a href="{:url('/admin/search_ctrl/add')}" class="store-sz hvr_wobble_horizontal">编辑店铺设置</a>
+                </li>
+
+                <li class="fr store-user store-wz">
+                    <p class="ico-m">T</p>
+                    <div>
+                        <p>最后登录： <a href="#">{$user_info.last_login_at}</a></p>
+                        <p>店铺等级： <a href="#">自营店铺专属等级</a></p>
+                        <p>有效期： <a href="#">不限制</a></p>
+                    </div>
+
+                </li>
+                <li class="fr store-user">
+                    <p class="ico-m">M</p>
+                    <div>
+                        <p>管理权限： <a href="#">{$user_info.role_name}</a></p>
+                        <p>店铺名称： <a href="#">{$user.store_name}</a></p>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="item-box">
+            <div class="item-a fl" style="margin-top: 36px">
+                <div class="bt">
+                    <h3 class="fl">交易提示</h3>
+                    <h5 class="fl">您需要立即处理的交易订单</h5>
+                </div>
+                <dl class="focus">
+                    <dt class="fl">近期售出：</dt>
+                    <dd title="已发布/可传商品" class="fl">交易中的订单</dd>
+                    <dt class="fl">维权提示：</dt>
+                    <dd class="fl">收到维权投诉</dd>
+                </dl>
+                <ul>
+                    <li><a href="{:url('/seller/crowd_order/index')}" class="num">众筹订单：</a></li>
+                    <li><a href="{:url('/seller/crowd_order/index')}?order_state=10" class="num">待付款 <em>{$crowOrder.new}</em></a></li>
+                    <li><a href="{:url('/seller/crowd_order/index')}?order_state=20" class="num">待发货 <em>{$crowOrder.pay}</em></a></li>
+                    <li><a href="{:url('/seller/crowd_order/index')}?order_state=40">已完成<em>{$crowOrder.refund}</em></a></li>
+
+                    <li><a href="{:url('seller/order/lists')}" class="num">生活馆订单：</a></li>
+                    <li><a href="{:url('/seller/order/lists')}?orderState=10" class="num">待付款 <em>{$order.new}</em></a></li>
+                    <li><a href="{:url('/seller/order/lists')}?orderState=20" class="num">待发货 <em>{$order.pay}</em></a></li>
+                    <li><a href="{:url('/seller/order/lists')}?orderState=refund">退款/售后<em>{$order.refund}</em></a></li>
+
+                    <li><a href="{:url('/seller/logs_order/index')}" class="num">整装订单：</a></li>
+                    <li><a href="{:url('/seller/logs_order/index')}?speed_status=2" class="num">待付款 <em>{$logsOrder.new}</em></a></li>
+                    <li><a href="{:url('/seller/logs_order/index')}?speed_status=4" class="num">待确认 <em>{$logsOrder.pay}</em></a></li>
+                    <li><a href="{:url('/seller/logs_order/index')}?speed_status=7">已验收<em>{$logsOrder.refund}</em></a></li>
+
+
+                </ul>
+            </div>
+
+
+            <div class="item-a fr">
+                <div class="bt">
+                    <h3 class="fl">商家帮助</h3>
+                </div>
+                <ul>
+                    <li><a href="#" class="num">规则体系</a></li>
+                    <li><a href="{:url('/admin/type/index')}" class="num">商品管理</a></li>
+                    <li><a href="#" class="num">促销方式</a></li>
+                    <li><a href="{:url('/seller/order/lists')}">订单及售后</a></li>
+                    <li><a href="#" class="num">店铺续约</a></li>
+                    <!--<li><a href="#" class="num">商品管理</a></li>-->
+                </ul>
+            </div>
+
+            <div class="item-a fr">
+                <div class="bt">
+                    <h3 class="fl">联系方式</h3>
+                </div>
+                <ul class="st-photo">
+                    <li>
+                        <p>电话1：{$user_info.phone}</p>
+                    </li>
+                    <!--<li>-->
+                        <!--<p>电话2：12345678</p>-->
+                    <!--</li>-->
+                    <li>
+                        <p>邮箱：{$user_info.email}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="item-a fl">
+                <div class="bt">
+                    <h3 class="fl">店铺及商品提示</h3>
+                    <h5 class="fl">您需要关注的店铺信息以及待处理事项</h5>
+                </div>
+                <dl class="focus">
+                    <dt class="fl">店铺商品发布情况</dt>
+                    <!--<dd title="已发布/可传商品" class="fl"><em id="">56</em>&nbsp;/&nbsp; 不限 </dd>-->
+                    <!--<dt class="fl">图片空间使用：</dt>-->
+                    <!--<dd class="fl"><em id="">0</em>&nbsp;/&nbsp;不限</dd>-->
+                </dl>
+                <ul>
+                    <li><a href="{:url('/seller/crowdfunding/lists')}" class="num">众筹商品：</a></li>
+                    <li><a href="{:url('/seller/crowdfunding/lists')}?verify=1" class="num">已审核 <em>{$crowGoods.verify_is}</em></a></li>
+                    <li><a href="{:url('/seller/crowdfunding/lists')}?verify=3" class="num">未审核 <em>{$crowGoods.verify_now}</em></a></li>
+                    <li><a href="{:url('/seller/crowdfunding/lists')}?verify=0">审核未通过<em>{$crowGoods.verify_no}</em></a></li>
+
+                    <li><a href="{:url('/seller/goods/lists')}" class="num">生活馆商品：</a></li>
+                    <li><a href="{:url('/seller/goods/lists')}?verify=1" class="num">已审核 <em>{$goods.verify_is}</em></a></li>
+                    <li><a href="{:url('/seller/goods/lists')}?verify=3" class="num">未审核 <em>{$goods.verify_now}</em></a></li>
+                    <li><a href="{:url('/seller/goods/lists')}?verify=0">审核未通过<em>{$goods.verify_no}</em></a></li>
+
+                    <li><a href="{:url('/seller/logs/index')}" class="num">整装商品：</a></li>
+                    <li><a href="{:url('/seller/logs/index')}?verify=1" class="num">已审核 <em>{$logsGoods.verify_is}</em></a></li>
+                    <li><a href="{:url('/seller/logs/index')}?verify=3" class="num">未审核 <em>{$logsGoods.verify_now}</em></a></li>
+                    <li><a href="{:url('/seller/logs/index')}?verify=0">审核未通过<em>{$logsGoods.verify_no}</em></a></li>
+
+                </ul>
+            </div>
+
+            <div class="item-a item-table fr">
+                <div class="bt">
+                    <h3 class="fl">销售情况统计</h3>
+                    <h5 class="fl">按周期统计商家店铺的订单量和订单金额</h5>
+                </div>
+                <table class="table table-hover">
+                    <tr>
+                        <th>项目</th>
+                        <th>订单量</th>
+                        <th>订单金额</th>
+                    </tr>
+                    <tr>
+                        <td>昨日销售</td>
+                        <td>{$order.yes_num}</td>
+                        <td>{$order.yes_amount}</td>
+                    </tr>
+                    <tr>
+                        <td>月销售</td>
+                        <td>{$order.mon_num}</td>
+                        <td>{$order.mon_amount}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="item-a item-table fl">
+                <div class="bt">
+                    <h3 class="fl">单品销售排名</h3>
+                    <h5 class="fl">掌握30日内最热销的商品及时补充货源</h5>
+                </div>
+                <table class="table table-hover">
+                    <tr>
+                        <th class="w50">排名</th>
+                        <th>商品信息</th>
+                        <th>销量</th>
+                    </tr>
+                    {if count($orderGoodsList) >0 && isset($orderGoodsList)}
+                    {foreach $orderGoodsList as $key=> $goodsInfo}
+                    <tr>
+                        <td>{$key+1}</td>
+                        <td>{$goodsInfo.goods_name}&nbsp;&nbsp;
+                            <?php foreach(json_decode($goodsInfo['sku_name'],true) as $key => $value){?>
+                                {$key} : {$value}
+                            <?php }?>
+                        </td>
+                        <td>{$goodsInfo.tp_sum}</td>
+                    </tr>
+                    {/foreach}
+                    {else}
+                    <tr>
+                        <td></td>
+                        <td>暂时没有销售数据</td>
+                        <td></td>
+                    </tr>
+                    {/if}
+                </table>
+            </div>
+            <!--2.10 杨萌 注释掉店铺运营推广 strat-->
+            <!--<div class="item-a fr">-->
+                <!--<div class="bt">-->
+                    <!--<h3 class="fl">店铺运营推广</h3>-->
+                    <!--<h5 class="fl">合理参加促销活动可以有效提升商品销量</h5>-->
+                <!--</div>-->
+                <!--<ul class="st-photo">-->
+                    <!--<li>-->
+                        <!--<div class="popur">-->
+                            <!--<a href="#"><i class="xb-a"></i></a>-->
+                            <!--<p class="tg-bt"><a href="#">团购活动</a><span>已开通</span></p>-->
+                            <!--<p class="tg-ms">参与平台发起的团购活动提高商品成交量及店铺浏览量</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<div class="popur">-->
+                            <!--<a href="#"><i class="xb-b"></i></a>-->
+                            <!--<p class="tg-bt"><a href="#">限时折扣</a><span>已开通</span></p>-->
+                            <!--<p class="tg-ms">参与平台发起的团购活动提高商品成交量及店铺浏览量</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<div class="popur">-->
+                            <!--<a href="#"><i class="xb-c"></i></a>-->
+                            <!--<p class="tg-bt"><a href="#">满即送</a><span class="no-open">未开通</span></p>-->
+                            <!--<p class="tg-ms">参与平台发起的团购活动提高商品成交量及店铺浏览量</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<div class="popur">-->
+                            <!--<a href="#"><i class="xb-d"></i></a>-->
+                            <!--<p class="tg-bt"><a href="#">优惠套装</a><span class="no-open">未开通</span></p>-->
+                            <!--<p class="tg-ms">参与平台发起的团购活动提高商品成交量及店铺浏览量</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<div class="popur">-->
+                            <!--<a href="#"><i class="xb-e"></i></a>-->
+                            <!--<p class="tg-bt"><a href="#">推荐展位</a><span>已开通</span></p>-->
+                            <!--<p class="tg-ms">参与平台发起的团购活动提高商品成交量及店铺浏览量</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<div class="popur">-->
+                            <!--<a href="#"><i class="xb-f"></i></a>-->
+                            <!--<p class="tg-bt"><a href="#">代金券</a><span>已开通</span></p>-->
+                            <!--<p class="tg-ms">参与平台发起的团购活动提高商品成交量及店铺浏览量</p>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
+            <!--2.10 杨萌 注释掉店铺运营推广 end-->
+
+
+        </div>

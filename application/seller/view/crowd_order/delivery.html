@@ -1,0 +1,83 @@
+{__NOLAYOUT__}
+{include file="layout/header" /}
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<style>
+    .table tbody tr td{
+        border-top: hidden;
+    }
+</style>
+<div class="re-layui order-delivery">
+    <form class="js-ajax-form" action="{:url('seller/CrowdOrder/shipping')}" method="post">
+        <input type="hidden" name="order_id" value="{$order.order_id}">
+        <input type="hidden"  name="goods_id" value="{$order['goods']['goods_id']}">
+        <table class="table" style="width: auto">
+            <tbody>
+            <tr>
+                <td class="td-l-na">订单编号：</td>
+                <td>{$order.order_id}</td>
+            </tr>
+
+            <tr>
+                <td class="td-l-na">状态：</td>
+                <td>{$order.order_state_name}</td>
+            </tr>
+
+            <tr>
+                <td class="td-l-na">实付款：</td>
+                <td>{$order.order_amount}</td>
+            </tr>
+
+            <tr>
+                <td class="td-l-na">优惠金额：</td>
+                <td>0元</td>
+            </tr>
+            <tr>
+                <td class="td-l-na">收货人：</td>
+                <td>
+                   {$order['extend_order_common']['receiver_name']}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-l-na">联系方式：</td>
+                <td>
+                    {$order['extend_order_common']['receiver_info']['phone']}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-l-na">地址：</td>
+                <td>
+                    {$order['extend_order_common']['receiver_info']['address']}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-l-na">物流单号：</td>
+                <td>
+                    <div><!--class="col-xs-10"-->
+                        <div class="one-text">
+                            <input type="text" value="{$order.shipping_code}" class="form-control h30 mb5" name="code">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center mt10">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">确定</button>
+                        <button class="btn max-bg return">取消</button>
+                    </div>
+
+                </td>
+            </tr>
+        </tbody>
+    </table></form>
+</div>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        $('.return').click(function(){
+            parent.layer.close(index);
+        });
+    })
+</script>

@@ -1,0 +1,479 @@
+<!--<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">-->
+<!--<div class="prompt-box">-->
+    <!--<ul>-->
+        <!--<li class="top-prompt">-->
+            <!--<h3>操作提示 <i class="icon-caret-down"></i></h3>-->
+        <!--</li>-->
+        <!--<li class="list-desc">-->
+            <!--<p><i class="icon-circle"></i>选择店铺经营的商品分类，以读取平台绑定的商品分类-规格类型，如分类：“服装”；规格：“颜色”、“尺码”等；当商品分类具有“颜色”规格时，可选择色块加以标识。</p>-->
+            <!--<p><i class="icon-circle"></i>可通过排序0-255改变规格值显示顺序；在发布商品时勾选已绑定的商品规格，还可对规格值进行“别名”修改操作，但不会影响规格值默认名称的设定。</p>-->
+        <!--</li>-->
+    <!--</ul>-->
+<!--</div>-->
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form " action="{:url('seller/logs/editPost')}" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>商品规格信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品类型</h3>
+                    </div>
+                </td>
+                <td class="item-list-chkbox goods-type">
+                    <ul class="chk-one">
+                        {if condition="$goods['type'] eq 1"}
+                        <li>
+                            <input type="checkbox" checked="true"  name="type" value="1" id="list_c_1" class="chk_1" />
+                            <label for="list_c_1" class="lab-t cus"></label>
+                            <label for="list_c_1" class="font-min">普通商品</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="type" value="2" id="list_c_2" class="chk_1" />
+                            <label for="list_c_2" class="lab-t"></label>
+                            <label for="list_c_2" class="font-min">代理商品</label>
+                        </li>
+                        {else/}
+                        <li>
+                            <input type="checkbox" name="type" value="1" id="list_c_1" class="chk_1" />
+                            <label for="list_c_1" class="lab-t"></label>
+                            <label for="list_c_1" class="font-min">普通商品</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="type" checked="true"   value="2" id="list_c_2" class="chk_1" />
+                            <label for="list_c_2" class="lab-t cus"></label>
+                            <label for="list_c_2" class="font-min">代理商品</label>
+                        </li>
+                        {/if}
+                    </ul>
+                </td>
+            </tr>
+            <tr class="category-info">
+                <td  class="w100">
+                    <div>
+                        <h3>整装分类</h3>
+                    </div>
+                </td>
+                <td class="show-category hide">
+                    
+                </td>
+                <td class="defalut-category table-handle">
+                    <div class="col-xs-11">
+                    {$goods.category_name}
+                    <span>
+                        <a href="javascript:;" class="edit-category"><i class="icon-edit"></i>编辑</a>
+                    </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>属性选择</h3>
+                    </div>
+                </td>
+                <td  class="form-inline">
+                    <div class="col-xs-11 show-attribute">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>整装名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-6">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="name" value="{$goods.name}">
+                            <span>请输入整装名称(最长不超过64个汉字)</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>说明</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-6">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="notes" value="{$goods.notes}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>装修面积*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-6">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5" name="acreage" value="{$goods.acreage}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>装修价格*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-6">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 " name="prize" value="{$goods.prize}">
+                            <span>单位为万元</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>耗时*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-6">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 " name="taking" value="{$goods.taking}">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>定金(元)*</h3>
+                    </div>
+                </td>
+                <td>
+                    {if condition="$goods['type'] eq 1"}
+                    <div class="item-list-chkbox pay-type hide">
+                    {else/}
+                    <div class="item-list-chkbox pay-type">
+                    {/if}
+                        <ul class="chk-one">
+                            {if condition="$goods['pay_type'] eq 1"}
+                            <li>
+                                <input type="checkbox" checked="true"  name="pay_type" value="1" id="pay_type_1" class="chk_1" />
+                                <label for="pay_type_1" class="lab-t cus"></label>
+                                <label for="pay_type_1" class="font-min">自定义</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="pay_type" value="2" id="pay_type_2" class="chk_1" />
+                                <label for="pay_type_2" class="lab-t"></label>
+                                <label for="pay_type_2" class="font-min">按比例</label>
+                            </li>
+                            {else/}
+                            <li>
+                                <input type="checkbox"  name="pay_type" value="1" id="pay_type_1" class="chk_1" />
+                                <label for="pay_type_1" class="lab-t"></label>
+                                <label for="pay_type_1" class="font-min">自定义</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" checked="true" name="pay_type" value="2" id="pay_type_2" class="chk_1" />
+                                <label for="pay_type_2" class="lab-t cus"></label>
+                                <label for="pay_type_2" class="font-min">按比例</label>
+                            </li>
+                            {/if}
+                        </ul>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 " name="deposit" value="{$goods.deposit}">
+                            <span>若为普通商品，则直接为定金金额，若为代理商商品，则为合同价格的百分比，例如设置为80，则价格为合同价的80%</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>设计师*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control h30 designer_name" value="{$desinger.designer_name}" />
+                            <input type="hidden" name="designer_id" value="{$goods.designer_id}" class="designer_id"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default choice-designer" type="button">搜索<tton>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 item-list-chkbox designer-type m15" >
+                        <ul class="chk-one designer-list" style="display:block; margin-left:-20px">
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>主图*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-12">
+                        <div class="uploadimg-cover">
+                            <div id="WU_FILE_Main_0" class="file-item thumbnail"><div class="up-imgbox"><img style="width: 100px;height: 100px;" src="{$goods.cover}@w100_h100.png"></div><div><a class="del_pic">删除</a></div><input name="cover" value="{$goods.cover}" class="imgName-up-item" type="hidden">
+                           </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                            <span class="input-group-btn one-text">
+                            <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload main-cover-upload">
+                              <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                            </a>
+                            </span>
+                        </div>
+                        <span>图片尺寸建议561*337</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>附图*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-12">
+                        <div class="uploadimg-attachment">
+                            {foreach $attachementList as $key => $attachement} 
+                            <div id="WU_FILE_INIT_{$key}" class="file-item thumbnail"><div class="up-imgbox"><img style="width: 100px;height: 100px;" src="{$attachement['attachment_url']}@w100_h100.png"></div><div><a class="del_pic">删除</a></div><input name="attachement[]" value="{$attachement['attachment_url']}" class="imgName-up-item" type="hidden">
+                           </div>
+                           {/foreach}
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                            <span class="input-group-btn one-text">
+                            <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload attachment-upload">
+                              <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                            </a>
+                            </span>
+                        </div>
+                        <span>图片尺寸建议1145*450</span>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <div>
+                        <h3>设计说明*</h3>
+                    </div>
+                </td>
+                <td>
+                    <script id="editor" name="goods_description" type="text/plain" style="width:100%;height:500px;">{$goods.goods_description|htmlspecialchars_decode}</script>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <input type="hidden" name="id" value="{$goods.id}">
+                        <button class="btn btn-warning max-bg js-ajax-submit">编辑</button>
+                        <a href="javascript:window.history.go(-1);"><button type="button" class="btn max-bg">返回</button></a>
+
+                        <!--<a class="btn max-bg back"  href="{:url('seller/logs/index')}">返回</a>-->
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="{$Think.JS_PATH}category.js"></script>
+<script type="text/javascript">
+var needInitFeature = parseInt( '{$needInitFeature}' );
+var featureList   = '{$featureList}';
+var featureObject = eval('(' + featureList + ')');
+$(function(){
+    //点击编辑分类
+    $(".edit-category").click(function(){
+        var ob = $(this).parents('.category-info');
+        ob.find('.defalut-category').addClass('hide');
+        ob.find('.show-category').removeClass('hide');
+        category.children(0,'{$logs_goos_category_id}');
+    });
+    category.url = "{:url('/seller/Goods/getCategory')}";
+    //最后一个分类选择的事件
+    category.func = function( categoryId, categoryName ) {
+        //若有传第三个参数，则做为显示的标记
+        var init = arguments.length > 2 ? arguments[2] : 0;
+        //通过分类查找属性
+        $.post("{:url('seller/goods_category/attribute')}", {
+            category_id : categoryId
+        }, function( response ){
+            var html   = '';
+            var option = '';
+            var target = null;
+            var selected = '';
+            if ( response.code == 1 ) {
+                for (var i = 0; i < response.data.length; i++) {
+                    option = '<option value="0">不限</option>';
+                    target = response.data[i].features_value;
+                    for (var j = 0; j < target.length; j++) {
+                        selected = '';
+                        //查找feature和feature_value_id
+                        if ( init == 1 ) {
+                            for (var k = 0; k < featureObject.length; k++) {
+                                if ( response.data[i].feature_id == featureObject[k].feature_id
+                                     && featureObject[k].feature_value_id == target[j].id ) {
+                                    selected = ' selected="true" '
+                                }
+                            }
+                        } 
+                        option += '<option value="'+target[j].id+'" '+selected+' >'+target[j].feature_value+'</option>';
+                    }
+                    html += '<b>'+response.data[i].attribute_name+'</b>\
+                             <div class="form-group category">\
+                                <input type="hidden" value="'+response.data[i].feature_id+'" name="attribute_id[]" />\
+                                <div class="col-sm-7">\
+                                    <select class="form-control h30" name="attribute_value_id[]">'+option+'</select>\
+                                </div>\
+                            </div>';
+                }
+            }
+            $(".show-attribute").empty();
+            $(".show-attribute").append( html );
+        })
+    }
+    //初始化属性
+    category.func( "{$goods['category_id']}", "", 1 );
+    //初始化编辑器
+    var ue = new baidu.editor.ui.Editor({
+        initialContent: "设计说明......",
+        autoClearinitialContent: false, //focus时自动清空初始化时的内容
+        //initialFrameWeight:100%,
+        initialFrameHeight: 350,
+        textarea: 'editorContent', //设置提交时编辑器内容的名字
+        autoFloatEnabled: false,
+        focus: false,
+        autoHeightEnabled: false,
+        sourceEditor: false,
+        wordCount: false, //关闭字数统计
+        elementPathEnabled: false, //关闭elementPath
+        maximumWords: 10240
+    });
+    ue.render("editor");
+
+    //主图上传
+    $('.main-cover-upload').uploader({
+        server: '{:url("index/index/uploadFile")}',//上传路径
+        container: '.uploadimg-cover',//图片容器
+        swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+        num:1,//上传数量
+        inputName:'cover',//input name值
+        btnDsab:'.js-ajax-submit',
+        imgBtn:'.main-cover-upload'
+    })
+
+    //主图上传
+    $('.attachment-upload').uploader({
+        server: '{:url("index/index/uploadFile")}',//上传路径
+        container: '.uploadimg-attachment',//图片容器
+        swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+        num:5,//上传数量
+        inputName:'attachement[]',//input name值
+        btnDsab:'.js-ajax-submit',
+        imgBtn:'.attachment-upload'
+    })
+
+    //商品类型单选
+    $('.goods-type input[type="checkbox"]').unbind('click');
+    $('.goods-type input[type="checkbox"]').click(function(){
+        $('.goods-type input[type="checkbox"]').each(function(){
+            if ( $(this).is(":checked") ) {
+                $(this).prop('checked', false);
+                $(this).next().removeClass('cus');
+            }
+        });
+        $(this).prop('checked', true);
+        $(this).next().addClass('cus');
+        //盘点状态
+        var type = parseInt( $(this).val() );
+        if ( type == 2 ) {
+            if ( $('.pay-type').hasClass('hide') ) {
+                $('.pay-type').removeClass('hide');
+            }
+        } else {
+            if ( !$('.pay-type').hasClass('hide') ) {
+                $('.pay-type').addClass('hide');
+            }
+        }
+    });
+
+    //支付方式
+    $('.pay-type input[type="checkbox"]').unbind('click');
+    $('.pay-type input[type="checkbox"]').click(function(){
+        $('.pay-type input[type="checkbox"]').each(function(){
+            if ( $(this).is(":checked") ) {
+                $(this).prop('checked', false);
+                $(this).next().removeClass('cus');
+            }
+        });
+        $(this).prop('checked', true);
+        $(this).next().addClass('cus');
+    });
+
+    $('.choice-designer').click(function() {
+        var name = $(".designer_name").val();
+        if ( trim( name ) == '' ) {
+            return false;
+        }
+        $.post('{:url("seller/logs/desinger")}',{
+            name : name
+        }, function(response){
+            var html = '';
+            if ( response.code == 1 ) {
+                for (var i = 0; i < response.data.length; i++) {
+                    html += '<li>\
+                            <input type="checkbox" name="designer_id" value="'+response.data[i].designer_id+'" id="desinger_list_'+i+'" class="chk_1" />\
+                            <label for="desinger_list_'+i+'" class="lab-t"></label>\
+                            <label for="desinger_list_'+i+'" class="font-min">'+response.data[i].designer_name+'【'+response.data[i].company+'】</label>\
+                        </li>';
+                }
+                $(".designer-list").empty();
+                $(".designer-list").append( html );
+                //进行点击事件绑定
+                $('.designer-type input[type="checkbox"]').unbind('click');
+                $('.designer-type input[type="checkbox"]').click(function(){
+                    $('.designer-type input[type="checkbox"]').each(function(){
+                        if ( $(this).is(":checked") ) {
+                            $(this).prop('checked', false);
+                            $(this).next().removeClass('cus');
+                        }
+                    });
+                    $(this).prop('checked', true);
+                    $(this).next().addClass('cus');
+                    var desingerId = $(this).val();
+                    $(".designer_id").val( desingerId );
+                });
+            }
+        });
+    })
+})
+</script>
+
+
+

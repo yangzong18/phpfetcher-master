@@ -1,0 +1,75 @@
+<!-- content start -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content list-alliance">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="list-alliance-head h-content-container">
+            <div class="h-content-logo-lt"></div>
+            <div class="h-content-logo-rt"></div>
+            <div class="font-color-pink">整装联盟</div>
+        </div>
+        <div class="list-alliance-list h-content-container">
+            {foreach $unionInfo as $vo}
+            <div class="list-alliance-list-head font-color-pink">{$vo.cate_name}</div>
+            <div class="list-alliance-list-body">
+                <ul>
+                    {foreach $vo.info as $v1}
+                    <li class="combg-h list-alliance-loop">
+                        <div>
+                            <a href="detail?id={$v1.id}"><img src="{$v1.log_pic}@w164_h111.png" /></a>
+                        </div>
+                        <div>
+                            <div class="font-color-gold">
+                                <a href="detail?id={$v1.id}" title="{$v1.union_name}">{if condition="mb_strlen($v1.union_name,'utf-8') > 14"}{$v1.union_name|mb_substr=0,14,'utf-8'}...{else /}{$v1.union_name}{/if}</a>
+                            </div>
+                            <div class="font-color-gray" title="{$v1.brand}">
+                                {if condition="mb_strlen($v1.brand,'utf-8') > 60"}{$v1.brand|mb_substr=0,60,'utf-8'}...{else /}{$v1.brand}{/if}
+                            </div>
+                        </div>
+                    </li>
+                    {/foreach}
+                    <li class="combg-h list-alliance">
+                        <div>
+                            <img src="{$Think.IMG_PATH}list-img-2.png" />
+                        </div>
+                        <div class="list-alliance-list-body-more">
+                            <a href="javascript:" class="font-color-gold list-alliance-a-toggle">等待更多入驻</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {/foreach}
+
+        </div>
+    </div>
+</div>
+<!-- content end -->
+
+<script type="text/javascript">
+    $(function() {
+
+      $(".list-alliance-list-body ul").each(function () {
+          var $this = $(this);
+          if($this.find("li").length<7){
+              $this.find(".list-alliance-a-toggle").html("等待更多入驻");
+          }else{
+              $this.find(".list-alliance-a-toggle").html("点击查看更多&nbsp;&or;");
+              $this.find(".list-alliance-loop:gt(4)").hide();
+              $this.data("show",false);
+              $this.find(".list-alliance-a-toggle").click(function (evt) {
+                  evt.preventDefault();
+                  $this.find(".list-alliance-loop:gt(4)").fadeToggle(0);
+                  if($this.data("show")){
+                      $this.data("show",false);
+                      $this.find(".list-alliance-a-toggle").html("点击查看更多&nbsp;&or;");
+                  }else {
+                      $this.data("show",true);
+                      $this.find(".list-alliance-a-toggle").html("点击查看更多&nbsp;&and;");
+                  }
+              });
+          }
+      });
+
+    })
+</script>

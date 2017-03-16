@@ -1,0 +1,122 @@
+        <ul class="top-nav marbox">
+            <li class="fl">
+                <!-- <div class="fl">
+                    <dl class="common-cut" style=" visibility: hidden">
+                        <dt><span>成都</span> <i></i></dt>
+                        <dd class="none">
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                            <a href="#">成都</a>
+                            <a href="#">上海</a>
+                            <a href="#">内蒙古</a>
+                        </dd>
+                    </dl>
+                </div> -->
+                <div class="mt-login fr">
+                    {if condition="$isLogin eq 1"}
+                        <p><a href="{:url('shop/user/index')}">{$user['phone']}</a></p>
+                        <p><a href="{:url('shop/login/signOut')}">退出</a></p>
+                    {else/}
+                        <p><a href="{:url('shop/login/login')}">[登录]</a></p>
+                        <p><a href="{:url('shop/login/register')}">[注册有惊喜]</a></p>
+                    {/if}
+                </div>
+            </li>
+            <li class="fr">
+                <ul>
+                    <li><a href="{:url('carts/index')}">购物车</a></li>
+                    <li><a href="{:url('order/orderlist')}">我的订单</a></li>
+                    <li><a href="{:url('favorite/index')}">我的收藏</a></li>
+                    <li><a href="{$alliance.url}" {if condition="$alliance.new_open"} target="_blank"{/if}>{$alliance.title}</a></li>
+                    <li><a href="{$cusService.url}"  {if condition="$cusService.new_open"} target="_blank"{/if}>{$cusService.title}</a></li>
+                    <li><a href="javascript:;">{$service.tel|default='17727982353'}</a></li>
+                </ul>
+            </li>
+            <li class="clear"></li>
+        </ul>
+
+        <ul class="logo-seach marbox">
+            <li class="fl logo">
+                <a href="/"><img src="{$Think.IMG_PATH}/logo.png" alt=""></a>
+            </li>
+            <li class="fl seach">
+                <form  id="forSearchName" class="cart_search" action="{if condition='isset($urlLiving)'}{$urlLiving}{else \}{:url('shop/living_museum/index')}{/if}" method="get">
+                    <div>
+                        <input type="text" id="search_name"  class="mt-text goods_name_1" name="name" autocomplete="off"  value="{if condition='isset($name)'}{$name}{/if}" placeholder="">
+                        <ul class="cache-seach"></ul>
+                        <input type="submit" class="mt-sub mt-sub-living"  value="">
+                        <p>
+                            <span>热门搜索:</span>
+                            {foreach $search_arr as $hot_word}
+                                <a href="{:url('shop/living_museum/index')}/name/{$hot_word}">{$hot_word}</a>
+                            {/foreach}
+                        </p>
+                    </div>
+                </form>
+            </li>
+            <li class="fr mt-erm">
+                <img src="{$Think.IMG_PATH}/mt-ewm.jpg" alt="" style="width:100px; height:100px;">
+                {if $user['type'] == 2}
+                <a href="{:url('shop/logsOrder/vip')}">二级代理</a>
+                {/if}
+            </li>
+            <li class="clear"></li>
+        </ul>
+
+        <script type="text/javascript">
+        $(function(e){
+            $('.logo-seach .seach div .mt-text').focus(function(){
+                var search = localStorage.getItem('search');
+                $('.cache-seach').empty();
+                if(search){
+                    var arr = search.split(',');
+                    var html = '';
+                    for (var i in arr)
+                    {
+                        html += "<li class='searchdetail'><a href='javascript:;'>"+arr[i]+"</a></li>";
+                    }
+                    $('.cache-seach').append(html);
+                    $(this).next().show();
+                }else{
+                    $(this).next().hide();
+                }
+            })
+            $('.logo-seach .seach div .mt-text').blur(function(){
+                $(this).next().hide();
+            });
+            //搜索名称
+            $("#forSearchName").submit(function(e){
+                e.preventDefault();
+            });
+            $(".mt-sub-living").click(function(){
+                //valiSearch('search_name');
+                if(!valiSearch('search_name')){
+                    return false;
+                }
+                var name = $.trim($('#search_name').val());
+                var url = $('form').attr('action');
+                var arr = url.split("/name/");
+                var res = arr[0]+'/name/'+name;
+                window.location.href=res;
+            });
+        })
+        </script>

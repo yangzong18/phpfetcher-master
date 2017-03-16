@@ -1,0 +1,157 @@
+<style>
+pre.delivery {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    width: 1136px;
+    color: #878685;
+    border: none;font-size: 14px;line-height: 24px;
+}
+</style>
+<!-- content start -->
+<div class="h-container">
+    <div class="h-container-head"></div>
+    <div class="h-content order-text">
+        <div class="h-content-logo-lt"></div>
+        <div class="h-content-logo-rt"></div>
+        <div class="order-text-head h-content-container">
+            <div class="order-text-head-title font-color-pink">
+                <div class="h-content-logo-lt"></div>
+                <div>
+                    <a href="{:url('/shop/user/index')}" class="font-color-pink">个人中心</a> &gt;
+                    <a href="{:url('/shop/order/orderlist')}" class="font-color-pink">我的订单</a> &gt;
+                    <a href="javascript:void(0);" class="font-color-pink">订单详情</a>
+                </div>
+                <div class="h-content-logo-rt"></div>
+            </div>
+            <div class="order-text-head-body font-color-gray">
+                <ul>
+                    <li>订单编号</li>
+                    <li>创建日期</li>
+                    <li>订单状态</li>
+                </ul>
+                <ul>
+                    <li>{$order_info.order_sn}</li>
+                    <li>{$order_info.add_time|date='Y-m-d H:i:s',###}</li>
+                    <li>
+                        {if $order_info.order_state==0}
+                        交易关闭
+                        {/if}
+                        {if $order_info.order_state==10}
+                        未付款
+                        {/if}
+                        {if $order_info.order_state==20}
+                        {if $order_info.payment_code == 'offline' }
+                        订单已提交
+                        {else}
+                        已支付
+                        {/if}
+                        ，等待发货
+                        {/if}
+                        {if $order_info.order_state==30}
+                        商家已发货
+                        {/if}
+                        {if $order_info.order_state==40}
+                        已经收货
+                        {/if}
+
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="order-text-head h-content-container">
+            <div class="order-text-head-title font-color-pink">
+                <div>订单信息</div>
+            </div>
+            <div class="order-text-head-body font-color-gray">
+                <ul>
+                    <li>收货人</li>
+                    <li>物流配送地址</li>
+                    <li>支付方式</li>
+                    <li>配送方式</li>
+                    <li>运费</li>
+                </ul>
+                <ul>
+                    <li>{$order_info.extend_order_common.receiver_name}</li>
+                    <li>{$order_info.extend_order_common.receiver_info.address}</li>
+                    <li>{$order_info.payment_name}</li>
+                    <li>
+                        {if condition="$order_info.shipping_mode == 0"}
+                        物流
+                            {else \}
+                        自提
+                        {/if}
+                    </li>
+                    <li>{if condition="$order_info.shipping_fee"}
+                            包邮
+                        {else \}
+                            {$order_info.shipping_fee}
+                        {/if}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="order-text-head h-content-container">
+
+            <div class="order-text-head-title font-color-pink">
+                <div>商品信息</div>
+            </div>
+
+            <!-- 商品信息 -->
+
+            <div class="order-text-head-body font-color-gray">
+                <ul class="order-text-head-body-img">
+                    <li><a href="{:url('shop/crowdfunding/detail')}?goodsId={$order_info.goods.goods_id}"><img class="bt-images" src="{$order_info.goods.goods_image}" alt=""></a></li>
+                </ul>
+                <ul>
+                    <li>商品编号： <span>{$order_info.goods.goods_id}</span></li>
+                    <li><a href="{:url('shop/crowdfunding/detail')}?goodsId={$order_info.goods.goods_id}">{$order_info.goods.goods_name}</a>
+                        {if $order_info.goods.specification!=''}
+                        {$order_info.goods.specification} : {$order_info.goods.type}
+                        {/if}
+                    </li>
+                    <li class="font-color-gold">￥{$order_info.goods.goods_price} * {$order_info.goods.goods_num}</li>
+                    <li>备注：<span>{$order_info.goods.remark}</span></li>
+
+                </ul>
+            </div>
+
+            <!-- 商品信息END -->
+
+
+        </div>
+        <div class="order-text-head h-content-container">
+            <div class="order-text-head-title font-color-pink">
+                <div>订单金额</div>
+            </div>
+            <div class="order-text-head-body order-text-head-table font-color-gray">
+                <table>
+                    <tbody><tr>
+                        <td>商品金额</td>
+                        <td>运费</td>
+                        <td>订单总额</td>
+                    </tr>
+                    <tr>
+                        <td>￥{$order_info.goods_amount}</td>
+                        <td>￥{$order_info.shipping_fee}</td>
+                        <td class="font-color-gold">￥{$order_info.order_amount}</td>
+                    </tr>
+                    </tbody></table>
+            </div>
+        </div>
+        <div class="order-text-head h-content-container">
+            <div class="order-text-head-title font-color-pink">
+                <div>物流信息</div>
+            </div>
+            <div class="order-text-head-body font-color-gray">
+                {if empty($order_info.delivery)}
+                物流信息为空
+                {else}
+                <pre class="delivery">{$order_info.delivery}</pre>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content end -->

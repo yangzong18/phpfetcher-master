@@ -1,0 +1,281 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<div class="prompt-box">
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>图片建议561*337</p>
+        </li>
+    </ul>
+</div>
+<td colspan="6">
+    <div class="mt-goods-spec">
+        <div class="mt-bt">
+            <p class=""><a href="/seller/Goods/edit?id={$_GET['goodsId']}">编辑商品</a></p>
+            <p class="cus"><a href="/seller/Goods/editImage?goodsId={$_GET['goodsId']}">编辑图片</a></p>
+        </div>
+    </div>
+</td>
+<div class="table-form-default">
+    <form action="/seller/goods/doEditImage" method="post" class="js-ajax-form">
+    <table class="table">
+        <tbody>
+        {if condition="count($color) > 0"}
+        {foreach $color as  $k=>$v}
+        <tr class="goods-tr-bg" >
+            <td colspan="6">
+                <label  class="text-left pr15">{$v['feature_value']}</label>
+            </td>
+        </tr>
+        <tr class="" >
+            <td>
+            <input type="hidden" name="image[{$k}]" value="{$v['imageStr']}" class="image"/>
+                <input type="hidden" name="group[{$k}]" value="{$v['group_id']}"/>
+            <!--dom结构部分-->
+            <div class="uploader-demo">
+                <!--用来存放item-->
+                <div class="fileList uploader-list  fileList_detail_{$v.id}">
+                    {if condition="isset($color[$k]['images'])"}
+                        {foreach $color[$k]['images'] as $key=>$val}
+                            <div id="WU_FILE_{$k}_{$key}" class="file-item thumbnail   upload-state-done" style="float:left;">
+                                <div class="up-imgbox">
+                                    <img style="width: 100px;height: 100px;" src="{$val|ltrim='.'}@w100_h100.png">
+                                </div>
+                                <div>
+                                    <a class="del_pic" value="{$val}">删除</a>
+                                </div>
+                            </div>
+                        {/foreach}
+                    {/if}
+                </div>
+                <div class="filePicker btn btn-default btn_addfile btn-one-upload webuploader-container" fid="{$v.id}" >
+                    <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                </div>
+            </div>
+            </td>
+        </tr>
+
+
+        {/foreach}
+        {else \}
+
+        <tr class="goods-tr-bg" >
+            <td colspan="6">
+                <label  class="text-left pr15">无颜色</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <input type="hidden" name="image[0]" value="{$imageStr}" class="image"/>
+            <input type="hidden" name="group[0]" value="{$group_id}"/>
+            <!--dom结构部分-->
+            <div class="uploader-demo">
+                <!--用来存放item-->
+                <div class="fileList uploader-list  fileList_detail_0">
+                    {if condition="isset($noneColor)"}
+                    {foreach $noneColor as $key=>$val}
+                    <div id="WU_FILE_0_{$key}" class="file-item thumbnail   upload-state-done" style="float:left;">
+                        <div class="up-imgbox">
+                            <img style="width: 100px;height: 100px;" src="{$val.attachment_url|ltrim='.'}@w100_h100.png">
+                        </div>
+                        <div>
+                            <a class="del_pic" value="{$val.attachment_url}">删除</a>
+                        </div>
+                    </div>
+                    {/foreach}
+                    {/if}
+                    <div class="filePicker btn btn-default btn_addfile btn-one-upload webuploader-container" fid="0" >
+                        <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                    </div>
+                </div>
+            </div>
+        </td>
+        </tr>
+        {/if}
+        <tr>
+            <td colspan="6">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-warning max-bg js-ajax-submit">提交</button>
+                    <a href="javascript:window.history.go(-1);"><button type="button" class="btn max-bg">返回</button></a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </form>
+</div>
+
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script>
+    del_pic();
+    // 初始化Web Uploader
+    var uploader = WebUploader.create({
+
+        // 选完文件后，是否自动上传。
+        auto: true,
+
+        // 不压缩image
+        resize: false,
+
+        chunked: true, //是否要分片处理大文件上传
+        chunkSize:5*1024*1024 ,//分片上传，每片2M，默认是5M
+        chunkRetry:2,
+        compress:false,
+
+        // swf文件路径
+        swf: '{$Think.IMG_PATH}Uploader.swf',
+
+        // 文件接收服务端。
+        server: '/index/index/uploadFile',
+
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: {
+            id : '.btn-one-upload',
+            //innerHTML : '添加文件',
+            //是否开起同时选择多个文件能力。
+            multiple : false
+        },
+
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/png,image/jpg,image/jpeg,image/bmp,image/gif'
+//            mimeTypes: 'image/*'
+        },
+
+
+//            disableGlobalDnd: true,
+//            fileNumLimit: 300,
+//            fileSizeLimit: 200 * 1024 * 1024,
+        // 200 M
+        fileSingleSizeLimit: 5 * 1024 * 1024 // 5 M
+    });
+
+
+    uploader.on('error',function( file ){
+        if(file == 'F_EXCEED_SIZE'){
+            alert('文件大小超出限制');
+        }
+    });
+
+    // 当有文件添加进来的时候
+    uploader.on( 'fileQueued', function( file ) {
+        $('.js-ajax-submit').prop('disabled', true).addClass('disabled');
+        $('.btn-one-upload').find('div:eq(1)').css('top','-1000px');
+        var $li = $(
+                        '<div id="' + file.id  + '" class="file-item thumbnail " style="float:left;">' +
+                        '<div class="up-imgbox">' +
+                        '<img>' +
+                        '</div>' +
+//                        '<div class="info">' + file.name + '</div>' +
+                        '<div><a class="del_pic">删除</a></div>'+
+                        '</div>'
+                ),
+                $img = $li.find('img');
+
+
+        // $list为容器jQuery实例
+//        var $list = $(".fileList");
+        var cid = $("#rt_"+file.source.ruid).parent().attr('fid');
+
+        // $list为容器jQuery实例
+        var $list = $(".fileList_detail_"+cid);
+        $list.append( $li );
+
+        var thumbnailWidth = 100;
+        var thumbnailHeight = 100;
+
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, thumbnailWidth, thumbnailHeight );
+    });
+
+
+
+
+
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+
+        var $li = $( '#'+file.id ),
+                $percent = $li.find('.progress span');
+
+        //            避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<div class="progress"><div class="progress-bar"><span class="sr-only" style="width:25%"></span></div></div>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file,response ) {
+        var one = $( '#'+file.id).parent().parent().parent().find('.image');
+        var str = '';
+        if(one.val()){
+            str = one.val()+','+response.filePath;
+        }else{
+            str = response.filePath;
+        }
+        one.val(str);
+        $( '#'+file.id ).find('.del_pic').attr('value',response.filePath);
+        $( '#'+file.id ).addClass('upload-state-done');
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+                $error = $li.find('div.error');
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        del_pic();
+        $( '#'+file.id ).find('.progress').remove();
+        $('.js-ajax-submit').prop('disabled',false).removeClass('disabled');
+        $('.btn-one-upload').find('div:eq(1)').css('top','0px');
+    });
+
+    //删除图片
+    function del_pic(){
+        $('.del_pic').click(function(){
+            var id = $(this).parent().parent().attr('id');
+            var theOne = $(this);
+            var file = theOne.parent().parent().parent();
+
+            if(uploader.getFile(id)){
+                uploader.removeFile(uploader.getFile(id));
+            }
+            $(this).parent().parent().remove();
+
+            var file1 = file.find('.del_pic');
+            var str1 = '';
+            file1.each(function(){
+                str1 += $(this).attr('value')+',';
+            });
+           file.parent().parent().find('.image').val(str1);
+            $('.js-ajax-submit').prop('disabled',false).removeClass('disabled');
+            $('.btn-one-upload').find('div:eq(1)').css('top','0px');
+        });
+    }
+
+</script>

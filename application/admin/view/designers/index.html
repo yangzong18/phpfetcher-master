@@ -1,0 +1,88 @@
+<div class="col-form">
+    <form class="form-inline" role="form" action="index" style="float:left;">
+        <div class="form-group">
+            <select name="searchType" class="form-control">
+                {foreach $search as $key => $val}
+                <option value="{$key}" {if condition='$searchType==$key'}selected="selected"{/if}>{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="input-group">
+            <input type="text" class="form-control" name="searchValue" value="{$searchValue}">
+            <span class="input-group-btn">
+              <button class="btn btn-default search" type="button">搜索</button>
+            </span>
+        </div>
+    </form>
+    <ul>
+        <li class="text-right" style="margin-right: 20px;">
+            <a href="add" class="btn btn-info"><i class="icon-plus"></i> 添加设计师</a>
+        </li>
+    </ul>
+</div>
+<div class="table-form-default">
+    <table class="table">
+        <tr>
+            <th class="w10"></th>
+            <th class="w100">序号</th>
+            <th class="w150">姓名</th>
+            <th class="w100">性别</th>
+            <th class="w150">手机号码</th>
+            <th class="w150">级别</th>
+            <th class="w100">设计年限</th>
+            <th class="w150">所属公司名称</th>
+            <th class="w120">作品数量</th>
+            <th class="w120">当前订单</th>
+            <th class="w250">操作</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="4">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $designers as $designer}
+        <tr class="goods-tr-t0">
+            <td  class="chk-one">
+                <input type="checkbox" id="checkbox_a2_{$designer.designer_id}" value="{$designer.designer_id}" class="chk_1 data_check" />
+                <label for="checkbox_a2_{$designer.designer_id}" class="lab-t"></label>
+            </td>
+            <td>{$designer.designer_id}</td>
+            <td>
+                <a href="#"><img src="{$designer.designer_avatar}@w100_h70.png" class="bt-images" alt=""><p>{$designer.designer_name}</p></a>
+            </td>
+            <td>{$designer.designer_sex_name}</td>
+            <td>{$designer.designer_phone}</td>
+            <td>{$levelList[$designer.level_id]['name']}</td>
+            <td>{$designer.designer_year}</td>
+            <td>{$designer.company}</td>
+            <td>{if isset($count[$designer.designer_id])}{$count[$designer.designer_id]}{else /}0{/if}</td>
+            <td>{if isset($order[$designer.designer_id])}{$order[$designer.designer_id]}{else /}0{/if}</td>
+            <td class="table-handle">
+                <span>
+                    <a href="{:url('shop/Designers/detail',['designer_id'=>$designer.designer_id])}"><i class="icon-list"></i>查看详情</a>
+                </span>
+                <span>
+                    <a href="edit?id={$designer.designer_id}"><i class="icon-pencil"></i>编辑</a>
+                </span>
+            </td>
+        </tr>
+        {/foreach}
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" id="checkbox_a1" class="chk_1 all" />
+                <label for="checkbox_a1" class="lab-t"></label>
+            </td>
+            <td colspan="5">
+                <label for="checkbox_a1" class="text-left pr15">全选</label>
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-default delete">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    {$designers->render();}
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>

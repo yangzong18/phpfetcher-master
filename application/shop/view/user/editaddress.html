@@ -1,0 +1,273 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}cut-style.css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{$Think.CSS_PATH}colorbox.css" media="screen" title="no title" charset="utf-8">
+<!-- 修改地址弹出 start -->
+<div class="mt-layer none">
+    <div class="login-main reg-main">
+        <ul class="">
+            <li class="form-box">
+                <form id="edit_address" action="{:url('shop/address/editaddresspost')}" method="post">
+                    <input type="hidden" name="address_id" value="{$address_one.address_id}"/>
+                    <div class="user-item">
+                        <p class="fl">修改地址</p>
+                        <p class="clear"></p>
+                    </div>
+                    <div class="form-item">
+                        <p class="">
+                            <label class="lab-ys">收货人 *</label>
+                            <span><input type="text" name="true_name" value="{$address_one.true_name}" data-placement="top"  class="intxt"></span>
+                        </p>
+                        <p class="adds">
+                            <input type="hidden" id="area_info" name="area_info" value="{$address_one.area_info}"/>
+                            <label class="lab-ys">所在地区 *</label>
+                            <span>
+                                <select class="comm-select" id="provinces" name="province_id">
+                                </select>
+                                <select class="comm-select" id="citys" name="city_id">
+                                </select>
+                                <select class="comm-select" id="countys" name="area_id">
+                                </select>
+                            </span>
+                            <i class="clear"></i>
+                        </p>
+                        <p class="">
+                            <label class="lab-ys">详细地址 *</label>
+                            <span><input type="text" data-placement="top" class="intxt" name="address" value="{$address_one.address}"></span>
+                        </p>
+                        <p class="">
+                            <label class="lab-ys">手机号 *</label>
+                            <span><input type="text" data-placement="top" class="intxt" name="mob_phone" value="{$address_one.mob_phone}"></span>
+                        </p>
+                        <p class="">
+                            <label class="lab-ys">座机号</label>
+                            <span><input type="text" data-placement="top" class="intxt" name="tel_phone" value="{$address_one.tel_phone}"></span>
+                        </p>
+                        <p class="">
+                            <label class="lab-ys">邮箱</label>
+                            <span><input type="text" data-placement="top" class="intxt" name="member_email" value="{$address_one.member_email}"></span>
+                        </p>
+                        <p class="mr-adds">
+                            <label class="lab-ys">默认地址</label>
+                                <span>
+                                    {if condition="($address_one.is_default == 1)"}
+                                        <input type="radio" name="is_default" value="1" checked style="background: none;"/>是
+                                        <input type="radio" name="is_default" value="0" style="background: none;"/>否
+                                    {else /}
+                                        <input type="radio" name="is_default" value="1" style="background: none;"/>是
+                                        <input type="radio" name="is_default" value="0" checked style="background: none;"/>否
+                                    {/if}
+                                </span>
+                        </p>
+                        <p class="sub">
+                            <span><button type="button" class="js-ajax-submit">确认修改</button></span>
+                        </p>
+                    </div>
+                </form>
+            </li>
+            <li class="clear"></li>
+        </ul>
+    </div>
+</div>
+<!-- 修改地址弹出 end -->
+<!--自定义的工具类-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+<title>主页</title>
+<!--[if lt IE 9]>
+<script src="{$Think.JS_PATH}html5shiv.min.js"></script>
+<script src="{$Think.JS_PATH}respond.min.js"></script>
+<![endif]-->
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jquery.validation.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}ajaxForm.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function() {
+        function d(a, c) {
+            if ("" == a || null == a) a = 1;
+            if ("" == c || null == c) c = 0;
+            $.ajax({
+                type: "get",
+                url: "{:url('api/address/arealist')}",
+                data: {
+                    parent_id: a,
+                    deep: c
+                },
+                dataType: "json",
+                success: function(a) {
+                    0 == c ? ($("#provinces").html("<option value='provinces'>\u9009\u62e9\u7701</option>"), $.each(a.data, function(a, b) {
+                        $("#provinces").append("<option value='" + b[0] + "'>" + b[1] + "</option>")
+                    })) : 1 == c ? ($("#citys").html("<option value='citys'>\u9009\u62e9\u5e02</option>"), $.each(a.data, function(a, b) {
+                        $("#citys").append("<option value='" + b[0] + "'>" + b[1] + "</option>")
+                    })) : 2 == c && ($("#countys").html("<option value='countys'>\u9009\u62e9\u53bf</option>"), $.each(a.data, function(a, b) {
+                        $("#countys").append("<option value='" + b[0] + "'>" + b[1] + "</option>")
+                    }))
+                }
+            })
+        }
+        $.ajax({
+            type: "get",
+            url: "{:url('api/address/areaList')}",
+            data: {
+                parent_id: "1"
+            },
+            dataType: "json",
+            success: function(a) {
+                $.each(a.data, function(a, b) {
+                    "{$address_one.province_id}" == b[0] ? $("#provinces").append("<option value='" + b[0] + "' selected>" + b[1] + "</option>") : $("#provinces").append("<option value='" + b[0] + "'>" + b[1] + "</option>")
+                })
+            }
+        });
+        $.ajax({
+            type: "get",
+            url: '{:url("api/address/arealist")}',
+            data: {
+                parent_id: "{$address_one.province_id}",
+                deep: 1
+            },
+            dataType: "json",
+            success: function(a) {
+                $.each(a.data, function(a, b) {
+                    "{$address_one.city_id}" == b[0] ? $("#citys").append("<option value='" + b[0] + "' selected>" + b[1] + "</option>") : $("#citys").append("<option value='" + b[0] + "'>" + b[1] + "</option>")
+                })
+            }
+        });
+        $.ajax({
+            type: "get",
+            url: '{:url("api/address/arealist")}',
+            data: {
+                parent_id: "{$address_one.city_id}",
+                deep: 2
+            },
+            dataType: "json",
+            success: function(a) {
+                $.each(a.data, function(a, b) {
+                    "{$address_one.area_id}" == b[0] ? $("#countys").append("<option value='" + b[0] + "' selected >" + b[1] + "</option>") : $("#countys").append("<option value='" + b[0] + "'>" + b[1] + "</option>")
+                })
+            }
+        });
+        $("#provinces").change(function() {
+            $("#citys").html("<option value='citys'>\u9009\u62e9\u5e02</option>");
+            $("#countys").html("<option value='countys'>\u9009\u62e9\u53bf</option>");
+            "provinces" != $(this).val() && d($(this).val(), 1)
+        });
+        $("#citys").change(function() {
+            $("#countys").html("<option value='countys'>\u9009\u62e9\u53bf</option>");
+            "citys" != $(this).val() && d($(this).val(), 2)
+        });
+        jQuery.validator.addMethod("checkMob", function(a, c) {
+            c = /^1([3-9]{1})([0-9]{1})([0-9]{8})$/;
+            return 11 == a.length && c.test(a) || "" == a
+        });
+        jQuery.validator.addMethod("checkTel", function(a, c) {
+            return /^([0-9]{3,4})-([0-9]{7,9})$/.test(a) || "" == a
+        });
+        jQuery.validator.addMethod("checkPhone", function(a, c) {
+            return "" == $('input[name="tel_phone"]').val() && "" == $('input[name="mob_phone"]').val() ? !1 : !0
+        });
+        jQuery.validator.addMethod("checkStr", function(a, c) {
+            return /['!@#$%^&*+_=:<>"]/.test(a) ? !1 : !0
+        });
+        $("#edit_address").validate({
+            rules: {
+                true_name: {
+                    required: !0,
+                    maxlength: 14,
+                    checkStr: !0
+                },
+                area_id: {
+                    digits: !0
+                },
+                address: {
+                    required: !0,
+                    maxlength: 40,
+                    checkStr: !0
+                },
+                mob_phone: {
+                    checkPhone: !0,
+                    checkMob: !0
+                },
+                tel_phone: {
+                    checkPhone: !0,
+                    checkTel: !0
+                },
+                member_email: {
+                    email: !0
+                }
+            },
+            messages: {
+                true_name: {
+                    required: "\u6536\u8d27\u4eba\u7684\u59d3\u540d\u4e0d\u80fd\u4e3a\u7a7a",
+                    maxlength: "\u6536\u8d27\u4eba\u7684\u540d\u5b57\u957f\u5ea6\u4e0d\u80fd\u8d85\u8fc7\u5341\u56db\u4e2a\u5b57\u7b26",
+                    checkStr: "\u8f93\u5165\u7684\u5b57\u7b26\u4e32\u542b\u6709\u975e\u6cd5\u5b57\u7b26"
+                },
+                area_id: {
+                    digits: "\u6240\u9009\u5730\u533a\u4e0d\u80fd\u4e3a\u7a7a"
+                },
+                member_email: {
+                    email: "\u8bf7\u8f93\u5165\u6b63\u786e\u683c\u5f0f\u7684E-Mail"
+                },
+                address: {
+                    required: "\u8be6\u7ec6\u5730\u5740\u4e0d\u80fd\u4e3a\u7a7a",
+                    maxlength: "\u8be6\u7ec6\u5730\u5740\u4e0d\u80fd\u8d85\u8fc7\u56db\u5341\u4e2a\u5b57\u7b26",
+                    checkStr: "\u8f93\u5165\u7684\u5b57\u7b26\u4e32\u542b\u6709\u975e\u6cd5\u5b57\u7b26"
+                },
+                tel_phone: {
+                    checkPhone: "\u624b\u673a\u6216\u8005\u5ea7\u673a\u5fc5\u586b\u4e00\u9879",
+                    checkTel: "\u8bf7\u586b\u5199\u6b63\u786e\u5ea7\u673a\u53f7:\u533a\u53f7 - \u53f7\u7801\u7684\u5f62\u5f0f"
+                },
+                mob_phone: {
+                    checkPhone: "\u624b\u673a\u6216\u8005\u5ea7\u673a\u5fc5\u586b\u4e00\u9879",
+                    checkMob: "\u8bf7\u586b\u5199\u6b63\u786e\u7684\u624b\u673a\u53f7\u7801"
+                }
+            },
+            errorClass: "error",
+            success: "valid",
+            unhighlight: function(a, c, b) {
+                $(a).tooltip("destroy").removeClass(c);
+                $(".valid").remove()
+            },
+            errorPlacement: function(a, c) {
+                "countys" == c.context.id ? ($("#countys").next().remove(), a.removeClass("error"), a.append('<i style="color:#894719;position: absolute;top:5px;left:-10px; width: 0;height: 0;border-top: 5px solid transparent;border-right: 10px solid #894719; border-bottom: 5px solid transparent;"></i>').css({
+                    background: "#894719",
+                    "border-radius": "3px",
+                    padding: "3px 5px",
+                    "font-size": "12px",
+                    color: "#fff",
+                    position: "relative",
+                    margin: "15px"
+                }), $("#countys").after(a)) : $(c).attr("title", $(a).text()).tooltip("show")
+            }
+        });
+        $(".js-ajax-submit").click(function() {
+            var a = $(this);
+            if ($("#edit_address").valid()) {
+                var c = $("#edit_address");
+                $("#area_info").val($("#provinces option:selected").html() + $("#citys option:selected").html() + $("#countys option:selected").html());
+                c.ajaxSubmit({
+                    url: a.data("action") ? a.data("action") : c.attr("action"),
+                    dataType: "json",
+                    beforeSubmit: function(b, c, e) {
+                        a.data("loading", !0);
+                        b = a.text();
+                        a.text(b + "\u4e2d...").prop("disabled", !0).addClass("disabled")
+                    },
+                    success: function(b, c, e, d) {
+                        c = a.text();
+                        a.removeClass("disabled").prop("disabled", !1).text(c.replace("\u4e2d...", "")).parent().find("span").remove();
+                        layer.msg(b.msg);
+                        1 == b.code && (b = parent.layer.getFrameIndex(window.name), parent.layer.close(b), parent.location.reload())
+                    },
+                    error: function(a, c, d) {
+                        layer.msg(d)
+                    }
+                });
+                return !1
+            }
+        })
+    });
+</script>

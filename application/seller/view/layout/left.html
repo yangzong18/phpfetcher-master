@@ -1,0 +1,54 @@
+<!-- 左侧菜单 start -->
+<article class="left-container">
+    <div class="left-menu">
+        <ul>
+            {if condition="$topMenu['has_children'] eq 1"}
+                {foreach $topMenu['children_id_list'] as  $key => $childrenId}
+                    <li class="zbox">
+                        {if condition="$menuList[$childrenId]['current'] eq 1"}
+                        <div class='menu-toggle child-cus'>
+                        {else/}
+                        <div class='menu-toggle'>
+                        {/if}
+                            {if condition="$menuList[$childrenId]['has_children'] eq 1"}
+                                <span>{$menuList[$childrenId]['name']}</span>
+                                <ul {if condition="$menuList[$childrenId]['current'] neq 1"}class="none"{/if}>
+                                    {foreach $menuList[$childrenId]['children_id_list'] as  $unitId}
+                                        <li {if condition="$menuList[$unitId]['current'] eq 1" }class="next-cus"{/if}><a href="{$menuList[$unitId]['app'].'/'.$menuList[$unitId]['controller'].'/'.$menuList[$unitId]['action']|url='',false}">{$menuList[$unitId]['name']}</a></li>
+                                    {/foreach}
+                                </ul>
+                            {else/}
+                                <span><a href="{$menuList[$childrenId]['app'].'/'.$menuList[$childrenId]['controller'].'/'.$menuList[$childrenId]['action']|url='',false}">{$menuList[$childrenId]['name']}</a></span>
+                            {/if}
+                        </div>
+                    </li>
+                {/foreach}
+            {/if}
+    <!--2.10 杨萌 注释掉添加常用功能菜单 strat-->
+            <!--<li class="gn-menu pop-menu">-->
+                <!--<p class="add hvr_grow"><span>添加常用功能菜单</span></p>-->
+            <!--</li>-->
+    <!--2.10 杨萌 注释掉添加常用功能菜单 end-->
+
+        </ul>
+        <!-- <div class="mask"></div> -->
+    </div>
+</article>
+<!-- 左侧菜单 end -->
+
+{include file="layout/bar" /}
+
+<!-- 中间内容 start -->
+<article class="content">
+    <div class="fall-container">
+        <div class="position">
+            <span>
+                <a href="{:url('seller/index/index')}">商家管理中心</a>
+            </span>
+            {foreach $navList as $nav}
+                >
+                <span>
+                    <a href="javascript:;">{$nav['name']}</a>
+                </span>
+            {/foreach}
+        </div>

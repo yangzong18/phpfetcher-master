@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <link rel="stylesheet" href="{$Think.CSS_PATH}base.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{$Think.CSS_PATH}style.css" media="screen" title="no title" charset="utf-8">
+    <script src="{$Think.JS_PATH}jquery-1.9.1.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}ajaxForm.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}idangerous.swiper.min.js" charset="utf-8"></script>
+
+    <script src="{$Think.JS_PATH}jquery.validation.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}layer/layer.js" charset="utf-8"></script>
+    <script src="{$Think.JS_PATH}jQuery.md5.js" charset="utf-8"></script>
+    <title>木筑网-找回密码</title>
+    <!--[if lt IE 9]>
+    <script src="{$Think.JS_PATH}IE9.js"></script>
+    <script src="{$Think.JS_PATH}html5shiv.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        $(function() {
+            var browser = {
+                versions: function() {
+                    var u = navigator.userAgent,
+                        app = navigator.appVersion;
+                    var ios = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+                    var android = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+                    if (ios) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+                    }
+                    if (android) {
+                        $(window).bind('resize load', function() {
+                            $("body").css("zoom", $(window).width() / 1210);
+                            $("body").css("display", "block");
+                        });
+
+                    }
+                }(),
+            }
+
+        })
+    </script>
+
+</head>
+
+<body>
+<!-- content start  -->
+<div class="container">
+    <div class="login-logo">
+        <div class=" marbox">
+            <p>
+                <a href="#"><img src="{$Think.IMG_PATH}logo.png" alt="" /></a>
+            </p>
+            <p class="info">
+                <a href="#"><img src="{$Think.IMG_PATH}logo-info.png" alt="" /></a>
+            </p>
+        </div>
+    </div>
+    <div class="login-main reg-main">
+        <ul class="marbox">
+            <li class="form-box">
+                <form class="" id="form"  method="post">
+                    <input type="hidden" value="{$phone}" name="phone" id="phone">
+                    <input type="hidden" value="{$is_login}" name="is_login" id="is_login">
+                    <input type="hidden" name="__token__" value="{$Request.token}" />
+                    <div class="user-item">
+                        <p class="fl">找回密码</p>
+                        <p class="fr"><a href="register">注册</a>{if (!$is_login)}/<a href="login">登录</a>{/if}</p>
+                        <p class="clear"></p>
+                    </div>
+                    <div class="form-item">
+                        <p class="">
+                            <label class="lab-ys" >登入密码</label>
+                            <span><input type="password" id="password" name="password" data-placement="top"  class="intxt required" value="" placeholder="请录入6-18位字符密码"></span>
+                        </p>
+                        <p class="">
+                            <label class="lab-ys">再次录入</label>
+                            <span><input type="password" id="repeat_password" name="repeat_password" data-placement="top"  class="intxt required" value="" placeholder="请录入6-18位字符密码"></span>
+                        </p>
+                        <p class="sub">
+                            <span><input type="button" id="submitBtn" value="确 定"></span>
+                        </p>
+                    </div>
+                </form>
+                <div class="db-info pb50">
+                </div>
+            </li>
+            <li class="clear"></li>
+        </ul>
+
+    </div>
+
+</div>
+<!-- content end  -->
+{include file="layout/footer" /}
+<script src="{$Think.JS_PATH}jquery.validation.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}bootstrap.min.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jQuery.md5.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        //清空表单内容
+        $("#password").val("");
+        $("#repeat_password").val("");
+        $("#password").unbind("blur");
+        $("#repeat_password").unbind("blur");
+
+        //校验密码：只能输入6-18个字母、数字、下划线
+        jQuery.validator.addMethod("iszw", function(value, element) {
+            value = $.trim(value);
+            if(value=='') {
+                return false;
+                element.val('');
+            }
+            var patrn=/^(\w){6,18}$/;
+            return patrn.test(value);
+        }, "请录入6-18位字符密码");
+
+        //表单验证
+        $("#form").validate({
+            rules: {
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 18,
+                    iszw:true
+                },
+                repeat_password: {
+                    required: true,
+                    equalTo: '#password',
+                    minlength: 6,
+                    iszw:true
+                }
+            },
+            messages: {
+                password: {
+                    required: '请输入密码',
+                    minlength: '密码不能小于6位数',
+                    maxlength: '密码最多为18位',
+                    iszw : '建议使用字母、数字或下划线组合，6-18个字符'
+                },
+                repeat_password: {
+                    required: '请再次输入密码',
+                    equalTo: '两次密码输入不一致',
+                    minlength: '密码不能小于6位数',
+                    iszw : '建议使用字母、数字或下划线组合，6-18个字符'
+                }
+            },
+            errorClass: "error",
+            success: 'valid',
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).tooltip('destroy').removeClass(errorClass);
+            },
+            errorPlacement: function (label, element) {
+                $(element).tooltip('destroy'); /*必需*/
+                $(element).attr('title', $(label).text()).tooltip('show');
+            }
+        });
+
+        //点击确定按钮
+        $('#submitBtn').click(function(){
+            if( $("#form").valid() ){
+                $.post('{:url("shop/login/resetDo")}', {
+                    phone: $("#phone").val(),
+                    is_login: $("#is_login").val(),
+                    password :$.md5( $("#password").val() ),
+                    repeat_password: $.md5( $("#repeat_password").val() )
+                }, function( response ){
+                    layer.msg(response.msg);
+                    if ( response.code == 1 ) {
+                        window.location.href = "{:url('shop/login/login')}";
+                    }
+                })
+            }
+        });
+
+    });
+
+    //让IE 支持placeholder
+    (function($) {
+      var placeholderfriend = {
+        focus: function(s) {
+          s = $(s).hide().prev().show().focus();
+          var idValue = s.attr("id");
+          if (idValue) {
+            s.attr("id", idValue.replace("placeholderfriend", ""));
+          }
+          var clsValue = s.attr("class");
+       if (clsValue) {
+            s.attr("class", clsValue.replace("placeholderfriend", ""));
+          }
+        }
+      }
+      //判断是否支持placeholder
+      function isPlaceholer() {
+        var input = document.createElement('input');
+        return "placeholder" in input;
+      }
+      //不支持的代码
+      if (!isPlaceholer()) {
+        $(function() {
+          var form = $(this);
+          //遍历所有文本框，添加placeholder模拟事件
+          var elements = form.find("input[type='text'][placeholder]");
+          elements.each(function() {
+            var s = $(this);
+            var pValue = s.attr("placeholder");
+      var sValue = s.val();
+            if (pValue) {
+              if (sValue == '') {
+                s.val(pValue);
+              }
+            }
+          });
+          elements.focus(function() {
+            var s = $(this);
+            var pValue = s.attr("placeholder");
+      var sValue = s.val();
+            if (sValue && pValue) {
+              if (sValue == pValue) {
+                s.val('');
+              }
+            }
+          });
+          elements.blur(function() {
+            var s = $(this);
+            var pValue = s.attr("placeholder");
+      var sValue = s.val();
+            if (!sValue) {
+              s.val(pValue);
+            }
+          });
+          //遍历所有密码框，添加placeholder模拟事件
+          var elementsPass = form.find("input[type='password'][placeholder]");
+          elementsPass.each(function(i) {
+            var s = $(this);
+            var pValue = s.attr("placeholder");
+      var sValue = s.val();
+            if (pValue) {
+              if (sValue == '') {
+                //DOM不支持type的修改，需要复制密码框属性，生成新的DOM
+                var html = this.outerHTML || "";
+                html = html.replace(/\s*type=(['"])?password\1/gi, " type=text placeholderfriend")
+                  .replace(/\s*(?:value|on[a-z]+|name)(=(['"])?\S*\1)?/gi, " ")
+                  .replace(/\s*placeholderfriend/, " placeholderfriend value='" + pValue
+                  + "' " + "onfocus='placeholderfriendfocus(this);' ");
+                var idValue = s.attr("id");
+                if (idValue) {
+                  s.attr("id", idValue + "placeholderfriend");
+                }
+                var clsValue = s.attr("class");
+       if (clsValue) {
+                  s.attr("class", clsValue + "placeholderfriend");
+                }
+                s.hide();
+                s.after(html);
+              }
+            }
+          });
+          elementsPass.blur(function() {
+            var s = $(this);
+            var sValue = s.val();
+            if (sValue == '') {
+              var idValue = s.attr("id");
+              if (idValue) {
+                s.attr("id", idValue + "placeholderfriend");
+              }
+              var clsValue = s.attr("class");
+        if (clsValue) {
+                s.attr("class", clsValue + "placeholderfriend");
+              }
+              s.hide().next().show();
+            }
+          });
+        });
+      }
+      window.placeholderfriendfocus = placeholderfriend.focus;
+    })(jQuery);
+
+</script>

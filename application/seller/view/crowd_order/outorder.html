@@ -1,0 +1,106 @@
+<div class="col-form">
+    <form class="form-inline" id="log_form" role="form" act="{:url('seller/logsOrder/outOrder')}">
+        <span>商品名称</span>
+        <div class="form-group">
+            <input type="text" class="form-control export_name" name="goods_name" value="{$param.goods_name|default=''}">
+        </div>
+        <span>起始时间</span>
+        <div class="input-group">
+            <input type="text" name="start" value="{$param.start|default=''}" class="skinblue export_start form-control text-ra workinput wicon pr30 w80" placeholder="起始时间">
+        </div>
+        <span>结束时间</span>
+        <div class="input-group">
+            <input type="text" name="end" value="{$param.end|default=''}" class="skinblue export_end form-control text-ra workinput wicon pr30 w80" placeholder="结束时间">
+        </div>
+        <div class="form-group">
+            <button class="btn search_button" type="button">搜索</button>
+            <button type="button" id="out" value="{$pageTotal}" class="btn btn-info export_button">导出</button>
+            <b>【订单数：{$pageTotal}】</b>
+<span style="float:left;position: absolute ;font-size: 8px;color: red;">*建议一次导出不超过1000条</span>
+        </div>
+    </form>
+</div>
+<div class="table-form-default">
+    <table class="table" id="data-list">
+        <tr>
+            <th class="w50"></th>
+            <th class="w200"></th>
+            <th class="text-left">下单日期</th>
+            <th class="w100">订单编号</th>
+            <th class="w250">众筹时间</th>
+            <th class="w150">众筹状态</th>
+            <th class="w150">价格</th>
+            <th class="w150">数量</th>
+            <th class="w150">实付款</th>
+            <th class="w250">交易状态</th>
+            <th class="w250">运单号</th>
+        </tr>
+
+        <tr class="">
+            <td colspan="11">
+                <!-- 占位一行 -->
+            </td>
+        </tr>
+        {foreach $datas as $vo}
+        <tr class="goods-tr-t0">
+            <td>
+                <a href="{:url('shop/crowdfunding/detail', array('goodsId'=>$vo['goods']['goods_id']))}" target="_blank" class="bt-images"><img class="w50" src="{$vo['goods']['goods_image']}@w100_h70.png" alt=""></a>
+            </td>
+            <td class="text-left">
+                <dl class="goods-name">
+                    <dt><a href="{:url('shop/crowdfunding/detail', array('goodsId'=>$vo['goods']['goods_id']))}"  target="_blank">{$vo['goods']['goods_name']}</a></dt>
+                </dl>
+            </td>
+            <td>{$vo['add_time']|date="Y-m-d H:i:s",###}</td>
+            <td>{$vo.order_id}</td>
+            <td>{$vo['goods']['start_at']|date="Y-m-d H:i:s",###}至{$vo['goods']['end_at']|date="Y-m-d H:i:s",###}</td>
+            <td>{$vo.goods_state_name}</td>
+            <td>{$vo['goods']['goods_price']}</td>
+            <td>{$vo['goods']['goods_num']}</td>
+            <td>{$vo.order_amount}</td>
+            <td>
+                {$vo.order_state_name}<br/>
+                <a href="{:url('seller/CrowdOrder/detail', array('id'=>$vo['order_id']))}">订单详情</a>
+            </td>
+            <td>
+                {if condition="$vo.rebund eq 1"}
+                {$vo['shipping_code']}
+                {else/}
+                ###
+                {/if}
+            </td>
+
+        </tr>
+        {/foreach}
+    </table>
+    {$page}
+</div>
+
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<!--导出-->
+<script>
+    $(".search_button").click(function(){
+        var start = $('.export_start').val();
+        var end = $('.export_end').val();
+        if(start > end){
+            layer.msg('起始时间应该小于结束时间！');
+            return false;
+        }else{
+            $('#log_form').submit();
+        }
+    });
+
+    $('.export_button').click(function(){
+        var name = $('.export_name').val();
+        var start = $('.export_start').val();
+        var end = $('.export_end').val();
+        if(start > end){
+            layer.msg('起始时间应该小于结束时间！');
+            return false;
+        }
+        window.open('exportOrder?goods_name='+name+'&start='+start+'&end='+end,'_blank');
+        window.location.href = "{:url('seller/crowd_order/index')}";
+    });
+</script>

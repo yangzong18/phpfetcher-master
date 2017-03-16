@@ -1,0 +1,70 @@
+<div class="container">
+    <ul class="list-box">
+        <li class="goods-sort mt-fina-raise">
+            <ul class="marbox">
+                <li class="mt-xb">
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="">
+                    <h3><span>分期与众筹</span></h3>
+                </li>
+                <li class="mt-fn-bt">
+                    <p class="cus"><a class="cus" href="{:url('shop/Finance/index')}">分期作品</a> </p>
+                    <p><a href="{:url('shop/crowdfunding/index')}">原木众筹</a></p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="list-goods-item marbox">
+        <li class="mt-hb">
+            <span></span>
+            <span></span>
+        </li>
+        <li class="mt-ph">
+            <p><a class='cus'href="{:url('shop/Finance/index')}">综合</a></p>
+            <p><a href="{:url('shop/Finance/index')}">销量</a></p>
+            <p><a href="{:url('shop/Finance/index')}">价格</a></p>
+            <p><a href="{:url('shop/Finance/index')}">上架时间</a></p>
+
+        </li>
+        <li class="mt-content goods-tc">
+            {for start="1" end="17"}
+            <div class="fl">
+                <p class="box">
+                    <span class="mt-icox" dataId="1" flag="0">喜欢这款</span>
+                    <a href="javascript:;">
+                        <img class="lazy" data-original="{$host}/public/uploads/finance/{$i}.jpg@w265_h175.png" width="265" height="175" alt="" />
+                    </a>
+                </p>
+                <div class="mt-wz">
+                    <p><a href="javascript:;">{$goodsList[$i-1]['name']}</a></p>
+                    <p>
+                        <span>已售：<i>{$goodsList[$i-1]['sales_number']}</i>件</span>
+                        <span class="fr">抢购价：<i>￥{$goodsList[$i-1]['prize']}</i></span>
+                    </p>
+
+                </div>
+            </div>
+            {/for}
+        </li>
+        <li>
+            <div class="clear"></div>
+            <div class="pagelist">
+            </div>
+        </li>
+
+    </ul>
+</div>
+
+<script type="text/javascript">
+$(function(){
+    //图片加载
+    $("img.lazy").lazyload({
+        placeholder: "{$Think.IMG_PATH}loading.jpg",
+        effect: "fadeIn"
+    })
+})
+</script>

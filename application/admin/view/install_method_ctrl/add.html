@@ -1,0 +1,139 @@
+<link rel="stylesheet" href="{$Think.JS_PATH}jqueryuploader/css/jquery.fileupload.css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<style>
+    .webuploader-pick{
+        background: #fff;
+        padding: 7px 15px;
+        color: #000;
+    }
+    .webuploader-pick-hover{
+        background: #dcdcdc;
+    }
+</style>
+<!-- 表单组 -->
+<div class="sheet-box">
+    <form class="js-ajax-form" enctype="multipart/form-data" action="addPost" method="post">
+        <table class="table">
+            <tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>新增安装</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>安装名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="name">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>封面*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-12">
+                        <div class="uploadimg-cover">
+                        </div>
+                        <div class="clear"></div>
+                        <div class="w380">
+                            <span class="input-group-btn one-text">
+                            <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload main-cover-upload">
+                              <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                            </a>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>视频(.flv,建议10M以内)*</h3>
+                    </div>
+                </td>
+                <td>
+                   <div class="col-xs-11">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                              <a href="javascript:void(0)" class="btn btn-default btn_addfile">
+                                <span><i class="icon-circle-arrow-up"></i> 视频上传</span>
+                                <input type="file" name="file" id="fileupload" class="form-control">
+                                <input type="hidden" name="video" id="video" class="form-control">
+                            </a>
+                            </span>
+                        </div>
+                        <span class="video-name"></span>
+                    </div>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>排序</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-11">
+                        <div class="one-text">
+                            <input type="text" class="form-control h30 mb5 w400" name="sort">
+                            <span>请填写自然数。规格列表将会根据排序进行由小到大排列显示。</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button class="btn btn-warning max-bg js-ajax-submit">添加</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}jqueryuploader/js/jquery.ui.widget.js"></script>
+<script src="{$Think.JS_PATH}jqueryuploader/js/jquery.fileupload.js"></script>
+
+<script type="text/javascript">
+$(function(){
+    //主图上传
+    $('.main-cover-upload').uploader({
+        server: '/index/index/uploadFile',//上传路径
+        container: '.uploadimg-cover',//图片容器
+        swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+        num:1,//上传数量
+        inputName:'video_cover',//input name值
+        btnDsab:'.js-ajax-submit',
+        imgBtn:'.main-cover-upload'
+    })
+    $('#fileupload').fileupload({
+        url: '/index/index/file',
+        dataType: 'json',
+        done: function (e, data) {
+            if ( data.result.success ) {
+                $("#video").val( data.result.filePath );
+                $(".video-name").html( data.result.oldName+" 上传成功" );
+            } else {
+                $(".video-name").html( "上传失败" );
+            }
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+})
+</script>

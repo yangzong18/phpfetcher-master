@@ -1,0 +1,722 @@
+<td colspan="6">
+    <div class="mt-goods-spec">
+        <div class="mt-bt">
+            <p class="cus">编辑商品</p>
+            <!-- <p class=""><a href="url('seller/Goods/editImage','goodsId='{$goods.goods_id})">编辑图片</a></p> -->
+            <p class=""><a href="/seller/Goods/editImage?goodsId={$goods.goods_id}">编辑图片</a></p>
+        </div>
+    </div>
+</td>
+<div class="sheet-box">
+    <!--<form class="js-ajax-form" action="/seller/Goods/doEdit" method="post">-->
+    <form class="js-ajax-form" action="/seller/Goods/doEdit" method="post">
+        <input type="hidden" id="picOne" name="pic_one" value="{pictures}"/>
+        <input type="hidden"  name="goods_id" value="{$goods.goods_id}"/>
+        <table class="table">
+            <tbody><tr class="goods-tr-bg">
+                <th colspan="4">
+                    <h3>商品基本信息</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3 class="w100">商品分类*</h3>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="form-group" style="float: left;margin-left: 18px;margin-bottom: 1px;">
+                        <select class="form-control h30 firstSelect">
+                            <option>请选择...</option>
+                            {foreach $category['one']['data'] as $k=>$v}
+                            {if condition="$category['one']['id'] eq $v['category_id']"}
+                            <option selected value="{$v.category_id}">{$v.name}</option>
+                            {else /}
+                            <option value="{$v.category_id}">{$v.name}</option>
+                            {/if}
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="form-group" style="float: left;margin-left:10px;margin-bottom: 1px;">
+                        <select class="form-control h30 secondSelect">
+                            <option>请选择...</option>
+                            {foreach $category['two']['data'] as $k=>$v}
+                            {if condition="$category['two']['id'] eq $v['category_id']"}
+                            <option selected value="{$v.category_id}">{$v.name}</option>
+                            {else /}
+                            <option value="{$v.category_id}">{$v.name}</option>
+                            {/if}
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="form-group" style="float: left;margin-left: 10px; margin-bottom: 1px;">
+                        <select class="form-control h30 threeSelect" name="category_id">
+                            <option>请选择...</option>
+                            {foreach $category['three']['data'] as $k=>$v}
+                            {if condition="$category['three']['id'] eq $v['category_id']"}
+                            <option selected value="{$v.category_id}">{$v.name}</option>
+                            {else /}
+                            <option value="{$v.category_id}">{$v.name}</option>
+                            {/if}
+                            {/foreach}
+
+                        </select>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品名称*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_name" value="{$goods.goods_name}" class="form-control h30 mb5">
+                            <span>请输入商品名称(最长不超过64个汉字)</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品说明</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" value="{$goods.goods_desc}" name="goods_desc" class="form-control h30 mb5">
+                            <span>请输入商品说明(最长不超过500个字符)</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品价格*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_price" value="{$goods.goods_price}" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请填写商品基本价格（检索使用）,单位：元</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>市场价*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" value="{$goods.goods_market_price}" name="goods_market_price" class="form-control h30 mb5" style="width: 88px;">
+                            <span>此价格仅为市场参考售价，请根据该实际情况认真填写。单位：元</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>商品类型*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <select name="goods_type" class="form-control h35" style="width:128px;">
+                                {if condition="$goods.goods_type eq 1"}
+                                <option value="1" selected>普通商品</option>
+                                <option value="2">兑换商品</option>
+                                {else \}
+                                <option value="1">普通商品</option>
+                                <option value="2"  selected>兑换商品</option>
+                                {/if}
+                            </select>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr >
+                <td>
+                    <div>
+                        <h3>卖家货号*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_serial" value="{$goods.goods_serial}" class="form-control h30 mb5" style="width: 88px;">
+                            <span>请填写卖家货号</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr id="">
+                <td>
+                    <div>
+                        <h3>商品库存*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_storage" value="{$goods.goods_storage}" class="form-control mt-zkc h30 mb5" style="width: 88px;">
+                            <span>请填写商品库存</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr id="storage">
+                <td>
+                    <div>
+                        <h3>库存预警*</h3>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-7">
+                        <div class="one-text">
+                            <input type="text" name="goods_storage_alarm" value="{$goods.goods_storage_alarm}" class="form-control mt-zyj h30 mb5" style="width: 88px;">
+                            <span>请填写商品库存预警</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+            {if condition="isset($allCate['feature']) && !empty($allCate['feature'])"}
+            {foreach $allCate['feature'] as $k=>$v}
+
+            <tr class="typeSelect">
+                <td>
+                    <div><h3>{$v[0]['attribute_name']}</h3></div>
+                </td>
+                <td colspan="3">
+                    <div class="item-list-chkbox">
+                        <ul fid="{$v[0]['feature_id']}" class="chk-one select_feature_for_all select_feature_{$v[0]['feature_id']}">
+                            {if condition="isset($allCate['feature'][$k])"}
+                            {foreach $allCate['feature'][$k] as $ka=>$va}
+                            {if condition="$va['feature_value'] neq '无'"}
+                            {if condition="in_array($va['id'],$saleKeys)"}
+                            <li>
+                                <input checked="checked" type="checkbox" value="{$va['id']}" name="feature[{$k}][]" id="list_c_{$k}_{$ka}" thisname="{$va.feature_value}" thisid="{$va.id}" class="chk_1">
+                                <label for="list_c_{$k}_{$ka}" class="lab-t cus"></label>
+                                <label for="list_c_{$k}_{$ka}" class="font-min">{$va.feature_value}</label>
+                            </li>
+                            {else \}
+
+                            <li>
+                                <input type="checkbox" value="{$va['id']}" name="feature[{$k}][]" id="list_c_{$k}_{$ka}" thisname="{$va.feature_value}" thisid="{$va.id}" class="chk_1">
+                                <label for="list_c_{$k}_{$ka}" class="lab-t"></label>
+                                <label for="list_c_{$k}_{$ka}" class="font-min">{$va.feature_value}</label>
+                            </li>
+
+                            {/if}
+                            {/if}
+                            {/foreach}
+                            {/if}<a href="javascript:;"  class="btn btn-info add_feature_value"><i class="icon-plus"></i> 添加规格值</a>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+
+            {/foreach}
+            {/if}
+
+
+
+            <tr id="mainImage">
+                <td>
+                    <div>
+                        <h3>商品主图*</h3>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="uploadimg">
+                        {if condition="!empty($goods.goods_image_main)"}
+                        <div id="WU_FILE_0" class="file-item thumbnail">
+                            <div class="up-imgbox">
+                                <img style="width: 100px;height: 100px;" src="{$goods.goods_image_main}" height=""/>
+                            </div>
+                            <div>
+                                <a class="del_pic">删除</a>
+                            </div>
+                            <input type="hidden" name="image" value="{$goods.goods_image_main}" class="imgName-up-item">
+                        </div>
+                        {/if}
+                    </div>
+                    <div class="btn-up-zbox">
+                        <div class="clear"></div>
+                        <span class="input-group-btn one-text">
+                        <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload">
+                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                        </a>
+                        </span>
+                        <span>图片建议561*337</span>
+                    </div>
+                </td>
+            </tr>
+
+
+            {if condition="isset($allCate['feature_basic']) && is_array($allCate['feature_basic'])"}
+            <tr class=" form-inline">
+                <td>
+                    <div><h3>商品属性*</h3></div>
+                </td>
+                <td colspan="3">
+
+                    {foreach $allCate['feature_basic'] as $k=>$v}
+                    {$v[0]['attribute_name']}
+                    <div class="form-group" style="">
+                        <select name="feature_basic[{$v[0]['feature_id']}]" class="form-control">
+                            {if condition="isset($allCate['feature_basic'][$k])"}
+                            {foreach $allCate['feature_basic'][$k] as $key=>$val}
+                            {if condition="in_array($val['id'],$basicKeys)"}
+                            <option value="{$val.id}" selected>{$val.feature_value}</option>
+                            {else \}
+                            <option value="{$val.id}">{$val.feature_value}</option>
+                            {/if}
+                            {/foreach}
+                            {/if}
+                        </select>
+                    </div>
+                    {/foreach}
+
+                </td>
+            </tr>
+            {/if}
+            {if condition="isset($allCate['feature']) && !empty($allCate['feature']) && !empty($saleKeys)"}
+            {if condition="isset($sku)"}
+            <tr class="typeSelectOrder">
+                <td><div><h3>库存配置*</h3></div></td>
+                <td colspan="3">
+                    <div class="table-form-default">
+                        <table class="table">
+                            <tbody>
+
+                            {foreach $sku as $k=>$v}
+                            {if condition="$k eq 0"}
+                            <tr>
+                                {if condition="isset($sku[$k]['feature'])"}
+                                {foreach $sku[$k]['feature'] as $ke=>$va}
+                                <th>{$va['attribute_name']}</th>
+                                {/foreach}
+                                {/if}
+                                <!--<th>尺寸</th>-->
+                                <th class="">价格</th>
+                                <th class="">市场价</th>
+                                <th>库存</th>
+                                <th>库存预警</th>
+                                <th class="w150">卖家货号</th>
+                            </tr>
+                            {/if}
+                            <tr>
+                                {if condition="isset($sku[$k]['feature'])"}
+                                {foreach $sku[$k]['feature'] as $key=>$val}
+                                <td>{$val['feature_value']}<input type="hidden" value="{$val['feature_value_id']}" name="feature_ids[{$k}][]"/>
+                                    <input type="hidden" name="featureIdNames[{$k}][]" value="{$val['attribute_name']}"/>
+                                    <input type="hidden" name="featureNames[{$k}][]" value="{$val['feature_value']}"/>
+                                </td>
+                                {/foreach}
+                                {/if}
+                                <td><input class="form-control h30 mb5 price" name="salePrice[{$k}]" style="width: 88px;" type="text" value="{$v.goods_price}"></td>
+                                <td><input class="form-control h30 mb5 price-market" name="saleMarketPrice[{$k}]" style="width: 88px;" type="text" value="{$v.goods_market_price}"></td>
+                                <td><input class="form-control h30 mt-kc mt-fk mb5" name="saleStorage[{$k}]" style="width: 88px;" type="text" value="{$v.goods_storage}"> </td>
+                                <td><input class="form-control h30 mt-kc mt-yj mb5" name="saleStorageAlarm[{$k}]" style="width: 88px;" type="text" value="{$v.goods_storage_alarm}"> </td>
+                                <td><input type="text" class="form-control h30 mb5" name="saleNumber[{$k}]" style="width: 128px;" value="{$v.goods_serial}"> </td>
+                                <input type="hidden" class="form-control h30 mb5" name="saleSku[{$k}]" style="width: 128px;" value="{$v.goods_sku}">
+                            </tr>
+                            {/foreach}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            {/if}
+            {else /}
+            <input type="hidden" class="saleSkuOne" name="saleSkuOne" value="{$sku[0]['goods_sku']}" />
+            {/if}
+
+
+            <tr>
+                <td>
+                    <h3>商品实拍*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor1" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>商品规格*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor2" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>材质说明*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor3" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>品质保证*</h3>
+                </td>
+                <td colspan="3">
+                    <script id="editor4" type="text/plain" style="width:100%;height:500px;"></script>
+                </td>
+            </tr>
+
+
+
+
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">提交</button>
+                        <a href="javascript:window.history.go(-1);"><button type="button" class="btn max-bg">返回</button></a>
+                    </div>
+
+                </td>
+            </tr>
+
+            </tbody></table>
+        <!--<textarea name="editorContent" id="ueditor_textarea_editorContent" style="display: none;">{$goods.goods_describe}</textarea>-->
+    </form>
+</div>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script>
+
+    $(function() {
+        function q() {
+            $(".secondSelect").unbind("change").on("change", function() {
+                var d = $(this).find("option:selected").attr("value");
+                if (0 == d || null == d || "undefined" == d) return $(".threeSelect").html(""), $(".threeSelect").html("<option>\u8bf7\u9009\u62e9...</option>"), !1;
+                $(".typeSelect").remove();
+                $(".typeSelect1").remove();
+                $(".typeSelectOrder").remove();
+                $.ajax({
+                    url: "/seller/Goods/getCategory",
+                    dataType: "json",
+                    data: {
+                        ids: d
+                    },
+                    success: function(b) {
+                        if (0 == b.code) return layer.msg(b.msg), !1;
+                        b = b.data;
+                        var a = "<option>\u8bf7\u9009\u62e9...</option>",
+                                c;
+                        for (c in b) a += '<option value="' + b[c].category_id + '">' + b[c].name + "</option>";
+                        $(".threeSelect").html("");
+                        $(".threeSelect").html(a);
+                        r()
+                    }
+                })
+            })
+        }
+        function r() {
+            $(".threeSelect").unbind("change").on("change", function() {
+                $(".typeSelect").remove();
+                $(".typeSelect1").remove();
+                $(".typeSelectOrder").remove();
+                var d = $(this).find("option:selected").attr("value");
+                $(this);
+                $.ajax({
+                    url: "/seller/Goods/getTypes",
+                    dataType: "json",
+                    data: {
+                        ids: d
+                    },
+                    success: function(b) {
+                        if (1 == b.code) {
+                            var a = b.data.feature,
+                                    c = "",
+                                    d = "",
+                                    h = 0,
+                                    l = a.length,
+                                    t = 0,
+                                    k = [],
+                                    e;
+                            for (e in a) t++, d != a[e].feature_id ? (d = a[e].feature_id, k.push(d), 0 != h && (c += '<a href="#" class="btn btn-info add_feature_value"><i class="icon-plus"></i> \u6dfb\u52a0\u89c4\u683c\u503c</a>                        </ul></div></td></tr>'), c += '            <tr class="typeSelect"><td><div><h3>' + a[e].attribute_name + '</h3></div></td><td colspan="3"><div class="item-list-chkbox"><ul  fid="' + d + '" class="chk-one select_feature_for_all select_feature_' + d + '">', c += '<li><input type="checkbox" value="' + a[e].id + '" name="feature[' + d + '][]" id="list_c_' + e + '" thisName="' + a[e].feature_value + '" thisId="' + a[e].id + '" class="chk_1" /><label for="list_c_' + e + '" class="lab-t"></label><label for="list_c_' + e + '" class="font-min">' + a[e].feature_value + "</label></li>", h++) : 0 != h && (c += '<li><input type="checkbox" value="' + a[e].id + '" name="feature[' + d + '][]" thisName="' + a[e].feature_value + '" thisId="' + a[e].id + '" id="list_c_' + e + '" class="chk_1" /><label for="list_c_' + e + '" class="lab-t"></label><label for="list_c_' + e + '" class="font-min">' + a[e].feature_value + "</label></li>");
+                            l == t && 0 < l && (c += '<a href="javascript:;"  class="btn btn-info add_feature_value"><i class="icon-plus"></i> \u6dfb\u52a0\u89c4\u683c\u503c</a>                        </ul></div></td></tr>');
+                            $("#storage").after(c);
+                            b = b.data.feature_basic;
+                            a = "";
+                            if (b) {
+                                var a = a + '            <tr class="typeSelect form-inline"><td><div><h3>\u5546\u54c1\u5c5e\u6027*</h3></div></td><td colspan="3">',
+                                        f;
+                                for (f in b) if (b[f] instanceof Array) {
+                                    var a = a + (b[f][0].attribute_name + ':<div class="form-group" style=""><select name="feature_basic[' + b[f][0].feature_id + ']" class="form-control">'),
+                                            g;
+                                    for (g in b[f]) a += '<option value="' + b[f][g].id + '">' + b[f][g].feature_value + "</option>";
+                                    a += "</select></div>"
+                                }
+                                a += "</td></tr>"
+                            }
+                            $("#slaveImage").after(a);
+                            n();
+                            u()
+                        }
+                    }
+                })
+            })
+        }
+        function n() {
+            $(".select_feature_for_all input[type='checkbox']").unbind("click").on("click", function() {
+                var d = 0,
+                        b = [];
+                if ($(this).attr("checked")) {
+                    $(this).attr("checked", !1);
+                    var a = $(this).next().next(),
+                            c = "",
+                            c = a.has("input").length ? a.find("input").val() : a.html();
+                    a.html("");
+                    a.html(c)
+                } else {
+                    var x = $(this);
+                    $(this).attr("checked", "checked");
+                    a = $(this).next().next();
+                    c = '<input type="text" value="' + a.html() + '"/>';
+                    a.html("");
+                    a.html(c);
+                    a.find("input").on("keyup", function() {
+                        var a = $(this).val();
+                        x.attr("thisname", a)
+                    })
+                }
+                var h = [],
+                        l = [];
+                $(".typeSelect").each(function() {
+                    var a = $(this).find("h3").html(),
+                            c = $(this).find(".select_feature_for_all ").attr("fid");
+                    h.push(c);
+                    l[c] = a
+                });
+                for (var k in h) {
+                    var n = 0,
+                            e = [];
+                    $(".select_feature_" + h[k] + " input").each(function() {
+                        if ($(this).attr("checked")) {
+                            var a = [];
+                            a.id = $(this).attr("thisId");
+                            a.name = $(this).attr("thisName");
+                            e.push(a);
+                            b[k] = e;
+                            n++
+                        }
+                    });
+                    0 < n && d++
+                }
+                a = "";
+                if (d == h.length) {
+                    var a = a + '            <tr class="typeSelectOrder"><td><div><h3>\u5e93\u5b58\u914d\u7f6e*</h3></div></td><td colspan="3"><div class="table-form-default"><table class="table"><tr>',
+                            f;
+                    for (f in l) a += "<th>" + l[f] + "</th>";
+                    a += '<th class="">\u4ef7\u683c</th><th class="">\u5e02\u573a\u4ef7</th><th>\u5e93\u5b58</th><th>\u5e93\u5b58\u9884\u8b66</th><th class="w150">\u5356\u5bb6\u8d27\u53f7</th></tr>';
+                    d = eval("("+'{$already}'+")");
+                    f = function(a) {
+                        function c(a) {
+                            a++;
+                            if (!(a > d - 1)) for (f[a] || (f[a] = 0), b[a] instanceof Array || (b[a] = [b[a]]), f[a] = 0; f[a] < b[a].length; f[a]++) if (c(a), a == d - 1) {
+                                for (var h = [], g = d - 1; 0 <= g; g--) b[a - g] instanceof Array || (b[a - g] = [b[a - g]]), h.push(b[a - g][f[a - g]]);
+                                e.push(h)
+                            }
+                        }
+                        var b = a,
+                                d = b.length,
+                                e = [],
+                                f = {};
+                        c(-1);
+                        return e
+                    }(b);
+                    for (var g in f) {
+                        var c = f[g],
+                                a = a + "<tr>",
+                                p = "",
+                                q = 1,
+                                m;
+                        for (m in c) a += "<td>" + c[m].name + '<input type="hidden" value="' + c[m].id + '" name="feature_ids[' + g + '][]"><input type="hidden" name="featureIdNames[' + g + '][]" value="' + l[h[m]] + '"><input type="hidden" value="' + c[m].name + '" name="featureNames[' + g + '][]"> </td>', p = 1 == q ? p + c[m].id : p + ("_" + c[m].id), q++;
+                        console.log(p);
+                        d[p] ? (c = d[p], a += '<td><input class="form-control h30 mb5 price" name="salePrice[]" style="width: 88px;" type="text" value="' + c.goods_price + '" ></td><td><input class="form-control h30 mb5 price-market" name="saleMarketPrice[]" style="width: 88px;" type="text" value="' + c.goods_market_price + '" ></td><td><input class="form-control h30 mt-kc mt-fk mb5" name="saleStorage[]" style="width: 88px;" type="text" value="' + c.goods_storage + '"/> </td><td><input class="form-control h30 mt-kc mt-yj mb5" name="saleStorageAlarm[' + g + ']" style="width: 88px;" type="text" value="' + c.goods_storage_alarm + '" /> </td><td><input type="text" class="form-control h30 mb5" name="saleNumber[]" style="width: 128px;" value="' + c.goods_serial + '" /> </td><input type="hidden" class="form-control h30 mb5" name="saleSku[]" style="width: 128px;" value="' + c.goods_sku + '"></tr>') : a += '<td><input class="form-control h30 mb5 price" name="salePrice[]" style="width: 88px;" type="text" value="" ></td><td><input class="form-control h30 mb5 price-market" name="saleMarketPrice[]" style="width: 88px;" type="text" value="" ></td><td><input class="form-control h30 mt-kc mt-fk mb5" name="saleStorage[]" style="width: 88px;" type="text"/> </td><td><input class="form-control h30 mt-kc mt-yj mb5" name="saleStorageAlarm[' + g + ']" style="width: 88px;" type="text"/> </td><td><input type="text" class="form-control h30 mb5" name="saleNumber[]" style="width: 128px;" /> </td><input type="hidden" class="form-control h30 mb5" name="saleSku[]" style="width: 128px;"></tr>'
+                    }
+                    $(".typeSelectOrder").remove();
+                    $("#mainImage").before(a);
+                    v();
+                    goodsTotal(".mt-fk", ".mt-zkc")
+                } else $(".typeSelectOrder").remove()
+            })
+        }
+        function v() {
+            $(".mt-kc").blur(function() {
+                0 > $(this).val() && (layer.msg("\u4e0d\u80fd\u586b\u5199\u8d1f\u6570"), $(this).val(0));
+                goodsTotal(".mt-fk", ".mt-zkc");
+                $(".mt-zkc").attr("readonly", !0)
+            });
+            $(".mt-yj").blur(function() {
+                0 > $(this).val() && (layer.msg("\u4e0d\u80fd\u586b\u5199\u8d1f\u6570"), $(this).val(0));
+                goodsTotal(".mt-yj", ".mt-zyj");
+                $(".mt-zyj").attr("readonly", !0)
+            });
+            $(".price").blur(function() {
+                /^([1-9][0-9]*|0)(\.\d{1,2})?$/.test($(this).val()) || layer.msg("\u8bf7\u586b\u5199\u6b63\u786e\u6570\u5b57")
+            });
+            $(".price-market").blur(function() {
+                /^([1-9][0-9]*|0)(\.\d{1,2})?$/.test($(this).val()) || layer.msg("\u8bf7\u586b\u5199\u6b63\u786e\u6570\u5b57")
+            })
+        }
+        function u() {
+            $(".add_feature_value").on("click", function() {
+                $(this).before('<li><input type="text" /><a href="javascript:;" class="btn btn-info add_feature_commit"><i class="icon-plus"></i> \u786e\u8ba4</a><a href="javascript:;" class="btn btn-warning add_feature_cancel"><i class="icon-remove"></i> \u53d6\u6d88</a></li>');
+                $(this).hide();
+                $(".add_feature_commit").on("click", function() {
+                    var d = $(this).parent().parent().attr("fid"),
+                            b = $(this).prev().val(),
+                            a = $(".threeSelect").find("option:selected").attr("value"),
+                            c = $(this);
+                    $.ajax({
+                        url: "/seller/Goods/addFeatureValue",
+                        data: {
+                            value: b,
+                            fid: d,
+                            cate: a
+                        },
+                        success: function(a) {
+                            if (1 == a.code) {
+                                var d = '<li><input type="checkbox" thisname="' + b + '" thisid="' + a.data + '" id="list_c_' + a.data + '" class="chk_1"><label for="list_c_' + a.data + '" class="lab-t"></label><label for="list_c_' + a.data + '" class="font-min">' + b + "</label></li>";
+                                c.parent().before(d);
+                                c.parent().next().show();
+                                c.parent().remove();
+                                layer.msg(a.msg);
+                                n()
+                            } else layer.msg(a.msg)
+                        }
+                    })
+                });
+                $(".add_feature_cancel").on("click", function() {
+                    $(this).parent().next().show();
+                    $(this).parent().remove()
+                })
+            })
+        }
+        ctrlR();
+        q();
+        r();
+        n();
+        u();
+        0 < $(".mt-fk").length && (goodsTotal(".mt-fk", ".mt-zkc"), goodsTotal(".mt-yj", ".mt-zyj"));
+        v();
+        var w = [, '{$goods_extra.goods_real_shot|htmlspecialchars_decode}', '{$goods_extra.goods_specifications|htmlspecialchars_decode}', '{$goods_extra.goods_material_description|htmlspecialchars_decode}', '{$goods_extra.goods_quality_assurance|htmlspecialchars_decode}'],
+                k;
+        for (k in w)(new baidu.editor.ui.Editor({
+            initialContent: w[k],
+            initialFrameHeight: 350,
+            textarea: "editorContent" + k,
+            autoFloatEnabled: !1,
+            focus: !1,
+            autoHeightEnabled: !1,
+            sourceEditor: !1,
+            wordCount: !1,
+            elementPathEnabled: !1,
+            maximumWords: 10240
+        })).render("editor" + k);
+        $(".firstSelect").unbind("change").on("change", function() {
+            var d = $(this).find("option:selected").attr("value");
+            if (0 == d || null == d || "undefined" == d) return $(".secondSelect").html(""), $(".threeSelect").html(""), $(".secondSelect").html("<option>\u8bf7\u9009\u62e9...</option>"), $(".threeSelect").html("<option>\u8bf7\u9009\u62e9...</option>"), !1;
+            $(".typeSelect").remove();
+            $(".typeSelect1").remove();
+            $(".typeSelectOrder").remove();
+            $.ajax({
+                url: "/seller/Goods/getCategory",
+                dataType: "json",
+                data: {
+                    ids: d
+                },
+                success: function(b) {
+                    if (0 == b.code) return layer.msg(b.msg), !1;
+                    b = b.data;
+                    var a = "<option>\u8bf7\u9009\u62e9...</option>",
+                            c;
+                    for (c in b) a += '<option value="' + b[c].category_id + '">' + b[c].name + "</option>";
+                    $(".secondSelect").html("");
+                    $(".threeSelect").html("<option>\u8bf7\u9009\u62e9...</option>");
+                    $(".secondSelect").html(a);
+                    q()
+                }
+            })
+        })
+    });
+</script>
+
+
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+<!--<script src="{$Think.JS_PATH}upload/jquery.sortable.js" charset="utf-8"></script>-->
+<script type="text/javascript">
+    $(function() {
+
+        $('.btn-one-upload').uploader({
+            server: '/index/index/uploadFile', //上传路径
+            container: '.uploadimg', //图片容器
+            swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+            num: 1, //上传数量
+            inputName: 'image',//input name值
+            btnDsab:'.js-ajax-submit',
+            imgBtn:'.btn-one-upload'
+        });
+
+        $(".js-ajax-submit").click(function() {
+            var c = 0;
+            $(".price").each(function() {
+                0 >= $(this).val() && c++
+            });
+            if (0 < c) return layer.msg("\u4ef7\u683c\u4e0d\u80fd\u4e3a0\u6216\u8d1f\u6570"), !1;
+            var d = 0;
+            $(".price-market").each(function() {
+                0 >= $(this).val() && d++
+            });
+            if (0 < d) return layer.msg("\u5e02\u573a\u4ef7 \u4ef7\u683c\u4e0d\u80fd\u4e3a0\u6216\u8d1f\u6570"), !1;
+            var a = $(".mt-zkc").val(),
+                    b = $(".mt-zyj").val();
+            if (!(0 <= a && void 0 == String(a).split(".")[1]) || 0 > a) return layer.msg("\u5e93\u5b58\u5e94\u4e3a\u5927\u4e8e\u7b49\u4e8e0\u7684\u6574\u6570"), !1;
+            if (!(0 <= b && void 0 == String(b).split(".")[1]) || 0 > b) return layer.msg("\u5e93\u5b58\u9884\u8b66\u5e94\u4e3a\u5927\u4e8e\u7b49\u4e8e0\u7684\u6574\u6570"), !1;
+            var a = $(".typeSelect input"),
+                    e = 0;
+            a && a.each(function() {
+                $(this).attr("checked") && (e += 1)
+            });
+            if (e) if ($(".typeSelectOrder").html()) $(".saleSkuOne").attr("value", "");
+            else return layer.msg("\u89c4\u683c\u503c\u672a\u9009\u62e9\u5b8c\u5168\uff01"), !1
+        });
+    })
+</script>

@@ -1,0 +1,381 @@
+<link rel="stylesheet" href="{$Think.CSS_PATH}webuploader.css" media="screen" title="no title" charset="utf-8">
+<style type="text/css">
+.uploader {
+    position:relative;
+    display:inline-block;
+    overflow:hidden;
+    cursor:default;
+    padding:0;
+    margin:10px 0px;
+    /* -moz-box-shadow:0px 0px 5px #ddd;
+    -webkit-box-shadow:0px 0px 5px #ddd;
+    box-shadow:0px 0px 5px #ddd; */
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px; }
+.uploader input[type="radio"]{margin-left: 1px;}
+.uploader span{margin-bottom: 5px;display: block;}
+.uploader div input{margin-bottom: 5px !important; }
+.up-imgbox img{min-width: 218px;}
+
+.filename {
+    float:left;
+    display:inline-block;
+    outline:0 none;
+    height:32px;
+    width:180px;
+    margin:0;
+    padding:8px 10px;
+    overflow:hidden;
+    cursor:default;
+    border:1px solid;
+    border-right:0;
+    font:9pt/100% Arial, Helvetica, sans-serif;
+    color:#777;
+    text-shadow:1px 1px 0px #fff;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    -moz-border-radius:5px 0px 0px 5px;
+    -webkit-border-radius:5px 0px 0px 5px;
+    border-radius:5px 0px 0px 5px;
+    background:#f5f5f5;
+    background:-moz-linear-gradient(top, #fafafa 0%, #eee 100%);
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafafa), color-stop(100%, #f5f5f5));
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#f5f5f5', GradientType=0);
+    border-color:#ccc;
+    -moz-box-shadow:0px 0px 1px #fff inset;
+    -webkit-box-shadow:0px 0px 1px #fff inset;
+    box-shadow:0px 0px 1px #fff inset;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box; }
+
+.button {
+    float:left;
+    height:32px;
+    display:inline-block;
+    outline:0 none;
+    padding:8px 12px;
+    margin:0;
+    cursor:pointer;
+    border:1px solid;
+    font:bold 9pt/100% Arial, Helvetica, sans-serif;
+    -moz-border-radius:0px 5px 5px 0px;
+    -webkit-border-radius:0px 5px 5px 0px;
+    border-radius:0px 5px 5px 0px;
+    -moz-box-shadow:0px 0px 1px #fff inset;
+    -webkit-box-shadow:0px 0px 1px #fff inset;
+    box-shadow:0px 0px 1px #fff inset; }
+
+.uploader input[type=file] {
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    border:0;
+    padding:0;
+    margin:0;
+    height:30px;
+    cursor:pointer;
+    filter:alpha(opacity=0);
+    -moz-opacity:0;
+    -khtml-opacity: 0;
+    opacity:0; }
+
+input[type=button]::-moz-focus-inner {
+    padding:0;
+    border:0 none;
+    -moz-box-sizing:content-box;}
+
+input[type=button]::-webkit-focus-inner {
+    padding:0;
+    border:0 none;
+    -webkit-box-sizing:content-box;}
+
+input[type=text]::-moz-focus-inner {
+    padding:0;
+    border:0 none;
+    -moz-box-sizing:content-box;}
+
+input[type=text]::-webkit-focus-inner {
+    padding:0;
+    border:0 none;
+    -webkit-box-sizing:content-box;}
+
+/* White Color Scheme ------------------------ */
+
+.white .button {
+    color:#555;
+    text-shadow:1px 1px 0px #fff;
+    background:#ddd;
+    background:-moz-linear-gradient(top, #eeeeee 0%, #dddddd 100%);
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd', GradientType=0);
+    border-color:#ccc; }
+
+.white:hover .button {
+    background:#eee;
+    background:-moz-linear-gradient(top, #dddddd 0%, #eeeeee 100%);
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #dddddd), color-stop(100%, #eeeeee));
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#eeeeee', GradientType=0);}
+
+</style>
+<div class="prompt-box">
+
+    <ul>
+        <li class="top-prompt">
+            <h3>操作提示 <i class="icon-caret-down"></i></h3>
+        </li>
+        <li class="list-desc">
+            <p><i class="icon-circle"></i>编辑楼层模板信息</p>
+            <p><i class="icon-circle"></i>楼层模板图片，每个楼层首图建议805*490，次图建议341*233，其余图片建议278*191</p>
+        </li>
+    </ul>
+</div>
+<div class="sheet-box floor-box">
+    <form class="js-ajax-form" action="editPost" method="post" enctype="multipart/form-data">
+        <table class="table">
+            <tbody>
+            <tr class="goods-tr-bg">
+                <th colspan="4"><h3>添加楼层管理</h3></th>
+            </tr>
+            <tr>
+                <td width="150px"><div><h3>楼层选择*</h3></div></td>
+                <td>
+                    <div class="form-group" style="width: 50%; margin: 0; margin-left: 15px">
+                        <input type="hidden" id="id" name="id" value="{$tblRow.id}" />
+                        <input type="hidden" id="img_number" name="img_number" value="{$tblRow.img_number}"/>
+                        <select class="form-control" name="goods_category_id" id="goods_category_id" onchange="changeConfig({$tblRow.id})">
+                            <option>请选择...</option>
+                    {volist name="firstLevelGoodsCategory" id="data"}
+                            <option value="{$data.category_id}" {if condition="$tblRow.goods_category_id == $data.category_id"} selected="selected" {/if}>{$data.name}</option>
+                    {/volist}
+                        </select>
+                    </div>
+                </td>
+                <td width="150px"><div><h3>楼层名称*</h3></div></td>
+                <td>
+                    <div class="input-group">
+                        <input type="text" readonly class="form-control text-ra" name="">
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>楼层模板*</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    {volist name="storeyTemplateData" id="data"}
+                    <div class="uploader white" style="margin-left: 15px;width: 33%;">
+                        <img border=0 src="{$data.img_url}@w325_h180.png" width="100%" height="180" />
+                        <input type="radio" name="storey_template_id" id="storey_template_id_{$data.id}" value="{$data.id}" imgnumber="{$data.img_number}" onchange="changeConfig({$tblRow.id})" {if condition="$tblRow.storey_template_id == $data.id"} checked="checked" {/if} />
+                        <label for="storey_template_id_{$data.id}">{$data.name}</label>
+                    </div>
+                    {/volist}
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4" id="story_template_config" style="border: none; marging:0; padding:0; ">
+                    <table class="table">
+                    {foreach name="tblRow.parameter" item="param" key="goods_category_id"}
+                        <tr class="goods-tr-bg">
+                            <td style="width: 149px;">{$param.name}</td>
+                            <td>
+                            {volist name="param.forEdit" id="obj" key="index"}
+                                <div style="width: 30%; margin-left: 15px; float: left;">
+                                    <!--修改图片上传，以下注释掉的为原图片上传 begin-->
+                                    <!--<div id="{$goods_category_id}_preview_{$index}" class="preview" style="width: 100%; height: 180px; border: 1px solid gray">-->
+                                        <!--{if condition="$obj.path"}-->
+                                            <!--<img id="imghead" border=0 src="{$obj.path}" width="180" height="180" />-->
+                                        <!--{/if}-->
+                                    <!--</div>-->
+                                    <!--<div class="uploader white" style="width: 100%;">-->
+                                        <!--<input type="text" class="filename" readonly style="width: 70%;" value="{$obj.path}"/>-->
+                                        <!--<input type="button" name="file" class="button" value="上传图片{$index}" style="width: 30%;"/>-->
+                                        <!--<input type="file" name="{$goods_category_id}_img_path_{$index}" size="30" onchange="previewImage(this, '{$goods_category_id}_preview_{$index}', '{$goods_category_id}_imghead_{$index}')"/>-->
+                                        <!--<div class="input-group" style="width: 100%">-->
+                                            <!--<input type="text" name="{$goods_category_id}_img_description_{$index}" class="form-control text-ra" placeholder="图片描述{$index}" value="{$obj.description}" />-->
+                                            <!--<input type="text" name="{$goods_category_id}_img_link_{$index}" class="form-control text-ra"  placeholder="图片链接{$index}" value="{$obj.link}" />-->
+                                         <!--</div>-->
+                                    <!--</div>-->
+                                    <!--原图片上传 end-->
+
+                                    <!--修改后的图片上传 begin-->
+                                    <div class="uploadimg-cover" id="{$goods_category_id}_preview_{$index}" style="width: 100%; min-height: 212px; border: 1px solid #ddd;border-radius:2px;">
+                                        {if $obj.path!=''}
+                                            <div class="file-item thumbnail">
+                                                <div class="up-imgbox">
+                                                    <img src="{$obj.path}@w273_h180.png" style="width: 273px;height: 180px;">
+                                                </div>
+                                                <div>
+                                                    <a class="del_pic">删除</a>
+                                                </div>
+                                                <input type="hidden" name="{$goods_category_id}_preview_{$index}" value="{$obj.path}" class="imgName-up-item">
+                                            </div>
+                                        {/if}
+
+                                    </div>
+
+                                    <div class="uploader white" style="width: 100%;">
+                                        <span class="input-group-btn one-text">
+                                            <a href="javascript:void(0)" class="btn btn-default btn_addfile btn-one-upload main-cover-upload"  >
+                                            <span><i class="icon-circle-arrow-up"></i> 图片上传</span>
+                                            </a>
+                                        </span>
+                                        <div class="input-group" style="width: 100%">
+                                            <input type="text" name="{$goods_category_id}_img_description_{$index}" class="form-control text-ra" placeholder="图片描述{$index}" value="{$obj.description}" />
+                                            <input type="text" name="{$goods_category_id}_img_link_{$index}" class="form-control text-ra"  placeholder="图片链接{$index}" value="{$obj.link}" />
+                                        </div>
+                                    </div>
+                                    <!--修改后的图片上传 end-->
+
+                                </div>
+                            {/volist}
+                            </td>
+                        </tr>
+                    {/foreach}
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h3>更多产品的url*</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    <div class="col-xs-5">
+                        <div class="one-text">
+                            <input type="text" name="url" class="form-control h30 mb5" value="{$tblRow.url}">
+                            <span>填写完整的url,必须有http://或者https://</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>排序</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    <div class="col-xs-5" style="width: 33%">
+                        <div class="one-text">
+                            <input type="text" name="sort" class="form-control h30 mb5" value="{$tblRow.sort}">
+                            <span>请填写自然数。楼层模板列表将会根据排序由小到大排列显示，默认为0</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>
+                        <h3>是否失效</h3>
+                    </div>
+                </td>
+                <td colspan="3">
+                    <div class="form-group" style="width: 30%; margin: 0; margin-left: 15px">
+                        <select class="form-control" name="is_disable" id="is_disable">
+                            <option value="0" {if condition="$tblRow.is_disable == 0"} selected="selected" {/if}>否</option>
+                            <option value="1" {if condition="$tblRow.is_disable == 1"} selected="selected" {/if}>是</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="b0">
+                <td colspan="4" class="b0">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning max-bg js-ajax-submit">提交</button>
+                        <button type="button" class="btn max-bg" onclick="history.go(-1)">返回</button>
+                    </div>
+
+                </td>
+            </tr>
+
+            </tbody></table>
+    </form>
+</div>
+<!--自定义的工具类-->
+<script src="{$Think.JS_PATH}wind.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}common.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}webuploader.js" charset="utf-8"></script>
+<script src="{$Think.JS_PATH}upload/uploader.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+
+    $('.main-cover-upload').each(function(){
+
+            var containerId= $(this).parent().parent().prev().attr("id");
+            $(this).uploader({
+                server: '/index/index/uploadFile',//上传路径
+                container: "#" +containerId,
+                swfObj:'{$Think.JS_PATH}webuploader/Uploader.swf',
+                num:1,//上传数量
+                inputName:containerId,//input name值
+                imgWidth:273,
+                imgHeight:180,
+                btnDsab:'.js-ajax-submit',
+                imgBtn:'.main-cover-upload'
+            });
+    });
+
+
+    // 楼层模板配置
+    function changeConfig(id){
+        $("input[type=radio]").each(function(){
+            // 获取参数
+            goods_category_id  = $("#goods_category_id").val();
+            storey_template_id = $("input[name=storey_template_id]").val();
+            img_number = $("#storey_template_id_"+ storey_template_id).attr('imgnumber');
+            // 设定 img_number 值
+            $("#img_number").val(img_number);
+            // 数据提交
+            $.post('changeConfig',{
+                id : id,
+                goods_category_id : goods_category_id,
+                storey_template_id : storey_template_id,
+                img_number : img_number
+            }, function(response){
+                // 数据接收与加工处理以及显示
+                var change_config_content = '<table class="table">';
+                $.each(JSON.parse(response), function(idx, obj) {
+                    change_config_content +=
+                        '<tr class="goods-tr-bg">'+
+                            '<td style="width: 149px;">'+ obj.name +'</td>'+
+                            '<td>';
+                            for (i = 1; i <= img_number; i++)
+                            {
+                                change_config_content +=
+                                '<div style="width: 30%; margin-left: 15px; float: left;">'+
+                                '    <div id="'+ obj.category_id +'_preview_'+ i +'" class="preview" style="width: 100%; height: 180px; border: 1px solid gray">'+
+                                '    </div>'+
+                                '    <div class="uploader white" style="width: 100%;">'+
+                                '        <input type="text" class="filename" readonly style="width: 70%;"/>'+
+                                '        <input type="button" name="file" class="button" value="上传图片'+ i +'" style="width: 30%;"/>'+
+                                '        <input type="file" name="'+ obj.category_id +'_img_path_'+ i +'" size="30" onchange="previewImage(this, \''+ obj.category_id +'_preview_'+ i +'\', \''+ obj.category_id +'_imghead_'+ i +'\')"/>'+
+                                '        <div class="input-group" style="width: 100%">'+
+                                '            <input type="text" name="'+ obj.category_id +'_img_description_'+ i +'" class="form-control text-ra" placeholder="图片描述'+ i +'" />'+
+                                '            <input type="text" name="'+ obj.category_id +'_img_link_'+ i +'" class="form-control text-ra"  placeholder="图片链接'+ i +'" />'+
+                                '         </div>'+
+                                '    </div>'+
+                                '</div>';
+                            }
+                    change_config_content +=
+                            '</td>'+
+                        '</tr>';
+                });
+                change_config_content += '</table>';
+                // 显示数据
+                $("#story_template_config").empty();
+                $("#story_template_config").append(change_config_content);
+            });
+        });
+    }
+</script>
